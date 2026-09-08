@@ -129,6 +129,14 @@ DDJ200.init = function() {
 
         var vgroup = "[Channel" + i + "]";
 
+        // MixxxF retrasa Preferencias: si rate_dir queda 0, el fader de pitch
+        // no cambia el BPM. Pioneer usa invertido (-1). Si rateRange sigue en
+        // el valor medio del potmetro (~2), el recorrido es inutilizable.
+        engine.setValue(vgroup, "rate_dir", -1);
+        if (engine.getValue(vgroup, "rateRange") > 0.5) {
+            engine.setValue(vgroup, "rateRange", 0.08);
+        }
+
         // run onTrackLoad after every track load to set LEDs accordingly
         engine.makeConnection(vgroup, "track_loaded", function(ch, vgroup) {
             DDJ200.onTrackLoad(ch, vgroup);
@@ -142,6 +150,15 @@ DDJ200.init = function() {
         engine.makeConnection(vgroup, "pfl", function(value, group) {
             DDJ200.onChannelLed(group, function(physicalDeck) {
                 DDJ200.refreshCueLed(physicalDeck);
+            });
+        });
+
+        // Por qué unbuffered: el SYNC de la skin debe encender el LED al
+        // instante; makeConnection a veces agrupa el cambio y el boton queda
+        // apagado aunque Mixxx ya tenga sync_enabled.
+        DDJ200.connectLed(vgroup, "sync_enabled", function(_value, group) {
+            DDJ200.onChannelLed(group, function(physicalDeck) {
+                DDJ200.refreshSyncLed(physicalDeck);
             });
         });
 
@@ -288,6 +305,8 @@ DDJ200.init = function() {
         engine.beginTimer(300, function() {
             DDJ200.refreshUnshiftedPadLeds(1);
             DDJ200.refreshUnshiftedPadLeds(2);
+            DDJ200.refreshSyncLed(1);
+            DDJ200.refreshSyncLed(2);
         }, true);
     }, true);
 };
@@ -297,8 +316,13 @@ DDJ200.init = function() {
  * La DDJ-200 responde con la posicion actual de ruedas y faders.
  */
 DDJ200.requestControllerPositions = function() {
-    // Por si Mixxx aun tiene soft-takeover en el crossfader: el dump no se ignora.
+    // El dump de Pioneer manda tempo y faders: sin esto el primer movimiento
+    // no cambia el BPM (soft-takeover espera a que coincida el valor).
     engine.softTakeoverIgnoreNextValue("[Master]", "crossfader");
+    engine.softTakeoverIgnoreNextValue("[Channel1]", "rate");
+    engine.softTakeoverIgnoreNextValue("[Channel2]", "rate");
+    engine.softTakeoverIgnoreNextValue("[Channel3]", "rate");
+    engine.softTakeoverIgnoreNextValue("[Channel4]", "rate");
     midi.sendSysexMsg(
         [0xF0, 0x00, 0x40, 0x05, 0x00, 0x00, 0x02, 0x0A, 0x00, 0x03, 0x01, 0xF7],
         12
@@ -533,7 +557,7 @@ DDJ200.syncEnabled = function(channel, control, value, status, group) {
         var syncEnabled = ! engine.getValue(vgroup, "sync_enabled");
         DDJ200.vDeck[vDeckNo]["syncEnabled"] = syncEnabled;
         engine.setValue(vgroup, "sync_enabled", syncEnabled);
-        midi.sendShortMsg(status, control, 0x7F * syncEnabled); // set LED
+        // El LED lo pinta refreshSyncLed via sync_enabled (skin y hardware).
     }
 };
 
@@ -862,7 +886,14 @@ DDJ200.onChannelLed = function(group, applyLed) {
 /**
  * Pioneer usa MIDI distinto con SHIFT:
  * PFL = 0x54, efecto = 0x68; hotcue pad 1 = 0x97, loop = 0x98.
+ * Beat SYNC (sin SHIFT) es nota 0x58 y sigue a sync_enabled.
  */
+DDJ200.refreshSyncLed = function(physicalDeck) {
+    var vgroup = "[Channel" + DDJ200.vDeckNo[physicalDeck] + "]";
+    var on = engine.getValue(vgroup, "sync_enabled") ? 0x7F : 0x00;
+    midi.sendShortMsg(0x90 + physicalDeck - 1, 0x58, on);
+};
+
 DDJ200.refreshCueLed = function(physicalDeck) {
     if (DDJ200.fourDeckMode) {
         return;
@@ -1054,11 +1085,9 @@ DDJ200.quickEffectToggle = function(channel, control, value, status, group) {
 DDJ200.switchLEDs = function(vDeckNo) {
     // set LEDs of controller deck 1 or 2 according to virtual deck
     var d = (vDeckNo % 2) ? 0 : 1;           // d = deckNo - 1
-    var vgroup = "[Channel" + vDeckNo + "]";
     DDJ200.refreshPlayLed(d + 1);
     DDJ200.refreshMainCueLed(d + 1);
-    midi.sendShortMsg(0x90 + d, 0x58, 0x7F * engine.getValue(vgroup,
-        "sync_enabled"));
+    DDJ200.refreshSyncLed(d + 1);
     DDJ200.refreshCueLed(d + 1);
     DDJ200.refreshHotcueLeds(d + 1);
     DDJ200.refreshSlipLed(d + 1);

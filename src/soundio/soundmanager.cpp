@@ -141,10 +141,6 @@ QList<SoundDevicePointer> SoundManager::getDeviceList(
         // make sure to include any devices that have >0 channels.
         const bool hasOutputs = pDevice->getNumOutputChannels().isValid();
         const bool hasInputs = pDevice->getNumInputChannels().isValid();
-        qDebug() << "SoundManager::getDeviceList" << pDevice->getHostAPI()
-                 << pDevice->getDeviceId().debugName() << filterAPI
-                 << pDevice->getNumOutputChannels()
-                 << pDevice->getNumInputChannels();
         if (pDevice->getHostAPI() != filterAPI ||
                 (bOutputDevices && !bInputDevices && !hasOutputs) ||
                 (bInputDevices && !bOutputDevices && !hasInputs) ||
@@ -155,6 +151,8 @@ QList<SoundDevicePointer> SoundManager::getDeviceList(
         filteredDeviceList.push_back(pDevice);
     }
 
+    qDebug() << "SoundManager::getDeviceList done" << filterAPI
+             << "matched" << filteredDeviceList.size();
     return filteredDeviceList;
 }
 

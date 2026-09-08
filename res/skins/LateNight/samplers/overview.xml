@@ -8,13 +8,12 @@
     </Connection>
     <BgColor><Variable name="BgColorOverview_12"/></BgColor>
     <SignalColor><Variable name="SignalColor_12"/></SignalColor>
-    <!-- Default colors are used for high/mid/low: blue/green/red -->
-    <SignalHighColor></SignalHighColor>
-    <SignalMidColor></SignalMidColor>
-    <SignalLowColor></SignalLowColor>
-    <SignalRGBHighColor></SignalRGBHighColor>
-    <SignalRGBMidColor></SignalRGBMidColor>
-    <SignalRGBLowColor></SignalRGBLowColor>
+    <SignalHighColor>#0000FF</SignalHighColor>
+    <SignalMidColor>#00FF00</SignalMidColor>
+    <SignalLowColor>#FF0000</SignalLowColor>
+    <SignalRGBHighColor>#0000FF</SignalRGBHighColor>
+    <SignalRGBMidColor>#00FF00</SignalRGBMidColor>
+    <SignalRGBLowColor>#FF0000</SignalRGBLowColor>
     <PlayedOverlayColor><Variable name="PlayedOverlayColor"/></PlayedOverlayColor>
     <PlayPosColor><Variable name="PlayPosColor"/></PlayPosColor>
     <EndOfTrackColor><Variable name="EndOfTrackColor"/></EndOfTrackColor>

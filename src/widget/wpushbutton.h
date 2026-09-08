@@ -58,6 +58,9 @@ class WPushButton : public WWidget {
     // associated pixmaps.
     void setStates(int iStates);
 
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
+
   signals:
     void displayValueChanged(int value);
 
@@ -78,6 +81,8 @@ class WPushButton : public WWidget {
     // True si el aspecto lo dan los SVG y el tamano es fijo: polish() en hover
     // no hace falta y puede recortar el widget.
     bool shouldSkipHoverPolish() const;
+    // Recuerda el Size Nf,Mf del skin para que polish() no colapse el sizeHint.
+    void rememberSkinFixedSize();
 
     // Associates a pixmap of a given state of the button with the widget
     void setPixmap(int iState,
@@ -111,6 +116,8 @@ class WPushButton : public WWidget {
 
     // Associated background pixmap
     PaintablePointer m_pPixmapBack;
+    // Tamano fijo declarado en el skin. Invalido si el boton no es Fixed.
+    QSize m_skinHintSize;
 
     // short click toggle button long click push button
     mixxx::control::ButtonMode m_leftButtonMode;

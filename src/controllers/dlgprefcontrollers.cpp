@@ -1,5 +1,7 @@
 #include "controllers/dlgprefcontrollers.h"
 
+#include <QtDebug>
+
 #include "control/controlproxy.h"
 #include "controllers/controller.h"
 #include "controllers/controllermanager.h"
@@ -9,6 +11,7 @@
 #include "moc_dlgprefcontrollers.cpp"
 #include "preferences/dialog/dlgpreferences.h"
 #include "util/desktophelper.h"
+#include "util/scopedoverridecursor.h"
 #include "util/string.h"
 
 namespace {
@@ -31,7 +34,8 @@ DlgPrefControllers::DlgPrefControllers(DlgPreferences* pPreferences,
     setupUi(this);
     // Create text color for the cue mode link "?" to the manual
     createLinkColor();
-    setupControllerWidgets();
+    // MixxxF: no construir DlgPrefController (menu enorme + HID) al abrir
+    // Preferencias. Se crea al pulsar Controladores, si no Mixxx se congela.
 
     connect(btnOpenUserMappings, &QPushButton::clicked, this, [this]() {
         QString mappingsPath = userMappingsPath(m_pConfig);
@@ -142,6 +146,7 @@ QUrl DlgPrefControllers::helpUrl() const {
 }
 
 bool DlgPrefControllers::handleTreeItemClick(QTreeWidgetItem* clickedItem) {
+    ensureControllerWidgets();
     int controllerIndex = m_controllerTreeItems.indexOf(clickedItem);
     if (controllerIndex >= 0) {
         DlgPrefController* pControllerDlg = m_controllerPages.value(controllerIndex);
@@ -162,11 +167,15 @@ bool DlgPrefControllers::handleTreeItemClick(QTreeWidgetItem* clickedItem) {
 }
 
 void DlgPrefControllers::rescanControllers() {
+    if (!m_bControllerWidgetsCreated) {
+        return;
+    }
     destroyControllerWidgets();
     setupControllerWidgets();
 }
 
 void DlgPrefControllers::destroyControllerWidgets() {
+    m_bControllerWidgetsCreated = false;
     // NOTE: this assumes that the list of controllers does not change during the lifetime of Mixxx.
     // This is currently true, but once we support hotplug, we will need better lifecycle management
     // to keep this dialog and the controllermanager consistent.
@@ -189,7 +198,18 @@ void DlgPrefControllers::destroyControllerWidgets() {
     }
 }
 
+void DlgPrefControllers::ensureControllerWidgets() {
+    if (m_bControllerWidgetsCreated) {
+        return;
+    }
+    ScopedWaitCursor cursor;
+    qDebug() << "MixxxF: creando paginas de controladores";
+    setupControllerWidgets();
+    qDebug() << "MixxxF: paginas de controladores listas";
+}
+
 void DlgPrefControllers::setupControllerWidgets() {
+    m_bControllerWidgetsCreated = true;
     // For each controller, create a dialog and put a little link to it in the
     // treepane on the left.
     QList<Controller*> controllerList =

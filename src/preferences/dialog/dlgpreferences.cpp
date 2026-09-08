@@ -104,6 +104,7 @@ DlgPreferences::DlgPreferences(
     }
 
     // Construct page widgets and associated sidebar items
+    qDebug() << "MixxxF: Preferencias pagina Sound";
     m_pSoundDlg = std::make_unique<DlgPrefSound>(this, pSoundManager, m_pConfig);
     m_soundPage = PreferencesPage(
             m_pSoundDlg.get(),
@@ -112,6 +113,7 @@ DlgPreferences::DlgPreferences(
             tr("Sound Hardware"),
             "ic_preferences_soundhardware.svg");
 
+    qDebug() << "MixxxF: Preferencias pagina Library";
     DlgPrefLibrary* plibraryPage = new DlgPrefLibrary(this, m_pConfig, pLibrary);
     connect(plibraryPage,
             &DlgPrefLibrary::scanLibrary,
@@ -122,6 +124,7 @@ DlgPreferences::DlgPreferences(
             tr("Library"),
             "ic_preferences_library.svg");
 
+    qDebug() << "MixxxF: Preferencias pagina Controllers";
     QTreeWidgetItem* pControllerRootItem =
             new QTreeWidgetItem(contentsTreeWidget, QTreeWidgetItem::Type);
     m_pControllersDlg = new DlgPrefControllers(
@@ -273,6 +276,7 @@ DlgPreferences::DlgPreferences(
     // If we don't call this explicitly, then we default to showing the sound
     // hardware page but the tree item is not selected.
     showSoundHardwarePage();
+    qDebug() << "MixxxF: DlgPreferences constructor listo";
 }
 
 DlgPreferences::~DlgPreferences() {

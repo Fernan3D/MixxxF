@@ -180,13 +180,13 @@
             <Channel><Variable name="ChanNum"/></Channel>
             <BgColor><Variable name="BgColorWaveform"/></BgColor>
             <SignalColor><Variable name="SignalColor"/></SignalColor>
-            <!-- Default colors are used for high/mid/low: blue/green/red -->
-            <SignalHighColor></SignalHighColor>
-            <SignalMidColor></SignalMidColor>
-            <SignalLowColor></SignalLowColor>
-            <SignalRGBHighColor></SignalRGBHighColor>
-            <SignalRGBMidColor></SignalRGBMidColor>
-            <SignalRGBLowColor></SignalRGBLowColor>
+            <!-- L=#FF0000 M=#00FF00 H=#0000FF: al bajar un EQ se reduce esa banda. -->
+            <SignalHighColor>#0000FF</SignalHighColor>
+            <SignalMidColor>#00FF00</SignalMidColor>
+            <SignalLowColor>#FF0000</SignalLowColor>
+            <SignalRGBHighColor>#0000FF</SignalRGBHighColor>
+            <SignalRGBMidColor>#00FF00</SignalRGBMidColor>
+            <SignalRGBLowColor>#FF0000</SignalRGBLowColor>
             <BeatColor><Variable name="BeatColor"/></BeatColor>
             <AxesColor><Variable name="AxesColor"/></AxesColor>
             <BeatHighlightColor></BeatHighlightColor>

@@ -114,13 +114,12 @@
               <WidgetGroup>
                 <ObjectName>XfaderOrientRow</ObjectName>
                 <Layout>horizontal</Layout>
-                <SizePolicy>min,min</SizePolicy>
+                <Size>0me,26f</Size>
+                <SizePolicy>me,f</SizePolicy>
                 <Children>
                   <Template src="skins:LateNight/controls/button_xfader_deck.xml">
                     <SetVariable name="Group">[Channel1]</SetVariable>
-                    <SetVariable name="DeckGroup">Deck</SetVariable>
-                    <SetVariable name="xfaderLeft">default</SetVariable>
-                    <SetVariable name="xfaderRight">warning</SetVariable>
+                    <SetVariable name="Unit">Deck1</SetVariable>
                   </Template>
                 </Children>
                 <Connection>
@@ -158,13 +157,12 @@
               <WidgetGroup>
                 <ObjectName>XfaderOrientRow</ObjectName>
                 <Layout>horizontal</Layout>
-                <SizePolicy>min,min</SizePolicy>
+                <Size>0me,26f</Size>
+                <SizePolicy>me,f</SizePolicy>
                 <Children>
                   <Template src="skins:LateNight/controls/button_xfader_deck.xml">
                     <SetVariable name="Group">[Channel2]</SetVariable>
-                    <SetVariable name="DeckGroup">Deck</SetVariable>
-                    <SetVariable name="xfaderLeft">warning</SetVariable>
-                    <SetVariable name="xfaderRight">default</SetVariable>
+                    <SetVariable name="Unit">Deck2</SetVariable>
                   </Template>
                 </Children>
                 <Connection>

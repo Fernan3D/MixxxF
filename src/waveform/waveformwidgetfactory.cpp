@@ -48,9 +48,10 @@
 
 namespace {
 
-// We use an AllBand gain default of 2, because default ReplayGain is "enabled" at -18 LUFS
-// which gives at least 6 dB headroom with modern pop tracks.
-constexpr double kVisualGainDefault[] = {2, 1, 1, 1};
+// Mixxx oficial usa Overall=2 porque ReplayGain deja margen. En MixxxF, con
+// Overall=1 (y mas con 2) la onda que se desplaza con el play se sale del
+// visor aunque el EQ este al centro. 0.5 es el minimo de Preferencias.
+constexpr double kVisualGainDefault[] = {0.5, 1, 1, 1};
 constexpr bool kOverviewNormalizedDefault = false;
 
 // Returns true if the given waveform should be rendered.

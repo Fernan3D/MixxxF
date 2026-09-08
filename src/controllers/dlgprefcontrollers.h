@@ -53,6 +53,7 @@ class DlgPrefControllers : public DlgPreferencePage, public Ui::DlgPrefControlle
   private:
     void destroyControllerWidgets();
     void setupControllerWidgets();
+    void ensureControllerWidgets();
     void openLocalFile(const QString& file);
 
     DlgPreferences* m_pDlgPreferences;
@@ -61,6 +62,7 @@ class DlgPrefControllers : public DlgPreferencePage, public Ui::DlgPrefControlle
     QTreeWidgetItem* m_pControllersRootItem;
     QList<DlgPrefController*> m_controllerPages;
     QList<QTreeWidgetItem*> m_controllerTreeItems;
+    bool m_bControllerWidgetsCreated = false;
 
     const parented_ptr<ControlProxy> m_pNumDecks;
     const parented_ptr<ControlProxy> m_pNumSamplers;

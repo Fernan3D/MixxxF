@@ -111,6 +111,8 @@ class MixxxMainWindow : public QMainWindow {
     /// Load skin to a QWidget that we set as the central widget.
     bool loadConfiguredSkin();
     void tryParseAndSetDefaultStyleSheet();
+    /// MixxxF: Preferencias toca PortAudio; se crea tras la skin y el audio.
+    void createPreferencesDialog();
 
     bool confirmExit();
 #ifndef __APPLE__

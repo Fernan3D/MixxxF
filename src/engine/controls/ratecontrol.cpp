@@ -148,6 +148,27 @@ RateControl::RateControl(const QString& group, UserSettingsPointer pConfig)
             &RateControl::slotRateSliderChanged,
             Qt::DirectConnection);
 
+    // Mixxx oficial aplica rango y direccion del pitch en DlgPrefDeck, al
+    // crear Preferencias en el arranque. MixxxF crea ese dialogo mas tarde
+    // (para no congelar el inicio). Si no copiamos esos valores aqui,
+    // rate_dir queda 0 y el fader de tempo no cambia el BPM.
+    {
+        const ConfigKey rateRangeKey(QStringLiteral("[Controls]"),
+                QStringLiteral("RateRangePercent"));
+        int rateRangePercent = getConfig()->getValue(rateRangeKey, 8);
+        if (rateRangePercent <= 0 || rateRangePercent > 90) {
+            rateRangePercent = 8;
+        }
+        m_pRateRange->set(rateRangePercent / 100.0);
+
+        // RateDir 1 = invertido (bajar el fader sube la velocidad), como Pioneer.
+        const bool rateDirInverted = getConfig()->getValue(
+                ConfigKey(QStringLiteral("[Controls]"), QStringLiteral("RateDir")),
+                true);
+        m_pRateDir->set(rateDirInverted ? -1.0 : 1.0);
+        slotRateSliderChanged(m_pRateSlider->get());
+    }
+
     m_pReverseButton->set(0);
 
     connect(m_pForwardButton.get(),

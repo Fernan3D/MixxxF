@@ -390,7 +390,8 @@ DlgPrefSound::DlgPrefSound(QWidget* pParent,
 #endif
 
     initializePaths();
-    loadSettings();
+    // MixxxF: loadSettings() dispara refreshDevices. Eso se hace en
+    // slotUpdate() al mostrar Preferencias, no en el constructor.
 
     connect(apiComboBox,
             QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -1037,13 +1038,28 @@ void DlgPrefSound::refreshDevices() {
         m_outputDevices.clear();
         m_inputDevices.clear();
     } else {
-        m_outputDevices =
-            m_pSoundManager->getDeviceList(m_config.getAPI(), true, false);
-        m_inputDevices =
-            m_pSoundManager->getDeviceList(m_config.getAPI(), false, true);
+        // Un solo barrido: el segundo getDeviceList() se quedaba bloqueado
+        // en Windows con dispositivos DirectSound/WASAPI fantasma (UMC).
+        const QList<SoundDevicePointer> allDevices =
+                m_pSoundManager->getDeviceList(m_config.getAPI(), true, true);
+        m_outputDevices.clear();
+        m_inputDevices.clear();
+        for (const auto& pDevice : allDevices) {
+            if (pDevice->getNumOutputChannels().isValid()) {
+                m_outputDevices.append(pDevice);
+            }
+            if (pDevice->getNumInputChannels().isValid()) {
+                m_inputDevices.append(pDevice);
+            }
+        }
+        qDebug() << "DlgPrefSound::refreshDevices outputs"
+                 << m_outputDevices.size() << "inputs"
+                 << m_inputDevices.size();
     }
     emit refreshOutputDevices(m_outputDevices);
+    qDebug() << "DlgPrefSound::refreshDevices after refreshOutputDevices";
     emit refreshInputDevices(m_inputDevices);
+    qDebug() << "DlgPrefSound::refreshDevices after refreshInputDevices";
 }
 
 void DlgPrefSound::addDevice(SoundDevicePointer pDevice) {

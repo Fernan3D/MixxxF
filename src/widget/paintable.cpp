@@ -161,13 +161,18 @@ void Paintable::draw(const QRectF& targetRect, QPainter* pPainter,
         qreal sx = targetRect.width() / sourceRect.width();
         qreal sy = targetRect.height() / sourceRect.height();
 
-        // Adjust the scale so that the scaling in both axes is equal.
+        // Ajustar la escala para que ambos ejes coincidan (contain).
+        // Centrar en el rectangulo destino; si no, el icono queda
+        // arriba-izquierda y en un boton ancho parece desalineado.
         if (sx != sy) {
             qreal scale = math_min(sx, sy);
-            QRectF adjustedTarget(targetRect.x(),
-                                  targetRect.y(),
-                                  scale * sourceRect.width(),
-                                  scale * sourceRect.height());
+            const qreal scaledWidth = scale * sourceRect.width();
+            const qreal scaledHeight = scale * sourceRect.height();
+            QRectF adjustedTarget(
+                    targetRect.x() + (targetRect.width() - scaledWidth) / 2.0,
+                    targetRect.y() + (targetRect.height() - scaledHeight) / 2.0,
+                    scaledWidth,
+                    scaledHeight);
             drawInternal(adjustedTarget, pPainter, sourceRect);
         } else {
             drawInternal(targetRect, pPainter, sourceRect);

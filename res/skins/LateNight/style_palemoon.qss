@@ -1671,11 +1671,50 @@ WPushButton#SyncLeader,
 #SamplerSettings WPushButton,
 #SamplerSettingsMini WPushButton,
 WPushButton#CrossfaderButton,
-WPushButton#XfaderDeckOrient,
+WPushButton#OrientationButtonDeck1,
+WPushButton#OrientationButtonDeck2,
+WPushButton#OrientationButtonDeck3,
+WPushButton#OrientationButtonDeck4,
+WPushButton#OrientationButtonAux,
 #LibExpand,
 #ToolBar WPushButton {
   margin: 0px;
   border-radius: 0px;
+}
+
+/* Orientacion L/M/R: colores PaleMoon, sin el azul de Deere.
+   Todos los estados usan el mismo fondo; el icono indica L/M/R. */
+#MixerContainer WPushButton#OrientationButtonDeck1,
+#MixerContainer WPushButton#OrientationButtonDeck2,
+#MixerContainer WPushButton#OrientationButtonDeck3,
+#MixerContainer WPushButton#OrientationButtonDeck4,
+#MixerContainer WPushButton#OrientationButtonAux,
+#MixerContainer WPushButton#OrientationButtonDeck1[displayValue="0"],
+#MixerContainer WPushButton#OrientationButtonDeck1[displayValue="1"],
+#MixerContainer WPushButton#OrientationButtonDeck1[displayValue="2"],
+#MixerContainer WPushButton#OrientationButtonDeck2[displayValue="0"],
+#MixerContainer WPushButton#OrientationButtonDeck2[displayValue="1"],
+#MixerContainer WPushButton#OrientationButtonDeck2[displayValue="2"],
+#MixerContainer WPushButton#OrientationButtonDeck3[displayValue="0"],
+#MixerContainer WPushButton#OrientationButtonDeck3[displayValue="1"],
+#MixerContainer WPushButton#OrientationButtonDeck3[displayValue="2"],
+#MixerContainer WPushButton#OrientationButtonDeck4[displayValue="0"],
+#MixerContainer WPushButton#OrientationButtonDeck4[displayValue="1"],
+#MixerContainer WPushButton#OrientationButtonDeck4[displayValue="2"],
+#MixerContainer WPushButton#OrientationButtonAux[displayValue="0"],
+#MixerContainer WPushButton#OrientationButtonAux[displayValue="1"],
+#MixerContainer WPushButton#OrientationButtonAux[displayValue="2"],
+WPushButton#OrientationButtonDeck1,
+WPushButton#OrientationButtonDeck2,
+WPushButton#OrientationButtonDeck3,
+WPushButton#OrientationButtonDeck4,
+WPushButton#OrientationButtonAux {
+  margin: 0px;
+  padding: 0px;
+  background-color: #1e1e20;
+  border: none;
+  border-radius: 2px;
+  outline: none;
 }
 
 
@@ -1987,7 +2026,9 @@ WPushButton#Blank[value="0"],
 WPushButton#Blank[value="1"],
 WPushButton#Blank[value="2"],
 WPushButton#Blank[value="3"],
-WPushButton#Blank[value="4"] {
+WPushButton#Blank[value="4"],
+#MixerContainer WPushButton#Blank,
+#MixerFxAssignRow WPushButton#Blank {
   background-color: transparent;
 }
 

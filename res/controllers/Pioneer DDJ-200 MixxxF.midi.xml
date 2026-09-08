@@ -499,7 +499,6 @@
                 <midino>0x00</midino>
                 <options>
                     <script-binding/>
-                    <soft-takeover/>
                     <!--fourteen-bit-msb/-->
                 </options>
             </control>
@@ -510,7 +509,6 @@
                 <status>0xB0</status>
                 <midino>0x20</midino>
                 <options>
-                    <soft-takeover/>
                     <script-binding/>
                     <!--fourteen-bit-lsb/-->
                 </options>

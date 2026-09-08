@@ -3,6 +3,8 @@
 #include <QApplication>
 #include <QMouseEvent>
 #include <QPaintEvent>
+#include <QSize>
+#include <QSizePolicy>
 #include <QStyleOption>
 #include <QStylePainter>
 #include <QtDebug>
@@ -234,6 +236,37 @@ void WPushButton::setup(const QDomNode& node, const SkinContext& context) {
     }
 
     setFocusPolicy(Qt::NoFocus);
+    rememberSkinFixedSize();
+}
+
+void WPushButton::rememberSkinFixedSize() {
+    // setupSize() ya aplico Size Nf,Mf via setFixedWidth/Height.
+    if (sizePolicy().horizontalPolicy() != QSizePolicy::Fixed ||
+            sizePolicy().verticalPolicy() != QSizePolicy::Fixed) {
+        m_skinHintSize = QSize();
+        return;
+    }
+    const int widthHint = minimumWidth();
+    const int heightHint = minimumHeight();
+    if (widthHint > 0 && heightHint > 0) {
+        m_skinHintSize = QSize(widthHint, heightHint);
+    }
+}
+
+QSize WPushButton::sizeHint() const {
+    // Sin esto, QWidget::sizeHint() puede ser 0 y el mixer elastico recorta
+    // el boton L/M/R en cada polish() de hover/clic.
+    if (m_skinHintSize.isValid()) {
+        return m_skinHintSize;
+    }
+    return WWidget::sizeHint();
+}
+
+QSize WPushButton::minimumSizeHint() const {
+    if (m_skinHintSize.isValid()) {
+        return m_skinHintSize;
+    }
+    return WWidget::minimumSizeHint();
 }
 
 void WPushButton::setStates(int iStates) {
@@ -291,6 +324,11 @@ void WPushButton::setPixmapBackground(const PixmapSource& source,
 }
 
 bool WPushButton::shouldSkipHoverPolish() const {
+    // Los botones L/M/R del mixer (mismo control que Deere) no usan
+    // QSS [hover]. polish() al entrar el cursor recorta el widget.
+    if (objectName().startsWith(QLatin1String("OrientationButton"))) {
+        return true;
+    }
     if (sizePolicy().horizontalPolicy() != QSizePolicy::Fixed ||
             sizePolicy().verticalPolicy() != QSizePolicy::Fixed) {
         return false;
@@ -307,26 +345,9 @@ bool WPushButton::shouldSkipHoverPolish() const {
 }
 
 void WPushButton::restyleAndRepaint() {
-    // polish() reaplica el QSS y puede borrar setFixedSize. En un padre
-    // elastico el layout recorta entonces el boton a un sizeHint cada vez
-    // menor (hover -> desaparece). Conservamos el tamano fijo del skin.
-    const QSizePolicy savedPolicy = sizePolicy();
-    const QSize savedMin = minimumSize();
-    const QSize savedMax = maximumSize();
-    const bool lockFixed = savedPolicy.horizontalPolicy() == QSizePolicy::Fixed &&
-            savedPolicy.verticalPolicy() == QSizePolicy::Fixed &&
-            savedMin.width() > 0 && savedMin.height() > 0;
-
     emit displayValueChanged(readDisplayValue());
 
     style()->polish(this);
-
-    if (lockFixed) {
-        setSizePolicy(savedPolicy);
-        setMinimumSize(savedMin);
-        setMaximumSize(savedMax);
-        setFixedSize(savedMin);
-    }
 
     // These calls don't always trigger the repaint, so call it explicitly.
     repaint();

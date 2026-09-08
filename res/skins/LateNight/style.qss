@@ -580,21 +580,10 @@ WBpmEditor,
 #XfaderOrientRow {
   qproperty-layoutAlignment: 0;
 }
-#MixerFxAssignRow #CrossfaderButtonContainer_Deck {
-  padding: 0px;
-  margin: 0px;
-  max-width: 33px;
-  max-height: 16px;
-}
-#MixerContainer WPushButton#XfaderDeckOrient,
-#MixerContainer WPushButton#XfaderDeckOrient[displayValue="0"],
-#MixerContainer WPushButton#XfaderDeckOrient[displayValue="1"],
-#MixerContainer WPushButton#XfaderDeckOrient[displayValue="2"],
-#MixerContainer WPushButton#XfaderDeckOrient[hover="true"] {
-  min-width: 33px;
-  max-width: 33px;
-  min-height: 16px;
-  max-height: 16px;
+#MixerFxAssignRow WPushButton#OrientationButtonDeck1,
+#MixerFxAssignRow WPushButton#OrientationButtonDeck2,
+#CrossfaderSwitch_4Decks WPushButton,
+WPushButton#OrientationButtonAux {
   margin: 0px;
   padding: 0px;
   border: none;
@@ -918,6 +907,24 @@ fondo base es oscuro y neutro. */
     WPushButton#PadEject:hover {
       color: #ff4d4d;
     }
+
+  /* Fila de controles del pad SAMPLER: play, BPM, eject y L/M/R del rack. */
+  #PadSamplerRow {
+    qproperty-layoutAlignment: 'AlignVCenter | AlignLeft';
+    margin: 0px 2px 2px 2px;
+  }
+  #PadSamplerPlayBox {
+    qproperty-layoutAlignment: 'AlignCenter';
+  }
+  #PadSamplerTools {
+    qproperty-layoutAlignment: 'AlignVCenter | AlignRight';
+  }
+  #PadCell WPushButton#PadSamplerXfader {
+    background-color: transparent;
+    border: 0px;
+    margin: 0px;
+    outline: 0px;
+  }
 
   /* Ocupacion del pad (sample cargado / hotcue puesto). Apagado = vacio. */
   WPushButton#PadOccupied {

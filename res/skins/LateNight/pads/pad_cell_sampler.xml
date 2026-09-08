@@ -1,12 +1,13 @@
 <!--
 Descripcion:
-  Pad individual en modo SAMPLER, al estilo de los Performance Pads de Rekordbox.
+  Pad individual en modo SAMPLER.
 
-  Se construye sobre TrackWidgetGroup en lugar de un WidgetGroup normal porque
-  asi toda la celda acepta pistas arrastradas desde la biblioteca: al soltar,
-  el tema se carga en el sampler asignado a este pad. Ademas TrackWidgetGroup
-  pinta el color de la pista, que es la senal visual que usa Rekordbox para
-  distinguir samples de un vistazo.
+  Se construye sobre TrackWidgetGroup para aceptar pistas arrastradas desde
+  la biblioteca y pintar el color de la pista.
+
+  Los controles de play, eject y orientacion al crossfader son los mismos
+  que usaba la barra inferior de Sampler (ya retirada): icono de play,
+  eject clasico y el interruptor L/M/R de tres estados.
 
 Variables:
   PadNum     : numero visible del pad (1-8)
@@ -27,7 +28,7 @@ Variables:
     <MinimumSize>80,58</MinimumSize>
     <Children>
 
-      <!-- Cabecera del pad: numero, nombre del sample y expulsar -->
+      <!-- Cabecera: numero de pad y nombre del sample -->
       <WidgetGroup>
         <ObjectName>PadCellHeader</ObjectName>
         <Layout>horizontal</Layout>
@@ -50,81 +51,106 @@ Variables:
             <Elide>right</Elide>
           </TrackProperty>
 
-          <!-- Solo tiene sentido con un sample cargado, por eso se oculta si no lo hay -->
-          <PushButton>
-            <TooltipId>eject</TooltipId>
-            <ObjectName>PadEject</ObjectName>
-            <Size>13f,16f</Size>
-            <NumberStates>1</NumberStates>
-            <State>
-              <Number>0</Number>
-              <Text>x</Text>
-              <Alignment>center</Alignment>
-            </State>
+        </Children>
+      </WidgetGroup><!-- PadCellHeader -->
+
+      <!-- Play a la izquierda; BPM, eject y L/M/R a la derecha, como el rack. -->
+      <WidgetGroup>
+        <ObjectName>PadSamplerRow</ObjectName>
+        <Layout>horizontal</Layout>
+        <Size>0me,42f</Size>
+        <Children>
+
+          <WidgetGroup>
+            <ObjectName>PadSamplerPlayBox</ObjectName>
+            <Layout>stacked</Layout>
+            <SizePolicy>max,max</SizePolicy>
+            <Children>
+              <Template src="skins:LateNight/controls/button_2state_right_display.xml">
+                <SetVariable name="TooltipId">cue_gotoandplay_cue_default</SetVariable>
+                <SetVariable name="ObjectName">PlaySampler</SetVariable>
+                <SetVariable name="Size">34f,34f</SetVariable>
+                <SetVariable name="BtnType"><Variable name="TopRegion_BtnType"/></SetVariable>
+                <SetVariable name="BtnSize">square_big</SetVariable>
+                <SetVariable name="ConfigKey"><Variable name="Group"/>,cue_gotoandplay</SetVariable>
+                <SetVariable name="ConfigKeyRight"><Variable name="Group"/>,cue_default</SetVariable>
+                <SetVariable name="ConfigKeyDisp"><Variable name="Group"/>,play_latched</SetVariable>
+              </Template>
+              <PushButton>
+                <ObjectName>PreviewIndicator</ObjectName>
+                <Size>34f,34f</Size>
+                <NumberStates>2</NumberStates>
+                <Connection>
+                  <ConfigKey><Variable name="Group"/>,play</ConfigKey>
+                </Connection>
+              </PushButton>
+            </Children>
+          </WidgetGroup><!-- PadSamplerPlayBox -->
+
+          <Number>
+            <TooltipId>visual_bpm</TooltipId>
+            <ObjectName>SamplerBpmMini</ObjectName>
+            <Size>0me,18f</Size>
+            <Group><Variable name="Group"/></Group>
+            <Alignment>left</Alignment>
             <Connection>
-              <ConfigKey><Variable name="Group"/>,eject</ConfigKey>
-              <ButtonState>LeftButton</ButtonState>
+              <ConfigKey><Variable name="Group"/>,visual_bpm</ConfigKey>
             </Connection>
             <Connection>
               <ConfigKey><Variable name="Group"/>,track_loaded</ConfigKey>
               <BindProperty>visible</BindProperty>
             </Connection>
-          </PushButton>
+          </Number>
+
+          <WidgetGroup><Size>0me,0min</Size></WidgetGroup>
+
+          <!-- Eject y orientacion solo con sample cargado, igual que el rack. -->
+          <WidgetGroup>
+            <ObjectName>PadSamplerTools</ObjectName>
+            <Layout>horizontal</Layout>
+            <Size>42f,18f</Size>
+            <Children>
+              <Template src="skins:LateNight/controls/button_1state.xml">
+                <SetVariable name="TooltipId">eject</SetVariable>
+                <SetVariable name="ObjectName">EjectButton12</SetVariable>
+                <SetVariable name="BtnType"></SetVariable>
+                <SetVariable name="ConfigKey"><Variable name="Group"/>,eject</SetVariable>
+                <SetVariable name="Size">21f,18f</SetVariable>
+              </Template>
+              <PushButton>
+                <TooltipId>orientation</TooltipId>
+                <ObjectName>PadSamplerXfader</ObjectName>
+                <Size>21f,18f</Size>
+                <NumberStates>3</NumberStates>
+                <State>
+                  <Number>0</Number>
+                  <Pressed scalemode="STRETCH_ASPECT">skins:LateNight/<Variable name="BtnScheme"/>/buttons/btn__xfader_sampler_left.svg</Pressed>
+                  <Unpressed scalemode="STRETCH_ASPECT">skins:LateNight/<Variable name="BtnScheme"/>/buttons/btn__xfader_sampler_left.svg</Unpressed>
+                </State>
+                <State>
+                  <Number>1</Number>
+                  <Pressed scalemode="STRETCH_ASPECT">skins:LateNight/<Variable name="BtnScheme"/>/buttons/btn__xfader_sampler_main.svg</Pressed>
+                  <Unpressed scalemode="STRETCH_ASPECT">skins:LateNight/<Variable name="BtnScheme"/>/buttons/btn__xfader_sampler_main.svg</Unpressed>
+                </State>
+                <State>
+                  <Number>2</Number>
+                  <Pressed scalemode="STRETCH_ASPECT">skins:LateNight/<Variable name="BtnScheme"/>/buttons/btn__xfader_sampler_right.svg</Pressed>
+                  <Unpressed scalemode="STRETCH_ASPECT">skins:LateNight/<Variable name="BtnScheme"/>/buttons/btn__xfader_sampler_right.svg</Unpressed>
+                </State>
+                <Connection>
+                  <ConfigKey><Variable name="Group"/>,orientation</ConfigKey>
+                  <ButtonState>LeftButton</ButtonState>
+                </Connection>
+              </PushButton>
+            </Children>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,track_loaded</ConfigKey>
+              <BindProperty>visible</BindProperty>
+            </Connection>
+          </WidgetGroup><!-- PadSamplerTools -->
 
         </Children>
-      </WidgetGroup><!-- PadCellHeader -->
-
-      <!-- Barra de ocupacion: se enciende si hay sample cargado, aunque no suene.
-      Asi se ve de un vistazo que pads estan vacios (como los LEDs de la DDJ). -->
-      <PushButton>
-        <ObjectName>PadOccupied</ObjectName>
-        <Size>0me,4f</Size>
-        <NumberStates>2</NumberStates>
-        <State>
-          <Number>0</Number>
-          <Text></Text>
-        </State>
-        <State>
-          <Number>1</Number>
-          <Text></Text>
-        </State>
-        <Connection>
-          <ConfigKey><Variable name="Group"/>,track_loaded</ConfigKey>
-          <ConnectValueFromWidget>false</ConnectValueFromWidget>
-        </Connection>
-      </PushButton>
-
-      <!-- Superficie del pad: click izquierdo dispara el sample desde el cue,
-      click derecho lo detiene. El estado visual sigue a play_latched. -->
-      <PushButton>
-        <TooltipId>cue_gotoandplay_cue_default</TooltipId>
-        <ObjectName>PadTrigger</ObjectName>
-        <Size>0me,38f</Size>
-        <NumberStates>2</NumberStates>
-        <RightClickIsPushButton>true</RightClickIsPushButton>
-        <State>
-          <Number>0</Number>
-          <Text></Text>
-          <Alignment>center</Alignment>
-        </State>
-        <State>
-          <Number>1</Number>
-          <Text></Text>
-          <Alignment>center</Alignment>
-        </State>
-        <Connection>
-          <ConfigKey><Variable name="Group"/>,cue_gotoandplay</ConfigKey>
-          <ButtonState>LeftButton</ButtonState>
-        </Connection>
-        <Connection>
-          <ConfigKey><Variable name="Group"/>,stop</ConfigKey>
-          <ButtonState>RightButton</ButtonState>
-        </Connection>
-        <Connection>
-          <ConfigKey><Variable name="Group"/>,play_latched</ConfigKey>
-          <ConnectValueFromWidget>false</ConnectValueFromWidget>
-        </Connection>
-      </PushButton>
+      </WidgetGroup><!-- PadSamplerRow -->
 
     </Children>
   </TrackWidgetGroup><!-- PadCell -->

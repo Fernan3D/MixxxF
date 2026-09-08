@@ -248,6 +248,18 @@ void PortAudioEnumerator::initialize() {
             double  defaultSampleRate
          */
         const auto deviceTypeId = paApiIndexToTypeId.value(deviceInfo->hostApi);
+#ifdef __WINDOWS__
+        // MixxxF: ASIO y WDM-KS se enumeran aunque el hardware no este
+        // conectado (UMC, webcam, Steam). En Mixxx 2.7/PortAudio eso deja
+        // el hilo principal bloqueado al rellenar Preferencias > Audio,
+        // antes de cargar la skin. DirectSound y WASAPI bastan.
+        if (deviceTypeId == paASIO || deviceTypeId == paWDMKS) {
+            qWarning() << "MixxxF: omitiendo dispositivo PortAudio"
+                       << (deviceTypeId == paASIO ? "ASIO" : "WDM-KS")
+                       << deviceInfo->name;
+            continue;
+        }
+#endif
         auto currentDevice = QSharedPointer<SoundDevicePortAudio>::create(
                 m_pConfig, m_pSoundManager, deviceInfo, deviceTypeId, i);
         m_devices.push_back(currentDevice);
@@ -260,6 +272,11 @@ void PortAudioEnumerator::initialize() {
     for (PaHostApiIndex i = 0; i < Pa_GetHostApiCount(); i++) {
         const PaHostApiInfo* api = Pa_GetHostApiInfo(i);
         if (api && std::strcmp(api->name, "skeleton implementation")) {
+#ifdef __WINDOWS__
+            if (api->type == paASIO || api->type == paWDMKS) {
+                continue;
+            }
+#endif
             m_apis.push_back(api->name);
         }
     }

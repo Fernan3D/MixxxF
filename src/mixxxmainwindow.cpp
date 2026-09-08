@@ -167,7 +167,14 @@ void MixxxMainWindow::initializeQOpenGL() {
             SharedGLContext::setWidget(pWidget);
             // When the widget's QOpenGLWindow has been initialized, we continue
             // with the actual initialization
-            connect(pWidget, &WInitialGLWidget::onInitialized, this, &MixxxMainWindow::initialize);
+            // MixxxF: initialize() carga la skin y crea mas contextos GL.
+            // Si corre dentro de initializeGL() (conexion directa), el driver
+            // NVIDIA se queda bloqueado. Encolar al event loop lo evita.
+            connect(pWidget,
+                    &WInitialGLWidget::onInitialized,
+                    this,
+                    &MixxxMainWindow::initialize,
+                    Qt::QueuedConnection);
             pWidget->show();
             return;
         }
@@ -299,34 +306,9 @@ void MixxxMainWindow::initialize() {
             WaveformWidgetFactory::instance(),
             &WaveformWidgetFactory::slotSkinLoaded);
 
-    // Initialize preference dialog
-    m_pPrefDlg = new DlgPreferences(
-            m_pCoreServices->getScreensaverManager(),
-            m_pSkinLoader,
-            m_pCoreServices->getSoundManager(),
-            m_pCoreServices->getControllerManager(),
-            m_pCoreServices->getVinylControlManager(),
-            m_pCoreServices->getEffectsManager(),
-            m_pCoreServices->getSettingsManager(),
-            m_pCoreServices->getLibrary());
-    m_pPrefDlg->setWindowIcon(QIcon(MIXXX_ICON_PATH));
-    m_pPrefDlg->setHidden(true);
-    connect(m_pPrefDlg,
-            &DlgPreferences::tooltipModeChanged,
-            this,
-            &MixxxMainWindow::slotTooltipModeChanged);
-    connect(m_pPrefDlg,
-            &DlgPreferences::reloadUserInterface,
-            this,
-            &MixxxMainWindow::rebootMixxxView,
-            Qt::DirectConnection);
-#ifndef __APPLE__
-    connect(m_pPrefDlg,
-            &DlgPreferences::menuBarAutoHideChanged,
-            this,
-            &MixxxMainWindow::slotUpdateMenuBarAltKeyConnection,
-            Qt::DirectConnection);
-#endif
+    // MixxxF: DlgPreferences (DlgPrefSound) se crea despues de la skin
+    // y de abrir el audio. En Windows se bloqueaba al enumerar de nuevo
+    // ASIO/WDM-KS/DirectSound fantasma y Mixxx no llegaba a cargar LateNight.
 
     // Connect signals to the menubar. Should be done before emit skinLoaded.
     connectMenuBar();
@@ -420,6 +402,9 @@ void MixxxMainWindow::initialize() {
     // The launch image widget is automatically disposed, but we still have a
     // pointer to it.
     m_pLaunchImage = nullptr;
+
+    // MixxxF: DlgPreferences se crea al abrir Preferencias. Construirlo aqui
+    // bloqueaba el arranque (ASIO/WDM-KS fantasma y paginas HID/MIDI).
 
     connect(pPlayerManager.get(),
             &PlayerManager::noMicrophoneInputConfigured,
@@ -661,6 +646,7 @@ QDialog::DialogCode MixxxMainWindow::soundDeviceErrorDlg(
             msgBox.hide();
 
             m_pCoreServices->getSoundManager()->clearAndQueryDevices();
+            createPreferencesDialog();
             // This way of opening the dialog allows us to use it synchronously
             m_pPrefDlg->setWindowModality(Qt::ApplicationModal);
             // Open preferences, sound hardware page is selected (default on first call)
@@ -767,6 +753,7 @@ QDialog::DialogCode MixxxMainWindow::noOutputDlg(bool* continueClicked) {
         } else if (msgBox.clickedButton() == reconfigureButton) {
             msgBox.hide();
 
+            createPreferencesDialog();
             // This way of opening the dialog allows us to use it synchronously
             m_pPrefDlg->setWindowModality(Qt::ApplicationModal);
             m_pPrefDlg->showSoundHardwarePage(mixxx::preferences::SoundHardwareTab::Output);
@@ -1114,7 +1101,46 @@ void MixxxMainWindow::slotViewFullScreen(bool toggle) {
     }
 }
 
+void MixxxMainWindow::createPreferencesDialog() {
+    if (m_pPrefDlg) {
+        return;
+    }
+    qDebug() << "MixxxF: creando DlgPreferences";
+    m_pPrefDlg = new DlgPreferences(
+            m_pCoreServices->getScreensaverManager(),
+            m_pSkinLoader,
+            m_pCoreServices->getSoundManager(),
+            m_pCoreServices->getControllerManager(),
+            m_pCoreServices->getVinylControlManager(),
+            m_pCoreServices->getEffectsManager(),
+            m_pCoreServices->getSettingsManager(),
+            m_pCoreServices->getLibrary());
+    m_pPrefDlg->setWindowIcon(QIcon(MIXXX_ICON_PATH));
+    m_pPrefDlg->setHidden(true);
+    connect(m_pPrefDlg,
+            &DlgPreferences::tooltipModeChanged,
+            this,
+            &MixxxMainWindow::slotTooltipModeChanged);
+    connect(m_pPrefDlg,
+            &DlgPreferences::reloadUserInterface,
+            this,
+            &MixxxMainWindow::rebootMixxxView,
+            Qt::DirectConnection);
+#ifndef __APPLE__
+    connect(m_pPrefDlg,
+            &DlgPreferences::menuBarAutoHideChanged,
+            this,
+            &MixxxMainWindow::slotUpdateMenuBarAltKeyConnection,
+            Qt::DirectConnection);
+#endif
+    qDebug() << "MixxxF: DlgPreferences listo";
+}
+
 void MixxxMainWindow::slotOptionsPreferences() {
+    {
+        ScopedWaitCursor cursor;
+        createPreferencesDialog();
+    }
     m_pPrefDlg->show();
     m_pPrefDlg->raise();
     m_pPrefDlg->activateWindow();
@@ -1142,6 +1168,7 @@ void MixxxMainWindow::slotNoVinylControlInputConfigured() {
     m_noVinylInputDialog->exec();
     if (m_noVinylInputDialog->clickedButton() ==
             m_noVinylInputDialog->button(QMessageBox::Ok)) {
+        createPreferencesDialog();
         m_pPrefDlg->show();
         m_pPrefDlg->showSoundHardwarePage(mixxx::preferences::SoundHardwareTab::Input);
     }
@@ -1169,6 +1196,7 @@ void MixxxMainWindow::slotNoDeckPassthroughInputConfigured() {
     m_noPassthroughInputDialog->exec();
     if (m_noPassthroughInputDialog->clickedButton() ==
             m_noPassthroughInputDialog->button(QMessageBox::Ok)) {
+        createPreferencesDialog();
         m_pPrefDlg->show();
         m_pPrefDlg->showSoundHardwarePage(mixxx::preferences::SoundHardwareTab::Input);
     }
@@ -1196,6 +1224,7 @@ void MixxxMainWindow::slotNoMicrophoneInputConfigured() {
     m_noMicInputDialog->exec();
     if (m_noMicInputDialog->clickedButton() ==
             m_noMicInputDialog->button(QMessageBox::Ok)) {
+        createPreferencesDialog();
         m_pPrefDlg->show();
         m_pPrefDlg->showSoundHardwarePage(mixxx::preferences::SoundHardwareTab::Input);
     }
@@ -1223,6 +1252,7 @@ void MixxxMainWindow::slotNoAuxiliaryInputConfigured() {
     m_noAuxInputDialog->exec();
     if (m_noAuxInputDialog->clickedButton() ==
             m_noAuxInputDialog->button(QMessageBox::Ok)) {
+        createPreferencesDialog();
         m_pPrefDlg->show();
         m_pPrefDlg->showSoundHardwarePage(mixxx::preferences::SoundHardwareTab::Input);
     }
