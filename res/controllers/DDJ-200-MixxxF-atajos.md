@@ -40,11 +40,12 @@ Si el deck está sonando, Mixxx puede no sustituir el tema al cargar (opción de
 
 ## Pads (sin SHIFT = modo de pantalla)
 
-Los 8 pads siguen el modo del banco en LateNight (`HOT CUE` / `PAD FX` / `BEAT JUMP` / `SAMPLER`). Cada deck tiene su propio modo.
+Los 8 pads siguen el modo del banco en LateNight (`HOT CUE` / `BEAT LOOP` / `PAD FX` / `BEAT JUMP` / `SAMPLER`). Cada deck tiene su propio modo.
 
 | Modo en pantalla | Pad 1–8 | LED encendido (sin SHIFT) |
 |---|---|---|
 | **HOT CUE** | Poner / saltar al hotcue | Ese hotcue existe |
+| **BEAT LOOP** | Loops 1/8, 1/4, 1/2, 1, 2, 4, 8, 16 | Ese tamaño de loop está activo |
 | **PAD FX** | Efecto momentáneo (mantener = on) | El efecto está activo |
 | **BEAT JUMP** | −8/−4/−2/−1 y +1/+2/+4/+8 beats | Hay un tema en el deck |
 | **SAMPLER** | Dispara Sampler 1–8 (banco global) | Sample cargado o sonando |

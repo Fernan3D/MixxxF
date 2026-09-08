@@ -1,7 +1,7 @@
 <!--
 Descripcion:
-  Boton selector de modo de un banco de pads (equivalente a los 4 botones de
-  modo de una DDJ).
+  Boton selector de modo de un banco de pads (HOT CUE, BEAT LOOP, PAD FX,
+  BEAT JUMP, SAMPLER).
 
   Una sola conexion hace de entrada y de salida sobre [PadBankN],mode:
    - IsEqual enciende el boton solo cuando el modo activo es el suyo

@@ -11,18 +11,19 @@ Descripcion:
   <WidgetGroup>
     <ObjectName>PadBank</ObjectName>
     <Layout>vertical</Layout>
-    <SizePolicy>min,min</SizePolicy>
+    <SizePolicy>me,min</SizePolicy>
+    <MinimumSize>400,130</MinimumSize>
     <Children>
 
       <Template src="skins:LateNight/pads/pad_mode_bar.xml"/>
 
       <WidgetStack currentpage="[PadBank2],mode" persist="true">
-        <Size>464f,108f</Size>
+        <Size>0me,108f</Size>
         <Children>
 
           <WidgetGroup>
             <Layout>vertical</Layout>
-            <SizePolicy>min,min</SizePolicy>
+            <SizePolicy>me,min</SizePolicy>
             <Children>
               <Template src="skins:LateNight/pads/page_hotcue.xml"/>
             </Children>
@@ -30,7 +31,15 @@ Descripcion:
 
           <WidgetGroup>
             <Layout>vertical</Layout>
-            <SizePolicy>min,min</SizePolicy>
+            <SizePolicy>me,min</SizePolicy>
+            <Children>
+              <Template src="skins:LateNight/pads/page_beatloop.xml"/>
+            </Children>
+          </WidgetGroup>
+
+          <WidgetGroup>
+            <Layout>vertical</Layout>
+            <SizePolicy>me,min</SizePolicy>
             <Children>
               <Template src="skins:LateNight/pads/page_padfx.xml"/>
             </Children>
@@ -38,7 +47,7 @@ Descripcion:
 
           <WidgetGroup>
             <Layout>vertical</Layout>
-            <SizePolicy>min,min</SizePolicy>
+            <SizePolicy>me,min</SizePolicy>
             <Children>
               <Template src="skins:LateNight/pads/page_beatjump.xml"/>
             </Children>
@@ -46,7 +55,7 @@ Descripcion:
 
           <WidgetGroup>
             <Layout>vertical</Layout>
-            <SizePolicy>min,min</SizePolicy>
+            <SizePolicy>me,min</SizePolicy>
             <Children>
               <Template src="skins:LateNight/pads/page_sampler.xml"/>
             </Children>
@@ -56,5 +65,9 @@ Descripcion:
       </WidgetStack>
 
     </Children>
+    <Connection>
+      <ConfigKey persist="true">[Skin],show_pads</ConfigKey>
+      <BindProperty>visible</BindProperty>
+    </Connection>
   </WidgetGroup><!-- PadBank -->
 </Template>

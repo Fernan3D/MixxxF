@@ -24,6 +24,9 @@
         </Connection>
       </WidgetGroup>
 
+      <!-- Pads en la columna del deck 2: mismo ancho que el deck, hasta el mixer. -->
+      <Template src="skins:LateNight/pads/pad_grid_deck2.xml"/>
+
     </Children>
   </WidgetGroup>
 </Template>

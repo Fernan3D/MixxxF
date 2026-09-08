@@ -1,17 +1,16 @@
 <!--
 Descripcion:
   Bloque de Performance Pads del deck 1: barra de modos + cuadricula de 8 pads.
-  La cuadricula cambia de funcion segun el modo activo del banco, igual que en
-  Rekordbox, y cada deck tiene su propio modo.
+  Vive dentro de la columna del deck (decks_left.xml) para ocupar el mismo
+  ancho que el deck, hasta el mixer.
 
-  El indice de pagina vive en [PadBank1],mode (0 HOT CUE, 1 PAD FX,
-  2 BEAT JUMP, 3 SAMPLER) y se conserva entre sesiones. Las paginas no usan
-  "trigger": el modo lo escriben los botones de la barra, de forma que el
-  control de modo es la unica fuente de verdad.
+  El indice de pagina vive en [PadBank1],mode:
+    0 HOT CUE, 1 BEAT LOOP, 2 PAD FX, 3 BEAT JUMP, 4 SAMPLER
+  y se conserva entre sesiones. Las paginas no usan "trigger": el modo lo
+  escriben los botones de la barra.
 
   Existe un archivo por deck porque el formato de skin no sustituye variables
-  dentro de los atributos XML (currentpage); el contenido de las paginas si es
-  compartido.
+  dentro de los atributos XML (currentpage).
 -->
 <Template>
   <SetVariable name="PadDeck">1</SetVariable>
@@ -21,18 +20,19 @@ Descripcion:
   <WidgetGroup>
     <ObjectName>PadBank</ObjectName>
     <Layout>vertical</Layout>
-    <SizePolicy>min,min</SizePolicy>
+    <SizePolicy>me,min</SizePolicy>
+    <MinimumSize>400,130</MinimumSize>
     <Children>
 
       <Template src="skins:LateNight/pads/pad_mode_bar.xml"/>
 
       <WidgetStack currentpage="[PadBank1],mode" persist="true">
-        <Size>464f,108f</Size>
+        <Size>0me,108f</Size>
         <Children>
 
           <WidgetGroup>
             <Layout>vertical</Layout>
-            <SizePolicy>min,min</SizePolicy>
+            <SizePolicy>me,min</SizePolicy>
             <Children>
               <Template src="skins:LateNight/pads/page_hotcue.xml"/>
             </Children>
@@ -40,7 +40,15 @@ Descripcion:
 
           <WidgetGroup>
             <Layout>vertical</Layout>
-            <SizePolicy>min,min</SizePolicy>
+            <SizePolicy>me,min</SizePolicy>
+            <Children>
+              <Template src="skins:LateNight/pads/page_beatloop.xml"/>
+            </Children>
+          </WidgetGroup>
+
+          <WidgetGroup>
+            <Layout>vertical</Layout>
+            <SizePolicy>me,min</SizePolicy>
             <Children>
               <Template src="skins:LateNight/pads/page_padfx.xml"/>
             </Children>
@@ -48,7 +56,7 @@ Descripcion:
 
           <WidgetGroup>
             <Layout>vertical</Layout>
-            <SizePolicy>min,min</SizePolicy>
+            <SizePolicy>me,min</SizePolicy>
             <Children>
               <Template src="skins:LateNight/pads/page_beatjump.xml"/>
             </Children>
@@ -56,7 +64,7 @@ Descripcion:
 
           <WidgetGroup>
             <Layout>vertical</Layout>
-            <SizePolicy>min,min</SizePolicy>
+            <SizePolicy>me,min</SizePolicy>
             <Children>
               <Template src="skins:LateNight/pads/page_sampler.xml"/>
             </Children>
@@ -66,5 +74,9 @@ Descripcion:
       </WidgetStack>
 
     </Children>
+    <Connection>
+      <ConfigKey persist="true">[Skin],show_pads</ConfigKey>
+      <BindProperty>visible</BindProperty>
+    </Connection>
   </WidgetGroup><!-- PadBank -->
 </Template>

@@ -16,13 +16,14 @@ Variables:
   <WidgetGroup>
     <ObjectName>PadCell</ObjectName>
     <Layout>vertical</Layout>
-    <Size>116f,54f</Size>
+    <Size>0me,54f</Size>
+    <MinimumSize>80,54</MinimumSize>
     <Children>
 
       <WidgetGroup>
         <ObjectName>PadCellHeader</ObjectName>
         <Layout>horizontal</Layout>
-        <Size>116f,16f</Size>
+        <Size>0me,16f</Size>
         <Children>
           <Label>
             <ObjectName>PadNumber</ObjectName>
@@ -42,7 +43,7 @@ Variables:
       <HotcueButton>
         <TooltipId>hotcue</TooltipId>
         <ObjectName>PadHotcue</ObjectName>
-        <Size>116f,38f</Size>
+        <Size>0me,38f</Size>
         <Group><Variable name="Group"/></Group>
         <Hotcue><Variable name="HotcueNum"/></Hotcue>
         <NumberStates>3</NumberStates>

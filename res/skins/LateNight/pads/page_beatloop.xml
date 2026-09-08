@@ -1,0 +1,74 @@
+<!--
+Descripcion:
+  Pagina de pads en modo BEAT LOOP. Los 8 pads cubren loops de 1/8 a 16 beats,
+  de menor a mayor.
+
+Variables:
+  Group : grupo del deck, [ChannelN]
+-->
+<Template>
+  <WidgetGroup>
+    <ObjectName>PadPage</ObjectName>
+    <Layout>vertical</Layout>
+    <SizePolicy>me,min</SizePolicy>
+    <Children>
+
+      <WidgetGroup>
+        <ObjectName>PadRow</ObjectName>
+        <Layout>horizontal</Layout>
+        <SizePolicy>me,min</SizePolicy>
+        <Children>
+          <Template src="skins:LateNight/pads/pad_cell_beatloop.xml">
+            <SetVariable name="PadNum">1</SetVariable>
+            <SetVariable name="LoopSize">0.125</SetVariable>
+            <SetVariable name="LoopLabel">1/8</SetVariable>
+          </Template>
+          <Template src="skins:LateNight/pads/pad_cell_beatloop.xml">
+            <SetVariable name="PadNum">2</SetVariable>
+            <SetVariable name="LoopSize">0.25</SetVariable>
+            <SetVariable name="LoopLabel">1/4</SetVariable>
+          </Template>
+          <Template src="skins:LateNight/pads/pad_cell_beatloop.xml">
+            <SetVariable name="PadNum">3</SetVariable>
+            <SetVariable name="LoopSize">0.5</SetVariable>
+            <SetVariable name="LoopLabel">1/2</SetVariable>
+          </Template>
+          <Template src="skins:LateNight/pads/pad_cell_beatloop.xml">
+            <SetVariable name="PadNum">4</SetVariable>
+            <SetVariable name="LoopSize">1</SetVariable>
+            <SetVariable name="LoopLabel">1</SetVariable>
+          </Template>
+        </Children>
+      </WidgetGroup><!-- PadRow 1-4 -->
+
+      <WidgetGroup>
+        <ObjectName>PadRow</ObjectName>
+        <Layout>horizontal</Layout>
+        <SizePolicy>me,min</SizePolicy>
+        <Children>
+          <Template src="skins:LateNight/pads/pad_cell_beatloop.xml">
+            <SetVariable name="PadNum">5</SetVariable>
+            <SetVariable name="LoopSize">2</SetVariable>
+            <SetVariable name="LoopLabel">2</SetVariable>
+          </Template>
+          <Template src="skins:LateNight/pads/pad_cell_beatloop.xml">
+            <SetVariable name="PadNum">6</SetVariable>
+            <SetVariable name="LoopSize">4</SetVariable>
+            <SetVariable name="LoopLabel">4</SetVariable>
+          </Template>
+          <Template src="skins:LateNight/pads/pad_cell_beatloop.xml">
+            <SetVariable name="PadNum">7</SetVariable>
+            <SetVariable name="LoopSize">8</SetVariable>
+            <SetVariable name="LoopLabel">8</SetVariable>
+          </Template>
+          <Template src="skins:LateNight/pads/pad_cell_beatloop.xml">
+            <SetVariable name="PadNum">8</SetVariable>
+            <SetVariable name="LoopSize">16</SetVariable>
+            <SetVariable name="LoopLabel">16</SetVariable>
+          </Template>
+        </Children>
+      </WidgetGroup><!-- PadRow 5-8 -->
+
+    </Children>
+  </WidgetGroup><!-- PadPage -->
+</Template>

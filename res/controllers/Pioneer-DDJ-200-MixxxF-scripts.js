@@ -14,9 +14,21 @@ var DDJ200 = {
     // Indices de [PadBankN],mode en LateNight. La DDJ-200 no envia MIDI de modo:
     // los pads sin SHIFT siguen el modo de la pantalla.
     PAD_MODE_HOTCUE: 0,
-    PAD_MODE_PADFX: 1,
-    PAD_MODE_BEATJUMP: 2,
-    PAD_MODE_SAMPLER: 3,
+    PAD_MODE_BEATLOOP: 1,
+    PAD_MODE_PADFX: 2,
+    PAD_MODE_BEATJUMP: 3,
+    PAD_MODE_SAMPLER: 4,
+    // Strings para que el nombre coincida con beatloop_<size>_toggle.
+    beatLoopMap: [
+        "0.125",
+        "0.25",
+        "0.5",
+        "1",
+        "2",
+        "4",
+        "8",
+        "16"
+    ],
     beatJumpMap: [
         {size: 8, dir: "backward"},
         {size: 4, dir: "backward"},
@@ -63,6 +75,7 @@ DDJ200.init = function() {
             DDJ200.onChannelLed(group, function(physicalDeck) {
                 DDJ200.refreshPad1Led(physicalDeck);
                 DDJ200.refreshPad5Led(physicalDeck);
+                DDJ200.refreshUnshiftedPadLeds(physicalDeck);
             });
         });
 
@@ -100,6 +113,19 @@ DDJ200.init = function() {
                     DDJ200.refreshUnshiftedPadLed(physicalDeck, padNo);
                 });
             });
+        }
+
+        // LED de BEAT LOOP: cada tamano tiene su propio beatloop_<size>_enabled.
+        for (var loopPad = 0; loopPad < DDJ200.beatLoopMap.length; loopPad++) {
+            engine.makeConnection(
+                vgroup,
+                "beatloop_" + DDJ200.beatLoopMap[loopPad] + "_enabled",
+                function(value, group) {
+                    DDJ200.onChannelLed(group, function(physicalDeck) {
+                        DDJ200.refreshUnshiftedPadLeds(physicalDeck);
+                    });
+                }
+            );
         }
 
         engine.makeConnection("[QuickEffectRack1_[Channel" + i + "]]", "enabled", function(value, group) {
@@ -524,6 +550,9 @@ DDJ200.unshiftedPadLit = function(vDeckNo, padNo) {
     if (mode === DDJ200.PAD_MODE_PADFX) {
         return engine.getValue(DDJ200.padFxGroup(vDeckNo, padNo), "enabled");
     }
+    if (mode === DDJ200.PAD_MODE_BEATLOOP) {
+        return engine.getValue(vgroup, "beatloop_" + DDJ200.beatLoopMap[padNo - 1] + "_enabled");
+    }
     if (mode === DDJ200.PAD_MODE_BEATJUMP) {
         return engine.getValue(vgroup, "track_loaded");
     }
@@ -560,6 +589,13 @@ DDJ200.hotcueNActivate = function(channel, control, value, status, group) {
     if (mode === DDJ200.PAD_MODE_SAMPLER) {
         if (value) {
             engine.setValue("[Sampler" + pad + "]", "cue_gotoandplay", 1);
+        }
+        return;
+    }
+
+    if (mode === DDJ200.PAD_MODE_BEATLOOP) {
+        if (value) {
+            engine.setValue(vgroup, "beatloop_" + DDJ200.beatLoopMap[control] + "_toggle", 1);
         }
         return;
     }
@@ -744,7 +780,7 @@ DDJ200.refreshPad5Led = function(physicalDeck) {
 
 /**
  * Pads 1 y 5 tambien escriben la capa SHIFT (loop). El resto solo la capa
- * sin SHIFT, que ahora sigue HOT CUE / PAD FX / BEAT JUMP / SAMPLER.
+ * sin SHIFT, que ahora sigue HOT CUE / BEAT LOOP / PAD FX / BEAT JUMP / SAMPLER.
  */
 DDJ200.refreshHotcueLed = function(physicalDeck, padNo) {
     if (padNo === 1) {

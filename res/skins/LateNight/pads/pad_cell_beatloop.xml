@@ -1,14 +1,13 @@
 <!--
 Descripcion:
-  Pad en modo BEAT JUMP. Cada pad salta un numero fijo de beats hacia atras o
-  hacia delante usando los controles beatjump_<size>_<direccion> que el motor
-  ya expone por deck.
+  Pad en modo BEAT LOOP. Cada pad activa o desactiva un loop de un tamano
+  fijo (1/8 ... 16 beats) con beatloop_<size>_toggle. El LED del pad sigue
+  beatloop_<size>_enabled para ver cual esta puesto.
 
 Variables:
   PadNum    : numero visible del pad (1-8)
-  JumpSize  : cantidad de beats del salto
-  Direction : forward o backward
-  JumpLabel : texto del pad, con signo (-8, +4...)
+  LoopSize  : tamano Mixxx (0.125, 0.25, 0.5, 1, 2, 4, 8, 16)
+  LoopLabel : texto del pad (1/8, 1/4...)
   Group     : grupo del deck, [ChannelN]
 -->
 <Template>
@@ -33,25 +32,34 @@ Variables:
           <Label>
             <ObjectName>PadCaption</ObjectName>
             <Size>0me,16f</Size>
-            <Text>BEATS</Text>
+            <Text>LOOP</Text>
             <Alignment>left</Alignment>
           </Label>
         </Children>
       </WidgetGroup><!-- PadCellHeader -->
 
       <PushButton>
-        <TooltipId>beatjump_forward</TooltipId>
-        <ObjectName>PadJump</ObjectName>
+        <TooltipId>beatloop_activate</TooltipId>
+        <ObjectName>PadLoop</ObjectName>
         <Size>0me,38f</Size>
-        <NumberStates>1</NumberStates>
+        <NumberStates>2</NumberStates>
         <State>
           <Number>0</Number>
-          <Text><Variable name="JumpLabel"/></Text>
+          <Text><Variable name="LoopLabel"/></Text>
+          <Alignment>center</Alignment>
+        </State>
+        <State>
+          <Number>1</Number>
+          <Text><Variable name="LoopLabel"/></Text>
           <Alignment>center</Alignment>
         </State>
         <Connection>
-          <ConfigKey><Variable name="Group"/>,beatjump_<Variable name="JumpSize"/>_<Variable name="Direction"/></ConfigKey>
+          <ConfigKey><Variable name="Group"/>,beatloop_<Variable name="LoopSize"/>_toggle</ConfigKey>
           <ButtonState>LeftButton</ButtonState>
+        </Connection>
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,beatloop_<Variable name="LoopSize"/>_enabled</ConfigKey>
+          <ConnectValueFromWidget>false</ConnectValueFromWidget>
         </Connection>
       </PushButton>
 

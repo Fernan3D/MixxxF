@@ -11,13 +11,13 @@ Descripcion:
   <WidgetGroup>
     <ObjectName>PadPage</ObjectName>
     <Layout>vertical</Layout>
-    <SizePolicy>min,min</SizePolicy>
+    <SizePolicy>me,min</SizePolicy>
     <Children>
 
       <WidgetGroup>
         <ObjectName>PadRow</ObjectName>
         <Layout>horizontal</Layout>
-        <SizePolicy>min,min</SizePolicy>
+        <SizePolicy>me,min</SizePolicy>
         <Children>
           <Template src="skins:LateNight/pads/pad_cell_sampler.xml">
             <SetVariable name="PadNum">1</SetVariable>
@@ -41,7 +41,7 @@ Descripcion:
       <WidgetGroup>
         <ObjectName>PadRow</ObjectName>
         <Layout>horizontal</Layout>
-        <SizePolicy>min,min</SizePolicy>
+        <SizePolicy>me,min</SizePolicy>
         <Children>
           <Template src="skins:LateNight/pads/pad_cell_sampler.xml">
             <SetVariable name="PadNum">5</SetVariable>

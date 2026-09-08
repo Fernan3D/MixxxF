@@ -24,7 +24,8 @@ bool positionNear(mixxx::audio::FramePos a, mixxx::audio::FramePos target) {
 }
 } // namespace
 
-double LoopingControl::s_dBeatSizes[] = { 0.03125, 0.0625, 0.125, 0.25, 0.5,
+// 0.015625 = 1/64: MixxxF lo necesita en los Performance Pads (BEAT LOOP pad 1).
+double LoopingControl::s_dBeatSizes[] = { 0.015625, 0.03125, 0.0625, 0.125, 0.25, 0.5,
                                           1, 2, 4, 8, 16, 32, 64, 128, 256, 512 };
 
 // Used to generate the beatloop_%SIZE, beatjump_%SIZE, and loop_move_%SIZE CO

@@ -1,11 +1,10 @@
 <!--
 Descripcion:
-  Barra superior de un banco de pads: nombre del deck y los 4 selectores de
-  modo. El ancho total (76 + 4x97 = 464) coincide con el de la cuadricula
-  (4 pads de 116) para que todo quede alineado.
+  Barra superior de un banco de pads: nombre del deck y los 5 selectores de
+  modo. El ancho es elastico (0me) para ocupar todo el deck, hasta el mixer.
 
-  Los cuatro botones escriben directamente su indice en [PadBankN],mode, que
-  es el mismo control que elige la pagina del WidgetStack.
+  Los botones escriben su indice en [PadBankN],mode, que elige la pagina del
+  WidgetStack: 0 HOT CUE, 1 BEAT LOOP, 2 PAD FX, 3 BEAT JUMP, 4 SAMPLER.
 
 Variables:
   PadDeck : numero de deck
@@ -15,42 +14,49 @@ Variables:
   <WidgetGroup>
     <ObjectName>PadModeBar</ObjectName>
     <Layout>horizontal</Layout>
-    <Size>464f,22f</Size>
+    <Size>0me,22f</Size>
     <Children>
 
       <Label>
         <ObjectName>PadBankLabel</ObjectName>
-        <Size>76f,22f</Size>
+        <Size>58f,22f</Size>
         <Text>DECK <Variable name="PadDeck"/></Text>
         <Alignment>left</Alignment>
       </Label>
 
       <Template src="skins:LateNight/pads/pad_mode_button.xml">
         <SetVariable name="Text">HOT CUE</SetVariable>
-        <SetVariable name="Width">97f</SetVariable>
+        <SetVariable name="Width">0me</SetVariable>
         <SetVariable name="ModeCO"><Variable name="PadBank"/>,mode</SetVariable>
         <SetVariable name="ModeIndex">0</SetVariable>
       </Template>
 
       <Template src="skins:LateNight/pads/pad_mode_button.xml">
-        <SetVariable name="Text">PAD FX</SetVariable>
-        <SetVariable name="Width">97f</SetVariable>
+        <SetVariable name="Text">BEAT LOOP</SetVariable>
+        <SetVariable name="Width">0me</SetVariable>
         <SetVariable name="ModeCO"><Variable name="PadBank"/>,mode</SetVariable>
         <SetVariable name="ModeIndex">1</SetVariable>
       </Template>
 
       <Template src="skins:LateNight/pads/pad_mode_button.xml">
-        <SetVariable name="Text">BEAT JUMP</SetVariable>
-        <SetVariable name="Width">97f</SetVariable>
+        <SetVariable name="Text">PAD FX</SetVariable>
+        <SetVariable name="Width">0me</SetVariable>
         <SetVariable name="ModeCO"><Variable name="PadBank"/>,mode</SetVariable>
         <SetVariable name="ModeIndex">2</SetVariable>
       </Template>
 
       <Template src="skins:LateNight/pads/pad_mode_button.xml">
-        <SetVariable name="Text">SAMPLER</SetVariable>
-        <SetVariable name="Width">97f</SetVariable>
+        <SetVariable name="Text">BEAT JUMP</SetVariable>
+        <SetVariable name="Width">0me</SetVariable>
         <SetVariable name="ModeCO"><Variable name="PadBank"/>,mode</SetVariable>
         <SetVariable name="ModeIndex">3</SetVariable>
+      </Template>
+
+      <Template src="skins:LateNight/pads/pad_mode_button.xml">
+        <SetVariable name="Text">SAMPLER</SetVariable>
+        <SetVariable name="Width">0me</SetVariable>
+        <SetVariable name="ModeCO"><Variable name="PadBank"/>,mode</SetVariable>
+        <SetVariable name="ModeIndex">4</SetVariable>
       </Template>
 
     </Children>
