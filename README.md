@@ -6,7 +6,7 @@ Este repositorio **no es Mixxx oficial**. Es un fork personal
 ([Fernan3D/MixxxF](https://github.com/Fernan3D/MixxxF)) centrado en
 **Pioneer DDJ-200** + skin LateNight (Performance Pads).
 
-![MixxxF LateNight con Performance Pads y Pioneer DDJ-200](docs/mixxxf/late-night-ddj200.jpg)
+![MixxxF LateNight con Performance Pads y Pioneer DDJ-200](docs/mixxxf/late-night-ddj200.png)
 
 Guia del fork: [MIXXXF.md](MIXXXF.md). Perfil MIDI:
 [Pioneer DDJ-200 MixxxF.midi.xml](res/controllers/Pioneer%20DDJ-200%20MixxxF.midi.xml)
