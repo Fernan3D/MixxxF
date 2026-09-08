@@ -1,0 +1,29 @@
+# MixxxF: deja origin/main igual que mixxxdj/mixxx (main).
+# No toca custom/mixxxf. El merge a MixxxF se hace en local con
+# actualizar-desde-mixxx.bat.
+
+name: MixxxF sync Mixxx main
+
+on:
+  schedule:
+    # Lunes 07:00 UTC
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch Mixxx official main
+        run: git fetch --no-tags https://github.com/mixxxdj/mixxx.git +main:refs/remotes/mixxx/main
+
+      - name: Push Mixxx main onto origin/main
+        run: git push origin refs/remotes/mixxx/main:refs/heads/main
