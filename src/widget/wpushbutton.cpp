@@ -290,10 +290,43 @@ void WPushButton::setPixmapBackground(const PixmapSource& source,
     }
 }
 
+bool WPushButton::shouldSkipHoverPolish() const {
+    if (sizePolicy().horizontalPolicy() != QSizePolicy::Fixed ||
+            sizePolicy().verticalPolicy() != QSizePolicy::Fixed) {
+        return false;
+    }
+    if (m_unpressedPixmaps.isEmpty()) {
+        return false;
+    }
+    for (const PaintablePointer& pPixmap : m_unpressedPixmaps) {
+        if (!pPixmap || pPixmap->isNull()) {
+            return false;
+        }
+    }
+    return true;
+}
+
 void WPushButton::restyleAndRepaint() {
+    // polish() reaplica el QSS y puede borrar setFixedSize. En un padre
+    // elastico el layout recorta entonces el boton a un sizeHint cada vez
+    // menor (hover -> desaparece). Conservamos el tamano fijo del skin.
+    const QSizePolicy savedPolicy = sizePolicy();
+    const QSize savedMin = minimumSize();
+    const QSize savedMax = maximumSize();
+    const bool lockFixed = savedPolicy.horizontalPolicy() == QSizePolicy::Fixed &&
+            savedPolicy.verticalPolicy() == QSizePolicy::Fixed &&
+            savedMin.width() > 0 && savedMin.height() > 0;
+
     emit displayValueChanged(readDisplayValue());
 
     style()->polish(this);
+
+    if (lockFixed) {
+        setSizePolicy(savedPolicy);
+        setMinimumSize(savedMin);
+        setMaximumSize(savedMax);
+        setFixedSize(savedMin);
+    }
 
     // These calls don't always trigger the repaint, so call it explicitly.
     repaint();
@@ -442,7 +475,12 @@ bool WPushButton::event(QEvent* e) {
         }
     } else if (e->type() == QEvent::Enter) {
         m_bHovered = true;
-        restyleAndRepaint();
+        // polish() en hover recorta botones con SVG (barra L/M/R del mixer).
+        if (shouldSkipHoverPolish()) {
+            update();
+        } else {
+            restyleAndRepaint();
+        }
     } else if (e->type() == QEvent::Leave) {
         // Leave might occur sporadically while dragging (swapping) a WHotcueButton.
         // Don't release in that case.
@@ -461,7 +499,11 @@ bool WPushButton::event(QEvent* e) {
             mouseReleaseEvent(&mouseEvent);
         }
         m_bHovered = false;
-        restyleAndRepaint();
+        if (shouldSkipHoverPolish()) {
+            update();
+        } else {
+            restyleAndRepaint();
+        }
     }
     return WWidget::event(e);
 }

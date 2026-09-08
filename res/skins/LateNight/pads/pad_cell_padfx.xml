@@ -1,20 +1,11 @@
 <!--
 Descripcion:
-  Celda de un pad en modo PAD FX. El pad es momentaneo: mantener pulsado
-  activa el efecto y al soltar se desactiva, como el Pad FX de Rekordbox.
-
-  El efecto vive en la PadFxChain del deck ([PadFxRack1_[ChannelN]]), una
-  cadena dedicada que Mixxx crea junto al deck y que no aparece en el rack de
-  efectos. El nombre que se muestra lo lee EffectName del slot, asi que si el
-  efecto del pad cambia la etiqueta se actualiza sola.
-
-  LeftClickIsPushButton fuerza el comportamiento momentaneo: el control
-  "enabled" del slot es un boton PowerWindow y, sin esto, un click corto lo
-  dejaria enganchado.
+  Celda PAD FX: pad momentaneo, lista desplegable para elegir el efecto
+  (WEffectSelector, igual que el rack de Mixxx) y knob meta de intensidad.
 
 Variables:
-  PadNum : numero de pad que se muestra (1-8)
-  FxNum  : numero de slot de efecto dentro de la cadena (1-8)
+  PadNum : numero de pad (1-8)
+  FxNum  : slot de la PadFxChain (1-8)
   Group  : canal del deck, [ChannelN]
 -->
 <Template>
@@ -24,52 +15,79 @@ Variables:
   <WidgetGroup>
     <ObjectName>PadCell</ObjectName>
     <Layout>vertical</Layout>
-    <Size>0me,54f</Size>
-    <MinimumSize>80,54</MinimumSize>
+    <Size>0me,62f</Size>
+    <MinimumSize>90,62</MinimumSize>
     <Children>
 
       <WidgetGroup>
         <ObjectName>PadCellHeader</ObjectName>
         <Layout>horizontal</Layout>
-        <Size>0me,16f</Size>
+        <Size>0me,22f</Size>
         <Children>
           <Label>
             <ObjectName>PadNumber</ObjectName>
-            <Size>13f,16f</Size>
+            <Size>13f,22f</Size>
             <Text><Variable name="PadNum"/></Text>
             <Alignment>center</Alignment>
           </Label>
-          <EffectName>
-            <ObjectName>PadCaption</ObjectName>
-            <Size>0me,16f</Size>
+          <EffectSelector>
+            <ObjectName>PadFxSelector</ObjectName>
+            <Size>0me,20f</Size>
+            <MinimumSize>36,20</MinimumSize>
+            <SizePolicy>me,f</SizePolicy>
             <EffectUnitGroup><Variable name="ChainGroup"/></EffectUnitGroup>
             <Effect><Variable name="FxNum"/></Effect>
-            <Elide>right</Elide>
-          </EffectName>
+          </EffectSelector>
         </Children>
       </WidgetGroup>
 
-      <PushButton>
-        <TooltipId>EffectSlot_enabled</TooltipId>
-        <ObjectName>PadFx</ObjectName>
-        <Size>0me,38f</Size>
-        <NumberStates>2</NumberStates>
-        <LeftClickIsPushButton>true</LeftClickIsPushButton>
-        <State>
-          <Number>0</Number>
-          <Text></Text>
-          <Alignment>center</Alignment>
-        </State>
-        <State>
-          <Number>1</Number>
-          <Text></Text>
-          <Alignment>center</Alignment>
-        </State>
-        <Connection>
-          <ConfigKey><Variable name="SlotGroup"/>,enabled</ConfigKey>
-          <ButtonState>LeftButton</ButtonState>
-        </Connection>
-      </PushButton>
+      <WidgetGroup>
+        <ObjectName>PadFxBody</ObjectName>
+        <Layout>horizontal</Layout>
+        <Size>0me,40f</Size>
+        <Children>
+          <PushButton>
+            <TooltipId>EffectSlot_enabled</TooltipId>
+            <ObjectName>PadFx</ObjectName>
+            <Size>0me,40f</Size>
+            <NumberStates>2</NumberStates>
+            <LeftClickIsPushButton>true</LeftClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text></Text>
+              <Alignment>center</Alignment>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text></Text>
+              <Alignment>center</Alignment>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="SlotGroup"/>,enabled</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <EffectMetaKnob>
+            <TooltipId>EffectSlot_metaknob</TooltipId>
+            <ObjectName>PadFxMeta</ObjectName>
+            <Size>35f,30f</Size>
+            <Knob>skins:LateNight/<Variable name="KnobScheme"/>/knobs/knob_indicator_small_<Variable name="KnobColorFx12"/>.svg</Knob>
+            <BackPath>skins:LateNight/<Variable name="KnobScheme"/>/knobs/knob_bg_small.svg</BackPath>
+            <MinAngle><Variable name="PotiMinAngle"/></MinAngle>
+            <MaxAngle><Variable name="PotiMaxAngle"/></MaxAngle>
+            <KnobCenterYOffset>1.883</KnobCenterYOffset>
+            <ArcRadius><Variable name="ArcRadiusSmall"/></ArcRadius>
+            <ArcThickness>2</ArcThickness>
+            <ArcRoundCaps><Variable name="ArcRoundCaps"/></ArcRoundCaps>
+            <ArcColor><Variable name="ArcColorFx12Quick"/></ArcColor>
+            <EffectUnitGroup><Variable name="ChainGroup"/></EffectUnitGroup>
+            <Effect><Variable name="FxNum"/></Effect>
+            <Connection>
+              <ConfigKey><Variable name="SlotGroup"/>,meta</ConfigKey>
+            </Connection>
+          </EffectMetaKnob>
+        </Children>
+      </WidgetGroup>
 
     </Children>
   </WidgetGroup><!-- PadCell -->

@@ -83,12 +83,12 @@
       <attribute persist="true" config_key="[Skin],show_effectrack">1</attribute>
       <attribute persist="true" config_key="[Skin],show_4effectunits">0</attribute>
       <attribute persist="true" config_key="[Skin],show_superknobs">0</attribute>
-    <!-- Performance Pads: modo por deck (0 HOT CUE, 1 BEAT LOOP, 2 PAD FX, 3 BEAT JUMP, 4 SAMPLER) -->
+    <!-- Performance Pads: 0 HOT CUE, 1 BEAT LOOP, 2 LOOP ROLL, 3 PAD FX, 4 BEAT JUMP, 5 SAMPLER -->
       <attribute persist="true" config_key="[Skin],show_pads">0</attribute>
       <attribute persist="true" config_key="[PadBank1],mode">0</attribute>
       <attribute persist="true" config_key="[PadBank2],mode">0</attribute>
-    <!-- Samplers: los reproductores [SamplerN] siguen existiendo porque el
-    modo SAMPLER de los pads los usa como motor de reproduccion -->
+    <!-- Samplers: el modo SAMPLER de los pads usa 16 reproductores
+    (deck 1 = Sampler 1-8, deck 2 = Sampler 9-16) -->
       <attribute persist="true" config_key="[Skin],show_samplers">0</attribute>
       <attribute persist="true" config_key="[LateNight],sampler_rows">1</attribute>
       <attribute persist="true" config_key="[LateNight],expand_samplers_1-4">0</attribute>

@@ -11,13 +11,16 @@ var DDJ200 = {
     pendingBrowseTimer: 0,
     playBlinkOn: false,
     playBlinkTimer: 0,
+    padModeTimer: 0,
+    lastPadMode: [-1, -1, -1],
     // Indices de [PadBankN],mode en LateNight. La DDJ-200 no envia MIDI de modo:
     // los pads sin SHIFT siguen el modo de la pantalla.
     PAD_MODE_HOTCUE: 0,
     PAD_MODE_BEATLOOP: 1,
-    PAD_MODE_PADFX: 2,
-    PAD_MODE_BEATJUMP: 3,
-    PAD_MODE_SAMPLER: 4,
+    PAD_MODE_LOOPROLL: 2,
+    PAD_MODE_PADFX: 3,
+    PAD_MODE_BEATJUMP: 4,
+    PAD_MODE_SAMPLER: 5,
     // Strings para que el nombre coincida con beatloop_<size>_toggle.
     beatLoopMap: [
         "0.125",
@@ -39,6 +42,77 @@ var DDJ200 = {
         {size: 4, dir: "forward"},
         {size: 8, dir: "forward"}
     ]
+};
+
+/**
+ * Conexion inmediata para LEDs. makeConnection agrupa cambios y a veces se
+ * come el aviso de un hotcue creado desde la skin.
+ */
+DDJ200.connectLed = function(group, key, callback) {
+    if (typeof engine.makeUnbufferedConnection === "function") {
+        return engine.makeUnbufferedConnection(group, key, callback);
+    }
+    return engine.makeConnection(group, key, callback);
+};
+
+/** Deck 1 y 3: Sampler 1-8. Deck 2 y 4: Sampler 9-16. */
+DDJ200.samplerNumber = function(vDeckNo, padNo) {
+    return ((vDeckNo - 1) % 2) * 8 + padNo;
+};
+
+DDJ200.samplerGroup = function(vDeckNo, padNo) {
+    return "[Sampler" + DDJ200.samplerNumber(vDeckNo, padNo) + "]";
+};
+
+/**
+ * [PadBankN],mode lo crea la skin. Si el mapeo se conecta antes, Mixxx ignora
+ * el callback y los LEDs no siguen a las pestañas. Este reloj compara el modo
+ * y reescribe los 8 pads en cuanto cambia el panel.
+ */
+DDJ200.watchPadModes = function() {
+    for (var deck = 1; deck <= 2; deck++) {
+        var mode = engine.getValue("[PadBank" + deck + "]", "mode");
+        if (mode !== DDJ200.lastPadMode[deck]) {
+            DDJ200.lastPadMode[deck] = mode;
+            DDJ200.refreshUnshiftedPadLeds(deck);
+        }
+    }
+};
+
+DDJ200.startPadModeWatch = function() {
+    if (DDJ200.padModeTimer) {
+        return;
+    }
+    DDJ200.padModeTimer = engine.beginTimer(40, function() {
+        DDJ200.watchPadModes();
+    });
+};
+
+DDJ200.stopPadModeWatch = function() {
+    if (DDJ200.padModeTimer) {
+        engine.stopTimer(DDJ200.padModeTimer);
+        DDJ200.padModeTimer = 0;
+    }
+};
+
+/** Se llama cuando la skin ya existe, para no conectar a un CO ausente. */
+DDJ200.bindPadBankMode = function() {
+    for (var deck = 1; deck <= 2; deck++) {
+        (function(physicalDeck) {
+            var conn = engine.makeConnection(
+                "[PadBank" + physicalDeck + "]",
+                "mode",
+                function() {
+                    DDJ200.lastPadMode[physicalDeck] =
+                            engine.getValue("[PadBank" + physicalDeck + "]", "mode");
+                    DDJ200.refreshUnshiftedPadLeds(physicalDeck);
+                }
+            );
+            if (conn && typeof conn.trigger === "function") {
+                conn.trigger();
+            }
+        })(deck);
+    }
 };
 
 DDJ200.init = function() {
@@ -103,23 +177,37 @@ DDJ200.init = function() {
         });
 
         // Por qué los 8: si solo se escucha 1 y 5, el resto no sigue a la skin.
+        // Unbuffered: al crear un hotcue en la waveform a veces el callback
+        // agrupado no llega y el LED de la DDJ se queda apagado.
         for (var pad = 1; pad <= 8; pad++) {
-            engine.makeConnection(vgroup, "hotcue_" + pad + "_enabled", function(value, group, control) {
-                var padNo = parseInt(String(control || "").split("_")[1], 10);
-                if (!padNo) {
-                    return;
-                }
-                DDJ200.onChannelLed(group, function(physicalDeck) {
-                    DDJ200.refreshUnshiftedPadLed(physicalDeck, padNo);
+            (function(padNo) {
+                DDJ200.connectLed(vgroup, "hotcue_" + padNo + "_enabled", function(_value, group) {
+                    DDJ200.onChannelLed(group, function(physicalDeck) {
+                        DDJ200.refreshUnshiftedPadLeds(physicalDeck);
+                    });
                 });
-            });
+                DDJ200.connectLed(vgroup, "hotcue_" + padNo + "_color", function(_value, group) {
+                    DDJ200.onChannelLed(group, function(physicalDeck) {
+                        DDJ200.refreshUnshiftedPadLeds(physicalDeck);
+                    });
+                });
+            })(pad);
         }
 
-        // LED de BEAT LOOP: cada tamano tiene su propio beatloop_<size>_enabled.
+        // LED de BEAT LOOP y LOOP ROLL: cada tamano tiene su propio control.
         for (var loopPad = 0; loopPad < DDJ200.beatLoopMap.length; loopPad++) {
             engine.makeConnection(
                 vgroup,
                 "beatloop_" + DDJ200.beatLoopMap[loopPad] + "_enabled",
+                function(value, group) {
+                    DDJ200.onChannelLed(group, function(physicalDeck) {
+                        DDJ200.refreshUnshiftedPadLeds(physicalDeck);
+                    });
+                }
+            );
+            engine.makeConnection(
+                vgroup,
+                "beatlooproll_" + DDJ200.beatLoopMap[loopPad] + "_activate",
                 function(value, group) {
                     DDJ200.onChannelLed(group, function(physicalDeck) {
                         DDJ200.refreshUnshiftedPadLeds(physicalDeck);
@@ -151,28 +239,22 @@ DDJ200.init = function() {
         DDJ200.refreshAutoDjLed();
     });
 
-    // Samples globales: cualquier deck en modo SAMPLER usa Sampler 1-8.
-    for (var s = 1; s <= 8; s++) {
-        engine.makeConnection("[Sampler" + s + "]", "track_loaded", function() {
-            DDJ200.refreshUnshiftedPadLeds(1);
-            DDJ200.refreshUnshiftedPadLeds(2);
-        });
-        engine.makeConnection("[Sampler" + s + "]", "play_latched", function() {
-            DDJ200.refreshUnshiftedPadLeds(1);
-            DDJ200.refreshUnshiftedPadLeds(2);
-        });
-    }
-
-    // Modo de pantalla y Pad FX (LateNight, decks 1 y 2).
-    for (var bank = 1; bank <= 2; bank++) {
-        engine.makeConnection("[PadBank" + bank + "]", "mode", function(_value, group) {
-            var deckNo = Number(group.slice("[PadBank".length, group.length - 1));
-            DDJ200.onChannelLed("[Channel" + deckNo + "]", function(physicalDeck) {
+    // Samples por deck: 1-8 a la izquierda, 9-16 a la derecha.
+    for (var s = 1; s <= 16; s++) {
+        (function(samplerNo) {
+            var physicalDeck = samplerNo <= 8 ? 1 : 2;
+            DDJ200.connectLed("[Sampler" + samplerNo + "]", "track_loaded", function() {
                 DDJ200.refreshUnshiftedPadLeds(physicalDeck);
             });
-        });
+            DDJ200.connectLed("[Sampler" + samplerNo + "]", "play_latched", function() {
+                DDJ200.refreshUnshiftedPadLeds(physicalDeck);
+            });
+        })(s);
+    }
+
+    for (var fxBank = 1; fxBank <= 2; fxBank++) {
         for (var fxPad = 1; fxPad <= 8; fxPad++) {
-            engine.makeConnection(DDJ200.padFxGroup(bank, fxPad), "enabled", function(_value, fxGroup) {
+            engine.makeConnection(DDJ200.padFxGroup(fxBank, fxPad), "enabled", function(_value, fxGroup) {
                 var deckNo = Number(fxGroup.split("Channel")[1].split("]")[0]);
                 var padNo = Number(fxGroup.split("_Effect")[1].split("]")[0]);
                 DDJ200.onChannelLed("[Channel" + deckNo + "]", function(physicalDeck) {
@@ -181,6 +263,8 @@ DDJ200.init = function() {
             });
         }
     }
+
+    DDJ200.startPadModeWatch();
 
     DDJ200.LEDsOff();
 
@@ -193,9 +277,18 @@ DDJ200.init = function() {
         DDJ200.refreshShiftLayerLeds();
         DDJ200.switchLEDs(DDJ200.vDeckNo[1]);
         DDJ200.switchLEDs(DDJ200.vDeckNo[2]);
+        DDJ200.bindPadBankMode();
+        DDJ200.refreshUnshiftedPadLeds(1);
+        DDJ200.refreshUnshiftedPadLeds(2);
         DDJ200.updatePlayBlinkTimer();
         // Despues de los defaults: el dump pisa CFX 50 % con la rueda real.
         DDJ200.requestControllerPositions();
+        // Pioneer a veces reescribe pads al arrancar; un segundo pase los deja
+        // alineados con el panel de la skin.
+        engine.beginTimer(300, function() {
+            DDJ200.refreshUnshiftedPadLeds(1);
+            DDJ200.refreshUnshiftedPadLeds(2);
+        }, true);
     }, true);
 };
 
@@ -213,6 +306,7 @@ DDJ200.requestControllerPositions = function() {
 };
 
 DDJ200.shutdown = function() {
+    DDJ200.stopPadModeWatch();
     DDJ200.stopPlayBlinkTimer();
     DDJ200.LEDsOff();
 };
@@ -544,8 +638,8 @@ DDJ200.unshiftedPadLit = function(vDeckNo, padNo) {
     var mode = DDJ200.padMode(vDeckNo);
     var vgroup = "[Channel" + vDeckNo + "]";
     if (mode === DDJ200.PAD_MODE_SAMPLER) {
-        return engine.getValue("[Sampler" + padNo + "]", "play_latched") ||
-                engine.getValue("[Sampler" + padNo + "]", "track_loaded");
+        return engine.getValue(DDJ200.samplerGroup(vDeckNo, padNo), "play_latched") ||
+                engine.getValue(DDJ200.samplerGroup(vDeckNo, padNo), "track_loaded");
     }
     if (mode === DDJ200.PAD_MODE_PADFX) {
         return engine.getValue(DDJ200.padFxGroup(vDeckNo, padNo), "enabled");
@@ -553,8 +647,12 @@ DDJ200.unshiftedPadLit = function(vDeckNo, padNo) {
     if (mode === DDJ200.PAD_MODE_BEATLOOP) {
         return engine.getValue(vgroup, "beatloop_" + DDJ200.beatLoopMap[padNo - 1] + "_enabled");
     }
+    if (mode === DDJ200.PAD_MODE_LOOPROLL) {
+        return engine.getValue(vgroup, "beatlooproll_" + DDJ200.beatLoopMap[padNo - 1] + "_activate");
+    }
     if (mode === DDJ200.PAD_MODE_BEATJUMP) {
-        return engine.getValue(vgroup, "track_loaded");
+        // Sin ocupacion: apagados, como un banco de samples vacio.
+        return false;
     }
     return engine.getValue(vgroup, "hotcue_" + padNo + "_enabled");
 };
@@ -588,7 +686,7 @@ DDJ200.hotcueNActivate = function(channel, control, value, status, group) {
 
     if (mode === DDJ200.PAD_MODE_SAMPLER) {
         if (value) {
-            engine.setValue("[Sampler" + pad + "]", "cue_gotoandplay", 1);
+            engine.setValue(DDJ200.samplerGroup(vDeckNo, pad), "cue_gotoandplay", 1);
         }
         return;
     }
@@ -600,7 +698,19 @@ DDJ200.hotcueNActivate = function(channel, control, value, status, group) {
         return;
     }
 
+    // LOOP ROLL es hold: 1 al pulsar, 0 al soltar (slip / el tema sigue).
+    if (mode === DDJ200.PAD_MODE_LOOPROLL) {
+        engine.setValue(
+            vgroup,
+            "beatlooproll_" + DDJ200.beatLoopMap[control] + "_activate",
+            value ? 1 : 0
+        );
+        return;
+    }
+
     if (mode === DDJ200.PAD_MODE_BEATJUMP) {
+        var physicalDeck = script.deckFromGroup(group);
+        DDJ200.sendUnshiftedPadLed(physicalDeck, pad, !!value);
         if (!value) {
             return;
         }
@@ -614,10 +724,12 @@ DDJ200.hotcueNActivate = function(channel, control, value, status, group) {
 };
 
 DDJ200.hotcueNClear = function(channel, control, value, status, group) {
-    var vDeckNo = DDJ200.vDeckNo[script.deckFromGroup(group)];
+    var physicalDeck = script.deckFromGroup(group);
+    var vDeckNo = DDJ200.vDeckNo[physicalDeck];
     var vgroup = "[Channel" + vDeckNo + "]";
     engine.setValue(vgroup, "hotcue_" + (control + 1) + "_clear", true);
     midi.sendShortMsg(status-1, control, 0x00);        // set hotcue LEDs
+    DDJ200.refreshUnshiftedPadLed(physicalDeck, control + 1);
 };
 
 /**
@@ -780,7 +892,8 @@ DDJ200.refreshPad5Led = function(physicalDeck) {
 
 /**
  * Pads 1 y 5 tambien escriben la capa SHIFT (loop). El resto solo la capa
- * sin SHIFT, que ahora sigue HOT CUE / BEAT LOOP / PAD FX / BEAT JUMP / SAMPLER.
+ * sin SHIFT, que ahora sigue HOT CUE / BEAT LOOP / LOOP ROLL / PAD FX /
+ * BEAT JUMP / SAMPLER.
  */
 DDJ200.refreshHotcueLed = function(physicalDeck, padNo) {
     if (padNo === 1) {

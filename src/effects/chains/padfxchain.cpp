@@ -5,6 +5,7 @@
 #include "effects/backends/effectsbackendmanager.h"
 #include "effects/effectslot.h"
 #include "effects/effectsmanager.h"
+#include "effects/presets/effectchainpreset.h"
 #include "moc_padfxchain.cpp"
 #include "util/assert.h"
 
@@ -84,5 +85,16 @@ void PadFxChain::loadDefaultPadEffects() {
         const EffectSlotPointer pSlot = m_effectSlots.at(i);
         pSlot->loadEffectWithDefaults(pManifest);
         pSlot->setMetaParameter(kPadFxPresets[i].metaknob, true);
+    }
+}
+
+void PadFxChain::loadChainPreset(EffectChainPresetPointer pPreset) {
+    EffectChain::loadChainPreset(pPreset);
+    // PerGroupEffectChain ya deja mix en 1.0; loadChainPreset no lo toca,
+    // pero lo reafirmamos por si un preset futuro guardara wet/dry.
+    m_pControlChainMix->set(1.0);
+    sendParameterUpdate();
+    for (const auto& pSlot : std::as_const(m_effectSlots)) {
+        pSlot->setEnabled(false);
     }
 }

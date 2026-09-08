@@ -3,7 +3,7 @@
     <info>
         <name>Pioneer DDJ-200 MixxxF</name>
         <author>Dan Giddins, Frank.Breitling at gmx.de</author>
-        <description>Mapeo MixxxF: pads sin SHIFT siguen el modo de pantalla (HOT CUE / BEAT LOOP / PAD FX / BEAT JUMP / SAMPLER). SHIFT+pads igual que el perfil personal (loop, slip, reverse).</description>
+        <description>Mapeo MixxxF: pads sin SHIFT siguen el modo de pantalla (HOT CUE / BEAT LOOP / LOOP ROLL / PAD FX / BEAT JUMP / SAMPLER). Samples por deck (1-8 y 9-16). LEDs segun ocupacion del panel activo. SHIFT+pads igual que el perfil personal (loop, slip, reverse).</description>
         <forum>https://mixxx.discourse.group/t/pioneer-ddj-200-mapping/18259</forum>
         <manual>pioneer_ddj_200</manual>
     </info>

@@ -16,8 +16,8 @@ Variables:
   <WidgetGroup>
     <ObjectName>PadCell</ObjectName>
     <Layout>vertical</Layout>
-    <Size>0me,54f</Size>
-    <MinimumSize>80,54</MinimumSize>
+    <Size>0me,58f</Size>
+    <MinimumSize>80,58</MinimumSize>
     <Children>
 
       <WidgetGroup>
@@ -39,6 +39,24 @@ Variables:
           </Label>
         </Children>
       </WidgetGroup><!-- PadCellHeader -->
+
+      <PushButton>
+        <ObjectName>PadOccupied</ObjectName>
+        <Size>0me,4f</Size>
+        <NumberStates>2</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text></Text>
+        </State>
+        <State>
+          <Number>1</Number>
+          <Text></Text>
+        </State>
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,hotcue_<Variable name="HotcueNum"/>_enabled</ConfigKey>
+          <ConnectValueFromWidget>false</ConnectValueFromWidget>
+        </Connection>
+      </PushButton>
 
       <HotcueButton>
         <TooltipId>hotcue</TooltipId>

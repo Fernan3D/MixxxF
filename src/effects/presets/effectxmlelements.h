@@ -17,6 +17,7 @@ const QString kChainPresetList(QStringLiteral("ChainPresetList"));
 const QString kQuickEffectList(QStringLiteral("QuickEffectPresetList"));
 const QString kStemQuickEffectChainPresets(QStringLiteral("StemQuickEffectChains"));
 const QString kQuickEffectChainPresets(QStringLiteral("QuickEffectChains"));
+const QString kPadFxChains(QStringLiteral("PadFxChains"));
 const QString kEqualizerEffects(QStringLiteral("EqualizerEffects"));
 const QString kChainPresetName(QStringLiteral("ChainPresetName"));
 

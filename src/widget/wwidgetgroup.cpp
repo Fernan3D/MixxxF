@@ -133,17 +133,29 @@ void WWidgetGroup::setup(const QDomNode& node, const SkinContext& context) {
             layoutIsStacked = true;
         }
 
-        // Set common layout parameters.
+        // Parametros comunes del layout.
         if (pLayout != nullptr) {
             pLayout->setSpacing(0);
             pLayout->setContentsMargins(0, 0, 0, 0);
-            pLayout->setAlignment(Qt::AlignCenter);
+            // QStackedLayout::setGeometry recorta los hijos al sizeHint si
+            // alignment() no es 0. En hover el control se va haciendo pequeno
+            // hasta desaparecer. No centrar el stacked.
+            if (!layoutIsStacked) {
+                pLayout->setAlignment(Qt::AlignCenter);
+            }
         }
     }
 
     QString sizeConstraintStr;
     if (pLayout && context.hasNodeSelectString(node, "SizeConstraint", &sizeConstraintStr)) {
-        pLayout->setSizeConstraint(sizeConstraintFromString(sizeConstraintStr));
+        const QLayout::SizeConstraint constraint =
+                sizeConstraintFromString(sizeConstraintStr);
+        pLayout->setSizeConstraint(constraint);
+        // Con tamano fijo, AlignCenter recortaria el hijo al sizeHint.
+        if (constraint == QLayout::SetFixedSize ||
+                constraint == QLayout::SetMinAndMaxSize) {
+            pLayout->setAlignment(Qt::Alignment());
+        }
     }
 
     if (pLayout) {

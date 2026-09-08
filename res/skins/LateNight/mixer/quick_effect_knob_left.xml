@@ -3,48 +3,16 @@
   <SetVariable name="QuickEffectGroup">[QuickEffectRack1_<Variable name="Group"/>]</SetVariable>
 
   <WidgetGroup>
-    <Layout>horizontal</Layout>
+    <Layout>vertical</Layout>
     <SizePolicy>min,min</SizePolicy>
     <Children>
       <WidgetGroup>
         <ObjectName>ChannelMixer_KnobContainer</ObjectName>
-        <Layout>horizontal</Layout>
+        <Layout>vertical</Layout>
         <SizePolicy>min,min</SizePolicy>
         <Children>
 
           <WidgetGroup>
-            <Layout>vertical</Layout>
-            <Size>18f,34f</Size>
-            <Children>
-              <WidgetGroup><Size>0min,5f</Size></WidgetGroup>
-              <PushButton>
-                <TooltipId>QuickEffectRack_enabled</TooltipId>
-                <ObjectName>QuickEffectButton</ObjectName>
-                <Size>18f,18f</Size>
-                <NumberStates>2</NumberStates>
-                <State>
-                  <Number>0</Number>
-                  <Unpressed scalemode="STRETCH">skins:LateNight/<Variable name="BtnScheme"/>/buttons/btn_<Variable name="BtnType"/>_eqkill.svg</Unpressed>
-                  <Pressed scalemode="STRETCH">skins:LateNight/<Variable name="BtnScheme"/>/buttons/btn_<Variable name="BtnType"/>_eqkill_active.svg</Pressed>
-                </State>
-                <State>
-                  <Number>1</Number>
-                  <Unpressed scalemode="STRETCH">skins:LateNight/<Variable name="BtnScheme"/>/buttons/btn_<Variable name="BtnType"/>_eqkill_active.svg</Unpressed>
-                  <Pressed scalemode="STRETCH">skins:LateNight/<Variable name="BtnScheme"/>/buttons/btn_<Variable name="BtnType"/>_eqkill_active.svg</Pressed>
-                </State>
-                <Connection>
-                  <ConfigKey><Variable name="QuickEffectGroup"/>,enabled</ConfigKey>
-                  <ButtonState>LeftButton</ButtonState>
-                </Connection>
-              </PushButton>
-            </Children>
-            <Connection>
-              <ConfigKey>[Skin],show_eq_kill_buttons</ConfigKey>
-              <BindProperty>visible</BindProperty>
-            </Connection>
-          </WidgetGroup>
-
-          <WidgetGroup><!-- QuickEffect Meta knob + status dot -->
             <Size>40f,34f</Size>
             <Children>
               <KnobComposed>
@@ -66,11 +34,10 @@
                   <ConfigKey><Variable name="QuickEffectGroup"/>,super1</ConfigKey>
                 </Connection>
               </KnobComposed>
-
               <PushButton>
                 <TooltipId>QuickEffectRack_enabled</TooltipId>
                 <ObjectName>QuickEffectDot</ObjectName>
-                <Pos>0,27</Pos>
+                <Pos>16,27</Pos>
                 <Size><Variable name="EqKillDotSize"/></Size>
                 <NumberStates>2</NumberStates>
                 <RightClickIsPushButton>false</RightClickIsPushButton>
@@ -91,7 +58,40 @@
                 </Connection>
               </PushButton>
             </Children>
-          </WidgetGroup><!-- QuickEffect Meta knob + status dot -->
+          </WidgetGroup>
+
+          <WidgetGroup>
+            <Layout>horizontal</Layout>
+            <Size>40f,18f</Size>
+            <Children>
+              <WidgetGroup><Size>11f,18f</Size></WidgetGroup>
+              <PushButton>
+                <TooltipId>QuickEffectRack_enabled</TooltipId>
+                <ObjectName>QuickEffectButton</ObjectName>
+                <Size>18f,18f</Size>
+                <NumberStates>2</NumberStates>
+                <State>
+                  <Number>0</Number>
+                  <Unpressed scalemode="STRETCH">skins:LateNight/<Variable name="BtnScheme"/>/buttons/btn_<Variable name="BtnType"/>_eqkill.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:LateNight/<Variable name="BtnScheme"/>/buttons/btn_<Variable name="BtnType"/>_eqkill_active.svg</Pressed>
+                </State>
+                <State>
+                  <Number>1</Number>
+                  <Unpressed scalemode="STRETCH">skins:LateNight/<Variable name="BtnScheme"/>/buttons/btn_<Variable name="BtnType"/>_eqkill_active.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:LateNight/<Variable name="BtnScheme"/>/buttons/btn_<Variable name="BtnType"/>_eqkill_active.svg</Pressed>
+                </State>
+                <Connection>
+                  <ConfigKey><Variable name="QuickEffectGroup"/>,enabled</ConfigKey>
+                  <ButtonState>LeftButton</ButtonState>
+                </Connection>
+              </PushButton>
+              <WidgetGroup><Size>11f,18f</Size></WidgetGroup>
+            </Children>
+            <Connection>
+              <ConfigKey>[Skin],show_eq_kill_buttons</ConfigKey>
+              <BindProperty>visible</BindProperty>
+            </Connection>
+          </WidgetGroup>
 
         </Children>
       </WidgetGroup>

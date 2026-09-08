@@ -1,0 +1,64 @@
+<!--
+Descripcion:
+  Pad en modo LOOP ROLL. Momentaneo: mantener activa beatlooproll y al soltar
+  el tema sigue (slip). Los tamanos coinciden con BEAT LOOP.
+
+Variables:
+  PadNum    : numero visible del pad (1-8)
+  LoopSize  : tamano Mixxx (0.125 ... 16)
+  LoopLabel : texto del pad
+  Group     : grupo del deck, [ChannelN]
+-->
+<Template>
+  <WidgetGroup>
+    <ObjectName>PadCell</ObjectName>
+    <Layout>vertical</Layout>
+    <Size>0me,54f</Size>
+    <MinimumSize>80,54</MinimumSize>
+    <Children>
+
+      <WidgetGroup>
+        <ObjectName>PadCellHeader</ObjectName>
+        <Layout>horizontal</Layout>
+        <Size>0me,16f</Size>
+        <Children>
+          <Label>
+            <ObjectName>PadNumber</ObjectName>
+            <Size>13f,16f</Size>
+            <Text><Variable name="PadNum"/></Text>
+            <Alignment>center</Alignment>
+          </Label>
+          <Label>
+            <ObjectName>PadCaption</ObjectName>
+            <Size>0me,16f</Size>
+            <Text>ROLL</Text>
+            <Alignment>left</Alignment>
+          </Label>
+        </Children>
+      </WidgetGroup><!-- PadCellHeader -->
+
+      <PushButton>
+        <TooltipId>beatlooproll_activate</TooltipId>
+        <ObjectName>PadRoll</ObjectName>
+        <Size>0me,38f</Size>
+        <NumberStates>2</NumberStates>
+        <LeftClickIsPushButton>true</LeftClickIsPushButton>
+        <State>
+          <Number>0</Number>
+          <Text><Variable name="LoopLabel"/></Text>
+          <Alignment>center</Alignment>
+        </State>
+        <State>
+          <Number>1</Number>
+          <Text><Variable name="LoopLabel"/></Text>
+          <Alignment>center</Alignment>
+        </State>
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,beatlooproll_<Variable name="LoopSize"/>_activate</ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+      </PushButton>
+
+    </Children>
+  </WidgetGroup><!-- PadCell -->
+</Template>

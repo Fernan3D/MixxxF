@@ -10,7 +10,8 @@ Descripcion:
 
 Variables:
   PadNum     : numero visible del pad (1-8)
-  SamplerNum : sampler global que dispara este pad
+  SamplerNum : sampler Mixxx de este pad ([SamplerN]). El deck 1 usa 1-8 y
+               el deck 2 usa 9-16, para que no compartan banco.
 -->
 <Template>
   <SetVariable name="Group">[Sampler<Variable name="SamplerNum"/>]</SetVariable>
@@ -20,10 +21,10 @@ Variables:
     <ObjectName>PadCell</ObjectName>
     <Group><Variable name="Group"/></Group>
     <!-- Alpha bajo para que el color de la pista tinte el pad sin tapar el texto -->
-    <TrackColorAlpha>90</TrackColorAlpha>
+    <TrackColorAlpha>150</TrackColorAlpha>
     <Layout>vertical</Layout>
-    <Size>0me,54f</Size>
-    <MinimumSize>80,54</MinimumSize>
+    <Size>0me,58f</Size>
+    <MinimumSize>80,58</MinimumSize>
     <Children>
 
       <!-- Cabecera del pad: numero, nombre del sample y expulsar -->
@@ -72,6 +73,26 @@ Variables:
 
         </Children>
       </WidgetGroup><!-- PadCellHeader -->
+
+      <!-- Barra de ocupacion: se enciende si hay sample cargado, aunque no suene.
+      Asi se ve de un vistazo que pads estan vacios (como los LEDs de la DDJ). -->
+      <PushButton>
+        <ObjectName>PadOccupied</ObjectName>
+        <Size>0me,4f</Size>
+        <NumberStates>2</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text></Text>
+        </State>
+        <State>
+          <Number>1</Number>
+          <Text></Text>
+        </State>
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,track_loaded</ConfigKey>
+          <ConnectValueFromWidget>false</ConnectValueFromWidget>
+        </Connection>
+      </PushButton>
 
       <!-- Superficie del pad: click izquierdo dispara el sample desde el cue,
       click derecho lo detiene. El estado visual sigue a play_latched. -->

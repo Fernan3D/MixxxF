@@ -1,11 +1,13 @@
 <!--
 Descripcion:
-  Pagina de pads en modo SAMPLER: cuadricula 2x4 (pads 1-4 arriba, 5-8 abajo),
-  igual que la disposicion fisica de una DDJ.
+  Pagina de pads en modo SAMPLER: cuadricula 2x4 (pads 1-4 arriba, 5-8 abajo).
 
-  En Rekordbox el banco de samples es global: los pads de cualquier deck
-  disparan los mismos samples. Por eso ambos decks apuntan a [Sampler1]..[Sampler8]
-  en lugar de tener un banco por deck.
+  Cada deck tiene su propio banco de 8 samples. LateNight pide 16 samplers:
+  el deck 1 usa Sampler 1-8 y el deck 2 usa Sampler 9-16, definidos en
+  pad_grid_deckN.xml (SamplerPad1..8).
+
+Variables:
+  SamplerPad1 .. SamplerPad8 : indices globales [SamplerN] de este deck
 -->
 <Template>
   <WidgetGroup>
@@ -21,19 +23,19 @@ Descripcion:
         <Children>
           <Template src="skins:LateNight/pads/pad_cell_sampler.xml">
             <SetVariable name="PadNum">1</SetVariable>
-            <SetVariable name="SamplerNum">1</SetVariable>
+            <SetVariable name="SamplerNum"><Variable name="SamplerPad1"/></SetVariable>
           </Template>
           <Template src="skins:LateNight/pads/pad_cell_sampler.xml">
             <SetVariable name="PadNum">2</SetVariable>
-            <SetVariable name="SamplerNum">2</SetVariable>
+            <SetVariable name="SamplerNum"><Variable name="SamplerPad2"/></SetVariable>
           </Template>
           <Template src="skins:LateNight/pads/pad_cell_sampler.xml">
             <SetVariable name="PadNum">3</SetVariable>
-            <SetVariable name="SamplerNum">3</SetVariable>
+            <SetVariable name="SamplerNum"><Variable name="SamplerPad3"/></SetVariable>
           </Template>
           <Template src="skins:LateNight/pads/pad_cell_sampler.xml">
             <SetVariable name="PadNum">4</SetVariable>
-            <SetVariable name="SamplerNum">4</SetVariable>
+            <SetVariable name="SamplerNum"><Variable name="SamplerPad4"/></SetVariable>
           </Template>
         </Children>
       </WidgetGroup><!-- PadRow 1-4 -->
@@ -45,19 +47,19 @@ Descripcion:
         <Children>
           <Template src="skins:LateNight/pads/pad_cell_sampler.xml">
             <SetVariable name="PadNum">5</SetVariable>
-            <SetVariable name="SamplerNum">5</SetVariable>
+            <SetVariable name="SamplerNum"><Variable name="SamplerPad5"/></SetVariable>
           </Template>
           <Template src="skins:LateNight/pads/pad_cell_sampler.xml">
             <SetVariable name="PadNum">6</SetVariable>
-            <SetVariable name="SamplerNum">6</SetVariable>
+            <SetVariable name="SamplerNum"><Variable name="SamplerPad6"/></SetVariable>
           </Template>
           <Template src="skins:LateNight/pads/pad_cell_sampler.xml">
             <SetVariable name="PadNum">7</SetVariable>
-            <SetVariable name="SamplerNum">7</SetVariable>
+            <SetVariable name="SamplerNum"><Variable name="SamplerPad7"/></SetVariable>
           </Template>
           <Template src="skins:LateNight/pads/pad_cell_sampler.xml">
             <SetVariable name="PadNum">8</SetVariable>
-            <SetVariable name="SamplerNum">8</SetVariable>
+            <SetVariable name="SamplerNum"><Variable name="SamplerPad8"/></SetVariable>
           </Template>
         </Children>
       </WidgetGroup><!-- PadRow 5-8 -->

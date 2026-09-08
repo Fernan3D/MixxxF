@@ -40,15 +40,18 @@ Si el deck está sonando, Mixxx puede no sustituir el tema al cargar (opción de
 
 ## Pads (sin SHIFT = modo de pantalla)
 
-Los 8 pads siguen el modo del banco en LateNight (`HOT CUE` / `BEAT LOOP` / `PAD FX` / `BEAT JUMP` / `SAMPLER`). Cada deck tiene su propio modo.
+Los 8 pads siguen el modo del banco en LateNight (`HOT CUE` / `BEAT LOOP` / `LOOP ROLL` / `PAD FX` / `BEAT JUMP` / `SAMPLER`). Cada deck tiene su propio modo.
 
 | Modo en pantalla | Pad 1–8 | LED encendido (sin SHIFT) |
 |---|---|---|
-| **HOT CUE** | Poner / saltar al hotcue | Ese hotcue existe |
-| **BEAT LOOP** | Loops 1/8, 1/4, 1/2, 1, 2, 4, 8, 16 | Ese tamaño de loop está activo |
-| **PAD FX** | Efecto momentáneo (mantener = on) | El efecto está activo |
-| **BEAT JUMP** | −8/−4/−2/−1 y +1/+2/+4/+8 beats | Hay un tema en el deck |
-| **SAMPLER** | Dispara Sampler 1–8 (banco global) | Sample cargado o sonando |
+| **HOT CUE** | Poner / saltar al hotcue | Ese hotcue existe (el resto apagado) |
+| **BEAT LOOP** | Loops 1/8, 1/4, 1/2, 1, 2, 4, 8, 16 (quedan puestos) | Ese tamaño de loop está activo |
+| **LOOP ROLL** | Mismos tamaños, momentáneo (mantener = roll, soltar = el tema sigue) | El roll está pulsado |
+| **PAD FX** | Efecto momentáneo (mantener = on). En pantalla: lista de efecto + knob de intensidad | El efecto está activo |
+| **BEAT JUMP** | −8/−4/−2/−1 y +1/+2/+4/+8 beats | Encendido mientras pulsas |
+| **SAMPLER** | Dispara el banco **de ese deck** (deck 1 = Sampler 1–8, deck 2 = Sampler 9–16) | Solo los pads con sample cargado |
+
+Al cambiar de pestaña, Mixxx reescribe los 8 LEDs según lo que haya en ese panel. Vacío = apagado.
 
 En la controladora deja los pads en modo **HOT CUE** del firmware Pioneer (el modo real lo elige Mixxx).
 
@@ -131,6 +134,8 @@ SHIFT + CUE de auriculares ya no carga el tema (ahora es el efecto).
 ## Recordatorios
 
 - Firmware de la DDJ-200: pads en **HOT CUE**. El modo Mixxx se elige en la pestaña PADS.
+- Tras esta actualización hay una pestaña nueva (**LOOP ROLL**, índice 2). Si PAD FX / BEAT JUMP / SAMPLER se ven en otra pestaña, púlsala otra vez: el modo guardado de sesiones viejas se desplaza.
+- Los efectos y la intensidad de **PAD FX** se recuerdan al cerrar Mixxx (effects.xml).
 - No uses “Aprender MIDI” de Mixxx sobre este perfil: Pioneer cambia de nota con SHIFT y se rompe el mapeo.
 - Perfil MixxxF: **Pioneer DDJ-200 MixxxF** (`Pioneer DDJ-200 MixxxF.midi.xml` + `Pioneer-DDJ-200-MixxxF-scripts.js`).
 - Perfil original (sin tocar): **Pioneer DDJ-200**.

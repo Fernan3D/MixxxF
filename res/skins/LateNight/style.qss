@@ -516,10 +516,13 @@ WBpmEditor,
 }
 
 #MixerDecks {
-  qproperty-layoutAlignment: 'AlignLeft | AlignTop';
+  qproperty-layoutAlignment: 'AlignHCenter | AlignTop';
+  }
+  #MixerChannelsRow {
+    qproperty-layoutAlignment: 'AlignHCenter | AlignTop';
   }
   #MixerChannel_2Decks {
-    qproperty-layoutAlignment: 'AlignHCenter | AlignBottom';
+    qproperty-layoutAlignment: 'AlignHCenter | AlignTop';
   }
 
   #MixerChannel_4Decks {
@@ -527,11 +530,11 @@ WBpmEditor,
   }
 
   #MixerChannel_2Decks_Left {
-    qproperty-layoutAlignment: 'AlignRight | AlignBottom';
+    qproperty-layoutAlignment: 'AlignRight | AlignTop';
   }
 
   #MixerChannel_2Decks_Right {
-    qproperty-layoutAlignment: 'AlignLeft | AlignBottom';
+    qproperty-layoutAlignment: 'AlignLeft | AlignTop';
   }
 
   #VolumeGain2Decks {
@@ -568,9 +571,38 @@ WBpmEditor,
   #VuMeterChannel_4Decks,
   #VuMeterMain_2Decks,
   #VuMeterMain_4Decks {
-    qproperty-layoutAlignment: 'AlignHCenter | AlignBottom';
+    qproperty-layoutAlignment: 'AlignHCenter | AlignTop';
     }
 
+#MixerFxAssignRow {
+  padding: 4px 2px 2px 2px;
+}
+#XfaderOrientRow {
+  qproperty-layoutAlignment: 0;
+}
+#MixerFxAssignRow #CrossfaderButtonContainer_Deck {
+  padding: 0px;
+  margin: 0px;
+  max-width: 33px;
+  max-height: 16px;
+}
+#MixerContainer WPushButton#XfaderDeckOrient,
+#MixerContainer WPushButton#XfaderDeckOrient[displayValue="0"],
+#MixerContainer WPushButton#XfaderDeckOrient[displayValue="1"],
+#MixerContainer WPushButton#XfaderDeckOrient[displayValue="2"],
+#MixerContainer WPushButton#XfaderDeckOrient[hover="true"] {
+  min-width: 33px;
+  max-width: 33px;
+  min-height: 16px;
+  max-height: 16px;
+  margin: 0px;
+  padding: 0px;
+  border: none;
+}
+#MixerCrossfaderRow {
+  qproperty-layoutAlignment: 'AlignHCenter | AlignBottom';
+  padding: 0px 2px 4px 2px;
+}
 #CrossfaderAndSwitches2Decks {
   qproperty-layoutAlignment: 'AlignHCenter';
 }
@@ -887,6 +919,17 @@ fondo base es oscuro y neutro. */
       color: #ff4d4d;
     }
 
+  /* Ocupacion del pad (sample cargado / hotcue puesto). Apagado = vacio. */
+  WPushButton#PadOccupied {
+    background-color: #262626;
+    border: 0px;
+    margin: 0px 4px 0px 4px;
+    max-height: 4px;
+  }
+  WPushButton#PadOccupied[value="1"] {
+    background-color: #e5b100;
+  }
+
   /* Superficie pulsable del pad. Estado 1 = sample sonando. */
   WPushButton#PadTrigger {
     background-color: #262626;
@@ -976,6 +1019,40 @@ fondo base es oscuro y neutro. */
   }
   WPushButton#PadLoop[value="1"]:hover {
     background-color: #ffc71a;
+  }
+
+  /* LOOP ROLL: verde para distinguirlo del loop que se queda puesto. */
+  WPushButton#PadRoll {
+    color: #d3d3d3;
+    font-size: 13px;
+    font-weight: bold;
+    background-color: #262626;
+    border: 1px solid #3a3a3a;
+    border-radius: 3px;
+    margin: 3px;
+  }
+  WPushButton#PadRoll:hover {
+    background-color: #383838;
+    border: 1px solid #5a5a5a;
+  }
+  WPushButton#PadRoll[value="1"] {
+    color: #1a1a1a;
+    background-color: #3cb371;
+    border: 1px solid #3cb371;
+  }
+
+  WEffectSelector#PadFxSelector {
+    font-size: 9px;
+    min-height: 16px;
+    padding: 1px 2px 1px 4px;
+    margin: 1px 2px 1px 0px;
+    background-color: #1a1a1a;
+    color: #d3d3d3;
+    border: 1px solid #333333;
+  }
+
+  #PadFxBody {
+    qproperty-layoutAlignment: 'AlignVCenter';
   }
 /************** Performance Pads **********************************************/
 

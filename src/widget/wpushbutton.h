@@ -75,6 +75,9 @@ class WPushButton : public WWidget {
     void fillDebugTooltip(QStringList* debug) override;
 
     virtual void restyleAndRepaint();
+    // True si el aspecto lo dan los SVG y el tamano es fijo: polish() en hover
+    // no hace falta y puede recortar el widget.
+    bool shouldSkipHoverPolish() const;
 
     // Associates a pixmap of a given state of the button with the widget
     void setPixmap(int iState,

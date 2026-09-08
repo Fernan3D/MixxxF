@@ -211,8 +211,7 @@ void EffectsManager::addPadFxChain(const ChannelHandleAndGroup& deckHandleGroup)
         return;
     }
 
-    // La tabla de efectos de los pads es fija, asi que la cadena no se guarda
-    // en effects.xml: se reconstruye igual en cada arranque.
+    // Los efectos de cada pad se eligen en la skin y se guardan en effects.xml.
     auto pChainSlot = PadFxChainPointer(
             new PadFxChain(deckHandleGroup, this, m_pMessenger));
 
@@ -300,6 +299,15 @@ void EffectsManager::readEffectsXml() {
         }
     }
 
+    QHashIterator<QString, EffectChainPresetPointer> padFxIt(data.padFxChainPresets);
+    while (padFxIt.hasNext()) {
+        padFxIt.next();
+        auto pChainSlot = m_padFxChains.value(padFxIt.key());
+        if (pChainSlot && !padFxIt.value().isNull()) {
+            pChainSlot->loadChainPreset(padFxIt.value());
+        }
+    }
+
     m_pVisibleEffectsList->readEffectsXml(doc, m_pBackendManager);
 }
 
@@ -330,6 +338,13 @@ void EffectsManager::readEffectsXmlSingleDeck(const QString& deckGroup) {
     auto pQuickEffectChainSlot = m_quickEffectChains.value(deckGroup);
     if (pQuickEffectChainSlot) {
         pQuickEffectChainSlot->loadChainPreset(data.quickEffectChainPreset);
+    }
+
+    // PAD FX: si no habia XML (primer arranque o perfil antiguo), se dejan
+    // los 8 efectos por defecto del constructor.
+    auto pPadFxChainSlot = m_padFxChains.value(deckGroup);
+    if (pPadFxChainSlot && !data.padFxChainPreset.isNull()) {
+        pPadFxChainSlot->loadChainPreset(data.padFxChainPreset);
     }
 }
 
@@ -408,13 +423,24 @@ void EffectsManager::saveEffectsXml() {
             // EffectChainPreset::EffectChainPreset(const EffectChain* chain)
             : EffectChainPresetPointer::create(m_outputEffectChain.data());
 
+    QHash<QString, EffectChainPresetPointer> padFxChainPresets;
+    padFxChainPresets.reserve(m_padFxChains.size());
+    QHashIterator<QString, PadFxChainPointer> padFxIt(m_padFxChains);
+    while (padFxIt.hasNext()) {
+        padFxIt.next();
+        auto* pPadFxChain = padFxIt.value().data();
+        auto pPreset = EffectChainPresetPointer::create(pPadFxChain);
+        padFxChainPresets.insert(padFxIt.key(), pPreset);
+    }
+
     m_pChainPresetManager->saveEffectsXml(&doc,
             EffectsXmlData{
                     eqEffectManifests,
                     quickEffectChainPresets,
                     quickStemEffectChainPresets,
                     standardEffectChainPresets,
-                    outputChainPreset});
+                    outputChainPreset,
+                    padFxChainPresets});
 
     m_pVisibleEffectsList->saveEffectsXml(&doc, m_pBackendManager);
 

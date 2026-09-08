@@ -7,18 +7,27 @@ Descripcion:
   <SetVariable name="PadDeck">2</SetVariable>
   <SetVariable name="PadBank">[PadBank2]</SetVariable>
   <SetVariable name="Group">[Channel2]</SetVariable>
+  <!-- Banco de samples propio del deck 2: Sampler 9-16 (no comparte el del deck 1) -->
+  <SetVariable name="SamplerPad1">9</SetVariable>
+  <SetVariable name="SamplerPad2">10</SetVariable>
+  <SetVariable name="SamplerPad3">11</SetVariable>
+  <SetVariable name="SamplerPad4">12</SetVariable>
+  <SetVariable name="SamplerPad5">13</SetVariable>
+  <SetVariable name="SamplerPad6">14</SetVariable>
+  <SetVariable name="SamplerPad7">15</SetVariable>
+  <SetVariable name="SamplerPad8">16</SetVariable>
 
   <WidgetGroup>
     <ObjectName>PadBank</ObjectName>
     <Layout>vertical</Layout>
     <SizePolicy>me,min</SizePolicy>
-    <MinimumSize>400,130</MinimumSize>
+    <MinimumSize>400,150</MinimumSize>
     <Children>
 
       <Template src="skins:LateNight/pads/pad_mode_bar.xml"/>
 
       <WidgetStack currentpage="[PadBank2],mode" persist="true">
-        <Size>0me,108f</Size>
+        <Size>0me,124f</Size>
         <Children>
 
           <WidgetGroup>
@@ -34,6 +43,14 @@ Descripcion:
             <SizePolicy>me,min</SizePolicy>
             <Children>
               <Template src="skins:LateNight/pads/page_beatloop.xml"/>
+            </Children>
+          </WidgetGroup>
+
+          <WidgetGroup>
+            <Layout>vertical</Layout>
+            <SizePolicy>me,min</SizePolicy>
+            <Children>
+              <Template src="skins:LateNight/pads/page_looproll.xml"/>
             </Children>
           </WidgetGroup>
 

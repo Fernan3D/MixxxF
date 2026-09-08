@@ -50,6 +50,7 @@
     <Children>
       <WidgetGroup>
         <Layout>horizontal</Layout>
+        <SizePolicy>min,me</SizePolicy>
         <Children>
           <Template src="skins:LateNight/mixer/vumeter_single.xml">
             <SetVariable name="Group">[Channel1]</SetVariable>
@@ -64,6 +65,7 @@
     <Children>
       <WidgetGroup>
         <Layout>horizontal</Layout>
+        <SizePolicy>min,me</SizePolicy>
         <Children>
           <Template src="skins:LateNight/mixer/vumeter_single.xml">
             <SetVariable name="Group">[Channel2]</SetVariable>
@@ -78,6 +80,7 @@
     <Children>
       <WidgetGroup>
         <Layout>horizontal</Layout>
+        <SizePolicy>min,me</SizePolicy>
         <Children>
           <Template src="skins:LateNight/mixer/vumeter_single.xml">
             <SetVariable name="Group">[Channel3]</SetVariable>
@@ -92,6 +95,7 @@
     <Children>
       <WidgetGroup>
         <Layout>horizontal</Layout>
+        <SizePolicy>min,me</SizePolicy>
         <Children>
           <Template src="skins:LateNight/mixer/vumeter_single.xml">
             <SetVariable name="Group">[Channel4]</SetVariable>
@@ -106,6 +110,7 @@
     <Children>
       <WidgetGroup>
         <Layout>horizontal</Layout>
+        <SizePolicy>min,me</SizePolicy>
         <Children>
           <Template src="skins:LateNight/mixer/vumeter_main.xml">
             <SetVariable name="VuColor">dark</SetVariable>
@@ -120,6 +125,7 @@
     <Children>
       <WidgetGroup>
         <Layout>horizontal</Layout>
+        <SizePolicy>min,me</SizePolicy>
         <Children>
           <Template src="skins:LateNight/mixer/vumeter_main.xml">
             <SetVariable name="VuColor">light</SetVariable>

@@ -15,7 +15,7 @@
 
           <WidgetGroup>
             <ObjectName>MixerDecks</ObjectName>
-            <SizePolicy>max,min</SizePolicy>
+            <SizePolicy>max,me</SizePolicy>
             <Layout>vertical</Layout>
             <Children>
               <Template src="skins:LateNight/mixer/mixer_2decks.xml"/>

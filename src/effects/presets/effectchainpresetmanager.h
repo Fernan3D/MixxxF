@@ -12,11 +12,17 @@ struct EffectsXmlData {
     QHash<QString, EffectChainPresetPointer> quickStemEffectChainPresets;
     QList<EffectChainPresetPointer> standardEffectChainPresets;
     EffectChainPresetPointer outputChainPreset;
+    /// Cadena completa de PAD FX por grupo de deck ([ChannelN]).
+    /// Si el XML no trae PadFxChains, el hash queda vacio y se conservan
+    /// los efectos por defecto del constructor.
+    QHash<QString, EffectChainPresetPointer> padFxChainPresets;
 };
 
 struct EffectXmlDataSingleDeck {
     EffectManifestPointer eqEffectManifest;
     EffectChainPresetPointer quickEffectChainPreset;
+    /// Nulo si ese deck no tenia Pad FX guardado (se dejan los defaults).
+    EffectChainPresetPointer padFxChainPreset;
 };
 
 /// EffectChainPresetManager maintains a list of custom EffectChainPresets in the

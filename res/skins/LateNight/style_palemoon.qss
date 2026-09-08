@@ -831,6 +831,10 @@ WBpmEditor QDoubleSpinBox::down-button {
     padding: 1px;
     margin: 0px 1px 1px 0px;
     }
+  #MixerFxAssignRow #CrossfaderButtonContainer_Deck {
+    padding: 0px;
+    margin: 0px;
+    }
   #CrossfaderButtonContainer_Aux {
     padding: 1px;
     margin-left: 3px;
@@ -1667,6 +1671,7 @@ WPushButton#SyncLeader,
 #SamplerSettings WPushButton,
 #SamplerSettingsMini WPushButton,
 WPushButton#CrossfaderButton,
+WPushButton#XfaderDeckOrient,
 #LibExpand,
 #ToolBar WPushButton {
   margin: 0px;

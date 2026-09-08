@@ -5,7 +5,7 @@ Descripcion:
   ancho que el deck, hasta el mixer.
 
   El indice de pagina vive en [PadBank1],mode:
-    0 HOT CUE, 1 BEAT LOOP, 2 PAD FX, 3 BEAT JUMP, 4 SAMPLER
+    0 HOT CUE, 1 BEAT LOOP, 2 LOOP ROLL, 3 PAD FX, 4 BEAT JUMP, 5 SAMPLER
   y se conserva entre sesiones. Las paginas no usan "trigger": el modo lo
   escriben los botones de la barra.
 
@@ -16,18 +16,27 @@ Descripcion:
   <SetVariable name="PadDeck">1</SetVariable>
   <SetVariable name="PadBank">[PadBank1]</SetVariable>
   <SetVariable name="Group">[Channel1]</SetVariable>
+  <!-- Banco de samples propio del deck 1: Sampler 1-8 -->
+  <SetVariable name="SamplerPad1">1</SetVariable>
+  <SetVariable name="SamplerPad2">2</SetVariable>
+  <SetVariable name="SamplerPad3">3</SetVariable>
+  <SetVariable name="SamplerPad4">4</SetVariable>
+  <SetVariable name="SamplerPad5">5</SetVariable>
+  <SetVariable name="SamplerPad6">6</SetVariable>
+  <SetVariable name="SamplerPad7">7</SetVariable>
+  <SetVariable name="SamplerPad8">8</SetVariable>
 
   <WidgetGroup>
     <ObjectName>PadBank</ObjectName>
     <Layout>vertical</Layout>
     <SizePolicy>me,min</SizePolicy>
-    <MinimumSize>400,130</MinimumSize>
+    <MinimumSize>400,150</MinimumSize>
     <Children>
 
       <Template src="skins:LateNight/pads/pad_mode_bar.xml"/>
 
       <WidgetStack currentpage="[PadBank1],mode" persist="true">
-        <Size>0me,108f</Size>
+        <Size>0me,124f</Size>
         <Children>
 
           <WidgetGroup>
@@ -43,6 +52,14 @@ Descripcion:
             <SizePolicy>me,min</SizePolicy>
             <Children>
               <Template src="skins:LateNight/pads/page_beatloop.xml"/>
+            </Children>
+          </WidgetGroup>
+
+          <WidgetGroup>
+            <Layout>vertical</Layout>
+            <SizePolicy>me,min</SizePolicy>
+            <Children>
+              <Template src="skins:LateNight/pads/page_looproll.xml"/>
             </Children>
           </WidgetGroup>
 

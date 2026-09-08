@@ -1,10 +1,8 @@
 <!--
 Descripcion:
-  Barra superior de un banco de pads: nombre del deck y los 5 selectores de
-  modo. El ancho es elastico (0me) para ocupar todo el deck, hasta el mixer.
+  Barra de modos del banco de pads. Ancho elastico (0me) hasta el mixer.
 
-  Los botones escriben su indice en [PadBankN],mode, que elige la pagina del
-  WidgetStack: 0 HOT CUE, 1 BEAT LOOP, 2 PAD FX, 3 BEAT JUMP, 4 SAMPLER.
+  Indices: 0 HOT CUE, 1 BEAT LOOP, 2 LOOP ROLL, 3 PAD FX, 4 BEAT JUMP, 5 SAMPLER.
 
 Variables:
   PadDeck : numero de deck
@@ -19,7 +17,7 @@ Variables:
 
       <Label>
         <ObjectName>PadBankLabel</ObjectName>
-        <Size>58f,22f</Size>
+        <Size>48f,22f</Size>
         <Text>DECK <Variable name="PadDeck"/></Text>
         <Alignment>left</Alignment>
       </Label>
@@ -39,24 +37,31 @@ Variables:
       </Template>
 
       <Template src="skins:LateNight/pads/pad_mode_button.xml">
-        <SetVariable name="Text">PAD FX</SetVariable>
+        <SetVariable name="Text">LOOP ROLL</SetVariable>
         <SetVariable name="Width">0me</SetVariable>
         <SetVariable name="ModeCO"><Variable name="PadBank"/>,mode</SetVariable>
         <SetVariable name="ModeIndex">2</SetVariable>
       </Template>
 
       <Template src="skins:LateNight/pads/pad_mode_button.xml">
-        <SetVariable name="Text">BEAT JUMP</SetVariable>
+        <SetVariable name="Text">PAD FX</SetVariable>
         <SetVariable name="Width">0me</SetVariable>
         <SetVariable name="ModeCO"><Variable name="PadBank"/>,mode</SetVariable>
         <SetVariable name="ModeIndex">3</SetVariable>
       </Template>
 
       <Template src="skins:LateNight/pads/pad_mode_button.xml">
-        <SetVariable name="Text">SAMPLER</SetVariable>
+        <SetVariable name="Text">BEAT JUMP</SetVariable>
         <SetVariable name="Width">0me</SetVariable>
         <SetVariable name="ModeCO"><Variable name="PadBank"/>,mode</SetVariable>
         <SetVariable name="ModeIndex">4</SetVariable>
+      </Template>
+
+      <Template src="skins:LateNight/pads/pad_mode_button.xml">
+        <SetVariable name="Text">SAMPLER</SetVariable>
+        <SetVariable name="Width">0me</SetVariable>
+        <SetVariable name="ModeCO"><Variable name="PadBank"/>,mode</SetVariable>
+        <SetVariable name="ModeIndex">5</SetVariable>
       </Template>
 
     </Children>

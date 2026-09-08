@@ -38,6 +38,27 @@ EffectChainPresetPointer loadPresetFromFile(const QString& filePath) {
     return pEffectChainPreset;
 }
 
+/// Lee las cadenas PAD FX guardadas en effects.xml. Cada EffectChain lleva
+/// el atributo group con el deck ([Channel1], ...).
+QHash<QString, EffectChainPresetPointer> readPadFxChainPresets(const QDomElement& root) {
+    QHash<QString, EffectChainPresetPointer> presets;
+    const QDomElement padFxElement = XmlParse::selectElement(root, EffectXml::kPadFxChains);
+    const QDomNodeList chains = padFxElement.elementsByTagName(EffectXml::kChain);
+    presets.reserve(chains.count());
+    for (int i = 0; i < chains.count(); ++i) {
+        const QDomElement chainElement = chains.at(i).toElement();
+        if (chainElement.isNull()) {
+            continue;
+        }
+        const QString deckGroup = chainElement.attribute(QStringLiteral("group"));
+        if (deckGroup.isEmpty()) {
+            continue;
+        }
+        presets.insert(deckGroup, EffectChainPresetPointer::create(chainElement));
+    }
+    return presets;
+}
+
 EffectChainPresetPointer createEmptyReadOnlyChainPreset() {
     EffectManifestPointer pEmptyManifest(new EffectManifest());
     pEmptyManifest->setName(kNoEffectString);
@@ -883,7 +904,8 @@ EffectsXmlData EffectChainPresetManager::readEffectsXml(
             quickEffectPresets,
             quickStemEffectPresets,
             standardEffectChainPresets,
-            mainEqPreset};
+            mainEqPreset,
+            readPadFxChainPresets(root)};
 }
 
 EffectXmlDataSingleDeck EffectChainPresetManager::readEffectsXmlSingleDeck(
@@ -939,7 +961,11 @@ EffectXmlDataSingleDeck EffectChainPresetManager::readEffectsXmlSingleDeck(
         }
     }
 
-    return EffectXmlDataSingleDeck{pEqEffect, pQuickEffectChainPreset};
+    const QHash<QString, EffectChainPresetPointer> padFxPresets =
+            readPadFxChainPresets(root);
+    return EffectXmlDataSingleDeck{pEqEffect,
+            pQuickEffectChainPreset,
+            padFxPresets.value(deckString)};
 }
 
 EffectChainPresetPointer EffectChainPresetManager::readEffectsXmlSingleDeckStem(
@@ -1078,4 +1104,19 @@ void EffectChainPresetManager::saveEffectsXml(QDomDocument* pDoc, const EffectsX
         quickEffectElement.setAttribute(QStringLiteral("group"), qseIt.key());
     }
     rootElement.appendChild(quickStemEffectPresetsElement);
+
+    // PAD FX: se guarda la cadena completa (8 slots + meta), no un nombre de
+    // preset. Cada pad elige efecto e intensidad por su cuenta.
+    QDomElement padFxChainsElement = pDoc->createElement(EffectXml::kPadFxChains);
+    QHashIterator<QString, EffectChainPresetPointer> padFxIt(data.padFxChainPresets);
+    while (padFxIt.hasNext()) {
+        padFxIt.next();
+        if (padFxIt.value().isNull()) {
+            continue;
+        }
+        QDomElement padFxChainElement = padFxIt.value()->toXml(pDoc);
+        padFxChainElement.setAttribute(QStringLiteral("group"), padFxIt.key());
+        padFxChainsElement.appendChild(padFxChainElement);
+    }
+    rootElement.appendChild(padFxChainsElement);
 }

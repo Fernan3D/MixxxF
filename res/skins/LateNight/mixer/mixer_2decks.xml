@@ -1,16 +1,18 @@
+<!--
+  Mixer de 2 decks. De abajo hacia arriba:
+    1. Crossfader a todo el ancho
+    2. Fila de Quick Effect + orientacion L/M/R al crossfader
+    3. EQ, gain, faders y VU ocupando el alto que queda
+-->
 <Template>
   <WidgetGroup>
     <Layout>vertical</Layout>
-    <SizePolicy>max,min</SizePolicy>
+    <SizePolicy>max,me</SizePolicy>
     <Children>
 
-      <!-- spacer to center channel controls without crossfader without
-          stretching them -->
-      <WidgetGroup><SizePolicy>min,e</SizePolicy></WidgetGroup>
-
       <WidgetGroup><!-- Channel controls -->
-        <ObjectName>AlignHCenter</ObjectName>
-        <SizePolicy>min,min</SizePolicy>
+        <ObjectName>MixerChannelsRow</ObjectName>
+        <SizePolicy>min,me</SizePolicy>
         <Layout>horizontal</Layout>
         <Children>
 
@@ -22,13 +24,13 @@
 
           <WidgetGroup><!-- Pfl + VU -->
             <Layout>vertical</Layout>
-            <SizePolicy>max,max</SizePolicy>
+            <SizePolicy>max,me</SizePolicy>
             <Children>
 
               <WidgetGroup>
                 <ObjectName></ObjectName>
                 <Layout>horizontal</Layout>
-                <Size>0min,26f</Size>
+                <Size>0min,34f</Size>
                 <Children>
                   <Template src="skins:LateNight/controls/button_2state.xml">
                     <SetVariable name="TooltipId">pfl</SetVariable>
@@ -48,12 +50,12 @@
                 </Children>
               </WidgetGroup>
 
-              <WidgetGroup><Size>1min,13f</Size></WidgetGroup>
+              <WidgetGroup><Size>1min,4f</Size></WidgetGroup>
 
               <WidgetGroup>
                 <ObjectName>VuMeterBoxFull</ObjectName>
                 <Layout>horizontal</Layout>
-                <SizePolicy>min,min</SizePolicy>
+                <SizePolicy>min,me</SizePolicy>
                 <Children>
                   <SingletonContainer>
                     <ObjectName>VuMeterChannel1</ObjectName>
@@ -80,26 +82,26 @@
         </Children>
       </WidgetGroup><!-- /Channel controls -->
 
-      <WidgetGroup><!-- Crossfader + Channel1/2 assign switches -->
-        <ObjectName>CrossfaderAndSwitches2Decks</ObjectName>
+      <!-- Quick Effect + orientacion al crossfader (una fila, no junto al fader) -->
+      <WidgetGroup>
+        <ObjectName>MixerFxAssignRow</ObjectName>
         <Layout>horizontal</Layout>
+        <SizePolicy>me,min</SizePolicy>
         <Children>
 
-          <!-- Channel 1 Quick effect selector + xFader switch -->
           <WidgetGroup>
             <Layout>vertical</Layout>
-            <SizePolicy>min,min</SizePolicy>
+            <SizePolicy>me,min</SizePolicy>
             <Children>
-              <!-- Quick effect selector -->
               <WidgetGroup>
-                <SizePolicy>i,f</SizePolicy>
-                <MinimumSize>,18</MinimumSize>
+                <SizePolicy>me,f</SizePolicy>
+                <MinimumSize>40,18</MinimumSize>
                 <MaximumSize>,18</MaximumSize>
                 <Layout>vertical</Layout>
                 <Children>
                   <EffectChainPresetSelector>
                     <ObjectName>QuickEffectSelectorLeft</ObjectName>
-                    <Size>40me,18f</Size>
+                    <Size>0me,18f</Size>
                     <EffectUnitGroup>[QuickEffectRack1_[Channel1]]</EffectUnitGroup>
                   </EffectChainPresetSelector>
                 </Children>
@@ -108,88 +110,91 @@
                   <BindProperty>visible</BindProperty>
                 </Connection>
               </WidgetGroup>
-
-              <!-- xfader switch -->
+              <WidgetGroup><Size>1min,2f</Size></WidgetGroup>
               <WidgetGroup>
+                <ObjectName>XfaderOrientRow</ObjectName>
                 <Layout>horizontal</Layout>
                 <SizePolicy>min,min</SizePolicy>
                 <Children>
-                  <!-- center xfader buttons below EQ knobs -->
-                  <WidgetGroup>
-                    <Layout>horizontal</Layout>
-                    <SizePolicy>min,min</SizePolicy>
-                    <Children>
-                      <WidgetGroup><Size>2f,0min</Size></WidgetGroup>
-                      <WidgetGroup>
-                        <Size>18f,0min</Size>
-                        <Connection>
-                          <ConfigKey persist="true">[Skin],show_eq_kill_buttons</ConfigKey>
-                          <BindProperty>visible</BindProperty>
-                        </Connection>
-                      </WidgetGroup>
-                    </Children>
-                    <Connection>
-                      <ConfigKey persist="true">[Skin],show_eq_knobs</ConfigKey>
-                      <BindProperty>visible</BindProperty>
-                    </Connection>
-                  </WidgetGroup><!-- spacer -->
-
-                  <WidgetGroup>
-                    <Layout>vertical</Layout>
-                    <SizePolicy>min,min</SizePolicy>
-                    <Children>
-                      <WidgetGroup><Size>min,2f</Size></WidgetGroup>
-                      <Template src="skins:LateNight/controls/button_xfader_deck.xml">
-                        <SetVariable name="Group">[Channel1]</SetVariable>
-                        <SetVariable name="DeckGroup">Deck</SetVariable>
-                        <SetVariable name="xfaderLeft">default</SetVariable>
-                        <SetVariable name="xfaderRight">warning</SetVariable>
-                      </Template>
-                    </Children>
-                    <Connection>
-                      <ConfigKey persist="true">[Skin],show_xfader</ConfigKey>
-                      <BindProperty>visible</BindProperty>
-                    </Connection>
-                  </WidgetGroup>
-
-                  <WidgetGroup><Size>0me,0min</Size></WidgetGroup>
+                  <Template src="skins:LateNight/controls/button_xfader_deck.xml">
+                    <SetVariable name="Group">[Channel1]</SetVariable>
+                    <SetVariable name="DeckGroup">Deck</SetVariable>
+                    <SetVariable name="xfaderLeft">default</SetVariable>
+                    <SetVariable name="xfaderRight">warning</SetVariable>
+                  </Template>
                 </Children>
-              </WidgetGroup><!-- xfader switch -->
-
+                <Connection>
+                  <ConfigKey persist="true">[Skin],show_xfader</ConfigKey>
+                  <BindProperty>visible</BindProperty>
+                </Connection>
+              </WidgetGroup>
             </Children>
-          </WidgetGroup><!-- Channel 1 Quick effect selector + xFader switch -->
+          </WidgetGroup>
 
-          <!--  Regular crossfader for
-                * 2 decks with EQ knobs visible
-                * 4 decks
-                Narrow crossfader for
-                * 2 decks with EQ knobs hidden -->
+          <WidgetGroup><Size>8f,0min</Size></WidgetGroup>
+
           <WidgetGroup>
-            <ObjectName>CrossfaderContainer</ObjectName>
-            <Layout>horizontal</Layout>
-            <SizePolicy>max,min</SizePolicy>
+            <Layout>vertical</Layout>
+            <SizePolicy>me,min</SizePolicy>
             <Children>
-
-              <WidgetGroup><!-- with EQ knobs -->
-                <Layout>horizontal</Layout>
-                <SizePolicy>max,min</SizePolicy>
+              <WidgetGroup>
+                <SizePolicy>me,f</SizePolicy>
+                <MinimumSize>40,18</MinimumSize>
+                <MaximumSize>,18</MaximumSize>
+                <Layout>vertical</Layout>
                 <Children>
-                  <SingletonContainer>
-                    <ObjectName>CrossfaderSingleton</ObjectName>
-                  </SingletonContainer>
+                  <EffectChainPresetSelector>
+                    <ObjectName>QuickEffectSelectorRight</ObjectName>
+                    <Size>0me,18f</Size>
+                    <EffectUnitGroup>[QuickEffectRack1_[Channel2]]</EffectUnitGroup>
+                  </EffectChainPresetSelector>
                 </Children>
                 <Connection>
                   <ConfigKey persist="true">[Skin],show_eq_knobs</ConfigKey>
                   <BindProperty>visible</BindProperty>
                 </Connection>
               </WidgetGroup>
+              <WidgetGroup><Size>1min,2f</Size></WidgetGroup>
+              <WidgetGroup>
+                <ObjectName>XfaderOrientRow</ObjectName>
+                <Layout>horizontal</Layout>
+                <SizePolicy>min,min</SizePolicy>
+                <Children>
+                  <Template src="skins:LateNight/controls/button_xfader_deck.xml">
+                    <SetVariable name="Group">[Channel2]</SetVariable>
+                    <SetVariable name="DeckGroup">Deck</SetVariable>
+                    <SetVariable name="xfaderLeft">warning</SetVariable>
+                    <SetVariable name="xfaderRight">default</SetVariable>
+                  </Template>
+                </Children>
+                <Connection>
+                  <ConfigKey persist="true">[Skin],show_xfader</ConfigKey>
+                  <BindProperty>visible</BindProperty>
+                </Connection>
+              </WidgetGroup>
+            </Children>
+          </WidgetGroup>
 
+        </Children>
+      </WidgetGroup><!-- MixerFxAssignRow -->
 
-              <SliderComposed><!-- without EQ knobs -->
+      <!-- Crossfader a todo el ancho, pegado al fondo del mixer -->
+      <WidgetGroup>
+        <ObjectName>MixerCrossfaderRow</ObjectName>
+        <Layout>horizontal</Layout>
+        <SizePolicy>me,min</SizePolicy>
+        <Children>
+          <WidgetGroup>
+            <ObjectName>CrossfaderContainer</ObjectName>
+            <Layout>horizontal</Layout>
+            <SizePolicy>me,min</SizePolicy>
+            <Children>
+              <SliderComposed>
                 <TooltipId>crossfader</TooltipId>
-                <Size>85f,40f</Size>
+                <Size>0me,40f</Size>
+                <MinimumSize>115,40</MinimumSize>
                 <Handle scalemode="STRETCH_ASPECT">skins:LateNight/<Variable name="SliderScheme"/>/sliders/knob_crossfader.svg</Handle>
-                <Slider scalemode="STRETCH_ASPECT">skins:LateNight/<Variable name="SliderScheme"/>/sliders/slider_crossfader_small.svg</Slider>
+                <Slider visible="false" scalemode="STRETCH">skins:LateNight/<Variable name="SliderScheme"/>/sliders/slider_crossfader.svg</Slider>
                 <Horizontal>true</Horizontal>
                 <BarColor><Variable name="BarColorCrossfader"/></BarColor>
                 <BarWidth><Variable name="BarWidth"/></BarWidth>
@@ -201,101 +206,19 @@
                 <Connection>
                   <ConfigKey>[Master],crossfader</ConfigKey>
                 </Connection>
-                <Connection>
-                  <ConfigKey persist="true">[Skin],show_eq_knobs</ConfigKey>
-                  <BindProperty>visible</BindProperty>
-                  <Transform><Not/></Transform>
-                </Connection>
               </SliderComposed>
-
             </Children>
             <Connection>
-              <ConfigKey persist="true">[Skin],show_xfader</ConfigKey>
-              <BindProperty>visible</BindProperty>
+              <ConfigKey>[AutoDJ],enabled</ConfigKey>
+              <BindProperty>highlight</BindProperty>
             </Connection>
-          </WidgetGroup><!-- CrossfaderContainer -->
-
-          <!-- Channel 2 Quick effect selector + xFader switch -->
-          <WidgetGroup>
-            <Layout>vertical</Layout>
-            <SizePolicy>min,min</SizePolicy>
-            <Children>
-
-              <!-- Quick effect selector -->
-              <WidgetGroup>
-                <SizePolicy>i,f</SizePolicy>
-                <MinimumSize>,18</MinimumSize>
-                <MaximumSize>,18</MaximumSize>
-                <Layout>vertical</Layout>
-                <Children>
-                  <EffectChainPresetSelector>
-                    <ObjectName>QuickEffectSelectorRight</ObjectName>
-                    <Size>40me,18f</Size>
-                    <EffectUnitGroup>[QuickEffectRack1_[Channel2]]</EffectUnitGroup>
-                  </EffectChainPresetSelector>
-                </Children>
-                <Connection>
-                  <ConfigKey persist="true">[Skin],show_eq_knobs</ConfigKey>
-                  <BindProperty>visible</BindProperty>
-                </Connection>
-              </WidgetGroup>
-
-              <!-- xfader switch -->
-              <WidgetGroup>
-                <Layout>horizontal</Layout>
-                <SizePolicy>min,me</SizePolicy>
-                <Children>
-                  <WidgetGroup><Size>0me,0min</Size></WidgetGroup>
-
-                  <WidgetGroup>
-                    <Layout>vertical</Layout>
-                    <SizePolicy>min,min</SizePolicy>
-                    <Children>
-                      <WidgetGroup><Size>min,2f</Size></WidgetGroup>
-                      <Template src="skins:LateNight/controls/button_xfader_deck.xml">
-                        <SetVariable name="Group">[Channel2]</SetVariable>
-                        <SetVariable name="DeckGroup">Deck</SetVariable>
-                        <SetVariable name="xfaderLeft">warning</SetVariable>
-                        <SetVariable name="xfaderRight">default</SetVariable>
-                      </Template>
-                    </Children>
-                    <Connection>
-                      <ConfigKey persist="true">[Skin],show_xfader</ConfigKey>
-                      <BindProperty>visible</BindProperty>
-                    </Connection>
-                  </WidgetGroup>
-
-                  <!-- center xfader buttons below EQ knobs -->
-                  <WidgetGroup>
-                    <Layout>horizontal</Layout>
-                    <SizePolicy>min,min</SizePolicy>
-                    <Children>
-                      <WidgetGroup><Size>2f,0min</Size></WidgetGroup>
-                      <WidgetGroup>
-                        <Size>18f,0min</Size>
-                        <Connection>
-                          <ConfigKey persist="true">[Skin],show_eq_kill_buttons</ConfigKey>
-                          <BindProperty>visible</BindProperty>
-                        </Connection>
-                      </WidgetGroup>
-                    </Children>
-                    <Connection>
-                      <ConfigKey persist="true">[Skin],show_eq_knobs</ConfigKey>
-                      <BindProperty>visible</BindProperty>
-                    </Connection>
-                  </WidgetGroup><!-- spacer -->
-                </Children>
-              </WidgetGroup><!-- xfader switch -->
-
-            </Children>
-          </WidgetGroup><!-- Channel 2 Quick effect selector + xFader switch -->
-
+          </WidgetGroup>
         </Children>
-      </WidgetGroup><!-- /Crossfader + Channel1/2 assign switches -->
-
-      <!-- spacer to center channel controls without crossfader without
-          stretching them -->
-      <WidgetGroup><SizePolicy>min,e</SizePolicy></WidgetGroup>
+        <Connection>
+          <ConfigKey persist="true">[Skin],show_xfader</ConfigKey>
+          <BindProperty>visible</BindProperty>
+        </Connection>
+      </WidgetGroup><!-- MixerCrossfaderRow -->
 
     </Children>
     <Connection>
@@ -303,5 +226,5 @@
       <Transform><Not/></Transform>
       <BindProperty>visible</BindProperty>
     </Connection>
-  </WidgetGroup><!-- MixerDecks -->
+  </WidgetGroup><!-- Mixer 2 decks -->
 </Template>
