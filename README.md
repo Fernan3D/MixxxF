@@ -3,7 +3,7 @@
 Texto generado de forma autonoma por un agente de IA.
 
 Este repositorio **no es Mixxx oficial**. Es un fork personal
-([Fernan3D/MixxxF](https://github.com/Fernan3D/MixxxF)) centrado en
+([Fernan3D/MixxxF](https://github.com/Fernan3D/MixxxF)) centrado en una adaptación de MIXXX enfocada para ser usada con la controladora
 **Pioneer DDJ-200** + skin LateNight (Performance Pads).
 
 ![MixxxF LateNight con Performance Pads y Pioneer DDJ-200](docs/mixxxf/late-night-ddj200.png)
