@@ -41,6 +41,10 @@ class EffectsManager {
             const QString& deckGroupName) const {
         return m_quickEffectChains.value(deckGroupName);
     }
+    /// Cadena que alimenta el modo PAD FX de los Performance Pads del deck.
+    PadFxChainPointer getPadFxChain(const QString& deckGroupName) const {
+        return m_padFxChains.value(deckGroupName);
+    }
     EffectChainPointer getStandardEffectChain(int unitNumber) const;
     EffectChainPointer getOutputEffectChain() const;
 
@@ -87,6 +91,7 @@ class EffectsManager {
 
     void addEqualizerEffectChain(const ChannelHandleAndGroup& deckHandleGroup);
     void addQuickEffectChain(const ChannelHandleAndGroup& deckHandleGroup);
+    void addPadFxChain(const ChannelHandleAndGroup& deckHandleGroup);
 
     void readEffectsXml();
     void readEffectsXmlSingleDeck(const QString& deckGroup);
@@ -104,6 +109,7 @@ class EffectsManager {
     QHash<QString, EqualizerEffectChainPointer> m_equalizerEffectChains;
     QHash<QString, QuickEffectChainPointer> m_quickEffectChains;
     QHash<QString, QuickEffectChainPointer> m_quickStemEffectChains;
+    QHash<QString, PadFxChainPointer> m_padFxChains;
 
     EffectsBackendManagerPointer m_pBackendManager;
     std::shared_ptr<ChannelHandleFactory> m_pChannelHandleFactory;

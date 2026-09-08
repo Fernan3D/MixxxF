@@ -244,6 +244,10 @@ void Tooltips::addStandardTooltips() {
             << tr("Sampler")
             << tr("Show/hide the Sampler section.");
 
+    add("show_pads")
+            << tr("Performance Pads")
+            << tr("Show/hide the Performance Pads section.");
+
     add("show_vinylcontrol")
             << tr("Vinyl Control")
             << tr("Show/hide the Vinyl Control section.")

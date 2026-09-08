@@ -1,0 +1,66 @@
+<!--
+Descripcion:
+  Pagina de pads en modo PAD FX: 8 efectos momentaneos sobre la PadFxChain
+  del deck. El pad K acciona el slot K de la cadena.
+
+Variables:
+  Group : grupo del deck, [ChannelN]
+-->
+<Template>
+  <WidgetGroup>
+    <ObjectName>PadPage</ObjectName>
+    <Layout>vertical</Layout>
+    <SizePolicy>min,min</SizePolicy>
+    <Children>
+
+      <WidgetGroup>
+        <ObjectName>PadRow</ObjectName>
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+          <Template src="skins:LateNight/pads/pad_cell_padfx.xml">
+            <SetVariable name="PadNum">1</SetVariable>
+            <SetVariable name="FxNum">1</SetVariable>
+          </Template>
+          <Template src="skins:LateNight/pads/pad_cell_padfx.xml">
+            <SetVariable name="PadNum">2</SetVariable>
+            <SetVariable name="FxNum">2</SetVariable>
+          </Template>
+          <Template src="skins:LateNight/pads/pad_cell_padfx.xml">
+            <SetVariable name="PadNum">3</SetVariable>
+            <SetVariable name="FxNum">3</SetVariable>
+          </Template>
+          <Template src="skins:LateNight/pads/pad_cell_padfx.xml">
+            <SetVariable name="PadNum">4</SetVariable>
+            <SetVariable name="FxNum">4</SetVariable>
+          </Template>
+        </Children>
+      </WidgetGroup><!-- PadRow 1-4 -->
+
+      <WidgetGroup>
+        <ObjectName>PadRow</ObjectName>
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+          <Template src="skins:LateNight/pads/pad_cell_padfx.xml">
+            <SetVariable name="PadNum">5</SetVariable>
+            <SetVariable name="FxNum">5</SetVariable>
+          </Template>
+          <Template src="skins:LateNight/pads/pad_cell_padfx.xml">
+            <SetVariable name="PadNum">6</SetVariable>
+            <SetVariable name="FxNum">6</SetVariable>
+          </Template>
+          <Template src="skins:LateNight/pads/pad_cell_padfx.xml">
+            <SetVariable name="PadNum">7</SetVariable>
+            <SetVariable name="FxNum">7</SetVariable>
+          </Template>
+          <Template src="skins:LateNight/pads/pad_cell_padfx.xml">
+            <SetVariable name="PadNum">8</SetVariable>
+            <SetVariable name="FxNum">8</SetVariable>
+          </Template>
+        </Children>
+      </WidgetGroup><!-- PadRow 5-8 -->
+
+    </Children>
+  </WidgetGroup><!-- PadPage -->
+</Template>

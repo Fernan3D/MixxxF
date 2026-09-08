@@ -1,0 +1,31 @@
+<!--
+Descripcion:
+  Rack de Performance Pads. Sustituye al rack de samplers en la barra superior:
+  muestra un bloque de 8 pads por deck, como en Rekordbox.
+  Se muestra u oculta con la pestana PADS ([Skin],show_pads).
+-->
+<Template>
+  <WidgetGroup>
+    <ObjectName>PadsRack</ObjectName>
+    <Layout>horizontal</Layout>
+    <SizePolicy>me,min</SizePolicy>
+    <Children>
+
+      <Template src="skins:LateNight/pads/pad_grid_deck1.xml"/>
+
+      <!-- Espaciador elastico: deja los pads del deck 1 a la izquierda y los del
+      deck 2 a la derecha, alineados con la posicion de sus decks -->
+      <WidgetGroup>
+        <ObjectName>PadsRackSpacer</ObjectName>
+        <Size>10me,0min</Size>
+      </WidgetGroup>
+
+      <Template src="skins:LateNight/pads/pad_grid_deck2.xml"/>
+
+    </Children>
+    <Connection>
+      <ConfigKey persist="true">[Skin],show_pads</ConfigKey>
+      <BindProperty>visible</BindProperty>
+    </Connection>
+  </WidgetGroup><!-- PadsRack -->
+</Template>

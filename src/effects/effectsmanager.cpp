@@ -5,6 +5,7 @@
 
 #include "effects/chains/equalizereffectchain.h"
 #include "effects/chains/outputeffectchain.h"
+#include "effects/chains/padfxchain.h"
 #include "effects/chains/quickeffectchain.h"
 #include "effects/chains/standardeffectchain.h"
 #include "effects/effectslot.h"
@@ -61,6 +62,7 @@ EffectsManager::~EffectsManager() {
     m_equalizerEffectChains.clear();
     m_quickStemEffectChains.clear();
     m_quickEffectChains.clear();
+    m_padFxChains.clear();
     m_standardEffectChains.clear();
     m_outputEffectChain.clear();
     m_effectChainSlotsByGroup.clear();
@@ -138,6 +140,7 @@ EffectChainPointer EffectsManager::getStandardEffectChain(int unitNumber) const 
 void EffectsManager::addDeck(const ChannelHandleAndGroup& deckHandleGroup) {
     addEqualizerEffectChain(deckHandleGroup);
     addQuickEffectChain(deckHandleGroup);
+    addPadFxChain(deckHandleGroup);
     // If a deck is added after setup() was run we need to read effects.xml
     // again to initialize its QuickEffect chain, either with defaults or the
     // previous state.
@@ -200,6 +203,20 @@ void EffectsManager::addQuickEffectChain(const ChannelHandleAndGroup& deckHandle
             new QuickEffectChain(deckHandleGroup, this, m_pMessenger));
 
     m_quickEffectChains.insert(deckHandleGroup.name(), pChainSlot);
+    m_effectChainSlotsByGroup.insert(pChainSlot->group(), pChainSlot);
+}
+
+void EffectsManager::addPadFxChain(const ChannelHandleAndGroup& deckHandleGroup) {
+    VERIFY_OR_DEBUG_ASSERT(!m_padFxChains.contains(deckHandleGroup.name())) {
+        return;
+    }
+
+    // La tabla de efectos de los pads es fija, asi que la cadena no se guarda
+    // en effects.xml: se reconstruye igual en cada arranque.
+    auto pChainSlot = PadFxChainPointer(
+            new PadFxChain(deckHandleGroup, this, m_pMessenger));
+
+    m_padFxChains.insert(deckHandleGroup.name(), pChainSlot);
     m_effectChainSlotsByGroup.insert(pChainSlot->group(), pChainSlot);
 }
 

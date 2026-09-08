@@ -466,9 +466,9 @@ Description:
             <Size>1min,12f</Size>
           </WidgetGroup>
 
-          <!-- Samplers -->
+          <!-- Performance Pads -->
           <SingletonContainer>
-            <ObjectName>SamplerSettingsSingleton</ObjectName>
+            <ObjectName>PadsSettingsSingleton</ObjectName>
           </SingletonContainer>
 
           <WidgetGroup>

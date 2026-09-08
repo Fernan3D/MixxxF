@@ -1,0 +1,42 @@
+<!--
+Descripcion:
+  Boton selector de modo de un banco de pads (equivalente a los 4 botones de
+  modo de una DDJ).
+
+  Una sola conexion hace de entrada y de salida sobre [PadBankN],mode:
+   - IsEqual enciende el boton solo cuando el modo activo es el suyo
+   - al pulsar, la transformacion inversa escribe ese mismo indice en el control
+
+  El patron es el mismo que Tango usa en los botones de 4/8 hotcues: sin
+  LeftClickIsPushButton (un boton momentaneo enviaria 0 al soltar y apagaria
+  el modo) y con EmitOnDownPress para no conmutar otra vez en el release.
+
+Variables:
+  Text      : etiqueta del modo
+  Width     : ancho del boton
+  ModeCO    : control con el modo activo del banco, [PadBankN],mode
+  ModeIndex : indice de pagina de este modo
+-->
+<Template>
+  <PushButton>
+    <ObjectName>PadModeButton</ObjectName>
+    <Size><Variable name="Width"/>,22f</Size>
+    <NumberStates>2</NumberStates>
+    <State>
+      <Number>0</Number>
+      <Text><Variable name="Text"/></Text>
+      <Alignment>center</Alignment>
+    </State>
+    <State>
+      <Number>1</Number>
+      <Text><Variable name="Text"/></Text>
+      <Alignment>center</Alignment>
+    </State>
+    <Connection>
+      <ConfigKey><Variable name="ModeCO"/></ConfigKey>
+      <Transform><IsEqual><Variable name="ModeIndex"/></IsEqual></Transform>
+      <ButtonState>LeftButton</ButtonState>
+      <EmitOnDownPress>true</EmitOnDownPress>
+    </Connection>
+  </PushButton>
+</Template>

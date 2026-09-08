@@ -1285,6 +1285,7 @@ add_library(
   src/effects/backends/effectsbackendmanager.cpp
   src/effects/chains/equalizereffectchain.cpp
   src/effects/chains/outputeffectchain.cpp
+  src/effects/chains/padfxchain.cpp
   src/effects/chains/pergroupeffectchain.cpp
   src/effects/chains/quickeffectchain.cpp
   src/effects/chains/standardeffectchain.cpp

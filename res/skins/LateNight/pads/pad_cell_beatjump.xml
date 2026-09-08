@@ -1,0 +1,59 @@
+<!--
+Descripcion:
+  Pad en modo BEAT JUMP. Cada pad salta un numero fijo de beats hacia atras o
+  hacia delante usando los controles beatjump_<size>_<direccion> que el motor
+  ya expone por deck.
+
+Variables:
+  PadNum    : numero visible del pad (1-8)
+  JumpSize  : cantidad de beats del salto
+  Direction : forward o backward
+  JumpLabel : texto del pad, con signo (-8, +4...)
+  Group     : grupo del deck, [ChannelN]
+-->
+<Template>
+  <WidgetGroup>
+    <ObjectName>PadCell</ObjectName>
+    <Layout>vertical</Layout>
+    <Size>116f,54f</Size>
+    <Children>
+
+      <WidgetGroup>
+        <ObjectName>PadCellHeader</ObjectName>
+        <Layout>horizontal</Layout>
+        <Size>116f,16f</Size>
+        <Children>
+          <Label>
+            <ObjectName>PadNumber</ObjectName>
+            <Size>13f,16f</Size>
+            <Text><Variable name="PadNum"/></Text>
+            <Alignment>center</Alignment>
+          </Label>
+          <Label>
+            <ObjectName>PadCaption</ObjectName>
+            <Size>0me,16f</Size>
+            <Text>BEATS</Text>
+            <Alignment>left</Alignment>
+          </Label>
+        </Children>
+      </WidgetGroup><!-- PadCellHeader -->
+
+      <PushButton>
+        <TooltipId>beatjump_forward</TooltipId>
+        <ObjectName>PadJump</ObjectName>
+        <Size>116f,38f</Size>
+        <NumberStates>1</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text><Variable name="JumpLabel"/></Text>
+          <Alignment>center</Alignment>
+        </State>
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,beatjump_<Variable name="JumpSize"/>_<Variable name="Direction"/></ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+      </PushButton>
+
+    </Children>
+  </WidgetGroup><!-- PadCell -->
+</Template>

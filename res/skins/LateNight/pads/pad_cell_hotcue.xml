@@ -1,0 +1,54 @@
+<!--
+Descripcion:
+  Pad en modo HOT CUE. El cuerpo es un HotcueButton, que ya trae de serie el
+  comportamiento completo de Rekordbox: click activa/crea el hotcue, click
+  derecho abre el menu de cue, y el pad se pinta con el color del hotcue.
+
+  Nota: HotcueButton no admite nodos <Connection> propios; su cableado lo
+  monta el parser a partir de <Group> y <Hotcue>.
+
+Variables:
+  PadNum    : numero visible del pad (1-8)
+  HotcueNum : hotcue del deck que dispara este pad
+  Group     : grupo del deck, [ChannelN]
+-->
+<Template>
+  <WidgetGroup>
+    <ObjectName>PadCell</ObjectName>
+    <Layout>vertical</Layout>
+    <Size>116f,54f</Size>
+    <Children>
+
+      <WidgetGroup>
+        <ObjectName>PadCellHeader</ObjectName>
+        <Layout>horizontal</Layout>
+        <Size>116f,16f</Size>
+        <Children>
+          <Label>
+            <ObjectName>PadNumber</ObjectName>
+            <Size>13f,16f</Size>
+            <Text><Variable name="PadNum"/></Text>
+            <Alignment>center</Alignment>
+          </Label>
+          <Label>
+            <ObjectName>PadCaption</ObjectName>
+            <Size>0me,16f</Size>
+            <Text>CUE <Variable name="HotcueNum"/></Text>
+            <Alignment>left</Alignment>
+          </Label>
+        </Children>
+      </WidgetGroup><!-- PadCellHeader -->
+
+      <HotcueButton>
+        <TooltipId>hotcue</TooltipId>
+        <ObjectName>PadHotcue</ObjectName>
+        <Size>116f,38f</Size>
+        <Group><Variable name="Group"/></Group>
+        <Hotcue><Variable name="HotcueNum"/></Hotcue>
+        <NumberStates>3</NumberStates>
+        <DimBrightThreshold><Variable name="DimBrightThresholdHotcueBtn"/></DimBrightThreshold>
+      </HotcueButton>
+
+    </Children>
+  </WidgetGroup><!-- PadCell -->
+</Template>

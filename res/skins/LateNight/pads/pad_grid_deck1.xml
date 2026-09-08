@@ -1,0 +1,70 @@
+<!--
+Descripcion:
+  Bloque de Performance Pads del deck 1: barra de modos + cuadricula de 8 pads.
+  La cuadricula cambia de funcion segun el modo activo del banco, igual que en
+  Rekordbox, y cada deck tiene su propio modo.
+
+  El indice de pagina vive en [PadBank1],mode (0 HOT CUE, 1 PAD FX,
+  2 BEAT JUMP, 3 SAMPLER) y se conserva entre sesiones. Las paginas no usan
+  "trigger": el modo lo escriben los botones de la barra, de forma que el
+  control de modo es la unica fuente de verdad.
+
+  Existe un archivo por deck porque el formato de skin no sustituye variables
+  dentro de los atributos XML (currentpage); el contenido de las paginas si es
+  compartido.
+-->
+<Template>
+  <SetVariable name="PadDeck">1</SetVariable>
+  <SetVariable name="PadBank">[PadBank1]</SetVariable>
+  <SetVariable name="Group">[Channel1]</SetVariable>
+
+  <WidgetGroup>
+    <ObjectName>PadBank</ObjectName>
+    <Layout>vertical</Layout>
+    <SizePolicy>min,min</SizePolicy>
+    <Children>
+
+      <Template src="skins:LateNight/pads/pad_mode_bar.xml"/>
+
+      <WidgetStack currentpage="[PadBank1],mode" persist="true">
+        <Size>464f,108f</Size>
+        <Children>
+
+          <WidgetGroup>
+            <Layout>vertical</Layout>
+            <SizePolicy>min,min</SizePolicy>
+            <Children>
+              <Template src="skins:LateNight/pads/page_hotcue.xml"/>
+            </Children>
+          </WidgetGroup>
+
+          <WidgetGroup>
+            <Layout>vertical</Layout>
+            <SizePolicy>min,min</SizePolicy>
+            <Children>
+              <Template src="skins:LateNight/pads/page_padfx.xml"/>
+            </Children>
+          </WidgetGroup>
+
+          <WidgetGroup>
+            <Layout>vertical</Layout>
+            <SizePolicy>min,min</SizePolicy>
+            <Children>
+              <Template src="skins:LateNight/pads/page_beatjump.xml"/>
+            </Children>
+          </WidgetGroup>
+
+          <WidgetGroup>
+            <Layout>vertical</Layout>
+            <SizePolicy>min,min</SizePolicy>
+            <Children>
+              <Template src="skins:LateNight/pads/page_sampler.xml"/>
+            </Children>
+          </WidgetGroup>
+
+        </Children>
+      </WidgetStack>
+
+    </Children>
+  </WidgetGroup><!-- PadBank -->
+</Template>

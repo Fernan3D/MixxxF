@@ -62,12 +62,12 @@
           </Template>
 
           <Template src="skins:LateNight/controls/button_2state_persist.xml">
-            <SetVariable name="TooltipId">show_samplers</SetVariable>
+            <SetVariable name="TooltipId">show_pads</SetVariable>
             <SetVariable name="ObjectName">GuiToggleButton</SetVariable>
-            <SetVariable name="Size">71f,20f</SetVariable>
-            <SetVariable name="state_0_text">SAMPLERS</SetVariable>
-            <SetVariable name="state_1_text">SAMPLERS</SetVariable>
-            <SetVariable name="ConfigKey">[Skin],show_samplers</SetVariable>
+            <SetVariable name="Size">48f,20f</SetVariable>
+            <SetVariable name="state_0_text">PADS</SetVariable>
+            <SetVariable name="state_1_text">PADS</SetVariable>
+            <SetVariable name="ConfigKey">[Skin],show_pads</SetVariable>
           </Template>
 
           <Template src="skins:LateNight/controls/button_2state_persist.xml">

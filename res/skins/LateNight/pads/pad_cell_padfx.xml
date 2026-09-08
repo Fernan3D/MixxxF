@@ -1,0 +1,75 @@
+<!--
+Descripcion:
+  Celda de un pad en modo PAD FX. El pad es momentaneo: mantener pulsado
+  activa el efecto y al soltar se desactiva, como el Pad FX de Rekordbox.
+
+  El efecto vive en la PadFxChain del deck ([PadFxRack1_[ChannelN]]), una
+  cadena dedicada que Mixxx crea junto al deck y que no aparece en el rack de
+  efectos. El nombre que se muestra lo lee EffectName del slot, asi que si el
+  efecto del pad cambia la etiqueta se actualiza sola.
+
+  LeftClickIsPushButton fuerza el comportamiento momentaneo: el control
+  "enabled" del slot es un boton PowerWindow y, sin esto, un click corto lo
+  dejaria enganchado.
+
+Variables:
+  PadNum : numero de pad que se muestra (1-8)
+  FxNum  : numero de slot de efecto dentro de la cadena (1-8)
+  Group  : canal del deck, [ChannelN]
+-->
+<Template>
+  <SetVariable name="ChainGroup">[PadFxRack1_<Variable name="Group"/>]</SetVariable>
+  <SetVariable name="SlotGroup">[PadFxRack1_<Variable name="Group"/>_Effect<Variable name="FxNum"/>]</SetVariable>
+
+  <WidgetGroup>
+    <ObjectName>PadCell</ObjectName>
+    <Layout>vertical</Layout>
+    <Size>116f,54f</Size>
+    <Children>
+
+      <WidgetGroup>
+        <ObjectName>PadCellHeader</ObjectName>
+        <Layout>horizontal</Layout>
+        <Size>116f,16f</Size>
+        <Children>
+          <Label>
+            <ObjectName>PadNumber</ObjectName>
+            <Size>13f,16f</Size>
+            <Text><Variable name="PadNum"/></Text>
+            <Alignment>center</Alignment>
+          </Label>
+          <EffectName>
+            <ObjectName>PadCaption</ObjectName>
+            <Size>0me,16f</Size>
+            <EffectUnitGroup><Variable name="ChainGroup"/></EffectUnitGroup>
+            <Effect><Variable name="FxNum"/></Effect>
+            <Elide>right</Elide>
+          </EffectName>
+        </Children>
+      </WidgetGroup>
+
+      <PushButton>
+        <TooltipId>EffectSlot_enabled</TooltipId>
+        <ObjectName>PadFx</ObjectName>
+        <Size>116f,38f</Size>
+        <NumberStates>2</NumberStates>
+        <LeftClickIsPushButton>true</LeftClickIsPushButton>
+        <State>
+          <Number>0</Number>
+          <Text></Text>
+          <Alignment>center</Alignment>
+        </State>
+        <State>
+          <Number>1</Number>
+          <Text></Text>
+          <Alignment>center</Alignment>
+        </State>
+        <Connection>
+          <ConfigKey><Variable name="SlotGroup"/>,enabled</ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+      </PushButton>
+
+    </Children>
+  </WidgetGroup><!-- PadCell -->
+</Template>

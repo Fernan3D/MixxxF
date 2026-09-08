@@ -1,0 +1,109 @@
+<!--
+Descripcion:
+  Pad individual en modo SAMPLER, al estilo de los Performance Pads de Rekordbox.
+
+  Se construye sobre TrackWidgetGroup en lugar de un WidgetGroup normal porque
+  asi toda la celda acepta pistas arrastradas desde la biblioteca: al soltar,
+  el tema se carga en el sampler asignado a este pad. Ademas TrackWidgetGroup
+  pinta el color de la pista, que es la senal visual que usa Rekordbox para
+  distinguir samples de un vistazo.
+
+Variables:
+  PadNum     : numero visible del pad (1-8)
+  SamplerNum : sampler global que dispara este pad
+-->
+<Template>
+  <SetVariable name="Group">[Sampler<Variable name="SamplerNum"/>]</SetVariable>
+
+  <!-- Tamano fijo: los pads son cuadricula, no deben estirarse con la ventana -->
+  <TrackWidgetGroup>
+    <ObjectName>PadCell</ObjectName>
+    <Group><Variable name="Group"/></Group>
+    <!-- Alpha bajo para que el color de la pista tinte el pad sin tapar el texto -->
+    <TrackColorAlpha>90</TrackColorAlpha>
+    <Layout>vertical</Layout>
+    <Size>116f,54f</Size>
+    <Children>
+
+      <!-- Cabecera del pad: numero, nombre del sample y expulsar -->
+      <WidgetGroup>
+        <ObjectName>PadCellHeader</ObjectName>
+        <Layout>horizontal</Layout>
+        <Size>116f,16f</Size>
+        <Children>
+
+          <Label>
+            <ObjectName>PadNumber</ObjectName>
+            <Size>13f,16f</Size>
+            <Text><Variable name="PadNum"/></Text>
+            <Alignment>center</Alignment>
+          </Label>
+
+          <TrackProperty>
+            <TooltipId>track_title</TooltipId>
+            <ObjectName>PadTitle</ObjectName>
+            <Size>0me,16f</Size>
+            <Group><Variable name="Group"/></Group>
+            <Property>titleInfo</Property>
+            <Elide>right</Elide>
+          </TrackProperty>
+
+          <!-- Solo tiene sentido con un sample cargado, por eso se oculta si no lo hay -->
+          <PushButton>
+            <TooltipId>eject</TooltipId>
+            <ObjectName>PadEject</ObjectName>
+            <Size>13f,16f</Size>
+            <NumberStates>1</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>x</Text>
+              <Alignment>center</Alignment>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,eject</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,track_loaded</ConfigKey>
+              <BindProperty>visible</BindProperty>
+            </Connection>
+          </PushButton>
+
+        </Children>
+      </WidgetGroup><!-- PadCellHeader -->
+
+      <!-- Superficie del pad: click izquierdo dispara el sample desde el cue,
+      click derecho lo detiene. El estado visual sigue a play_latched. -->
+      <PushButton>
+        <TooltipId>cue_gotoandplay_cue_default</TooltipId>
+        <ObjectName>PadTrigger</ObjectName>
+        <Size>116f,38f</Size>
+        <NumberStates>2</NumberStates>
+        <RightClickIsPushButton>true</RightClickIsPushButton>
+        <State>
+          <Number>0</Number>
+          <Text></Text>
+          <Alignment>center</Alignment>
+        </State>
+        <State>
+          <Number>1</Number>
+          <Text></Text>
+          <Alignment>center</Alignment>
+        </State>
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,cue_gotoandplay</ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,stop</ConfigKey>
+          <ButtonState>RightButton</ButtonState>
+        </Connection>
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,play_latched</ConfigKey>
+          <ConnectValueFromWidget>false</ConnectValueFromWidget>
+        </Connection>
+      </PushButton>
+
+    </Children>
+  </TrackWidgetGroup><!-- PadCell -->
+</Template>

@@ -1,0 +1,60 @@
+<!--
+Descripcion:
+  Bloque de Performance Pads del deck 2. Copia de pad_grid_deck1.xml con el
+  banco [PadBank2] y el canal [Channel2]; ver ese archivo para los detalles.
+-->
+<Template>
+  <SetVariable name="PadDeck">2</SetVariable>
+  <SetVariable name="PadBank">[PadBank2]</SetVariable>
+  <SetVariable name="Group">[Channel2]</SetVariable>
+
+  <WidgetGroup>
+    <ObjectName>PadBank</ObjectName>
+    <Layout>vertical</Layout>
+    <SizePolicy>min,min</SizePolicy>
+    <Children>
+
+      <Template src="skins:LateNight/pads/pad_mode_bar.xml"/>
+
+      <WidgetStack currentpage="[PadBank2],mode" persist="true">
+        <Size>464f,108f</Size>
+        <Children>
+
+          <WidgetGroup>
+            <Layout>vertical</Layout>
+            <SizePolicy>min,min</SizePolicy>
+            <Children>
+              <Template src="skins:LateNight/pads/page_hotcue.xml"/>
+            </Children>
+          </WidgetGroup>
+
+          <WidgetGroup>
+            <Layout>vertical</Layout>
+            <SizePolicy>min,min</SizePolicy>
+            <Children>
+              <Template src="skins:LateNight/pads/page_padfx.xml"/>
+            </Children>
+          </WidgetGroup>
+
+          <WidgetGroup>
+            <Layout>vertical</Layout>
+            <SizePolicy>min,min</SizePolicy>
+            <Children>
+              <Template src="skins:LateNight/pads/page_beatjump.xml"/>
+            </Children>
+          </WidgetGroup>
+
+          <WidgetGroup>
+            <Layout>vertical</Layout>
+            <SizePolicy>min,min</SizePolicy>
+            <Children>
+              <Template src="skins:LateNight/pads/page_sampler.xml"/>
+            </Children>
+          </WidgetGroup>
+
+        </Children>
+      </WidgetStack>
+
+    </Children>
+  </WidgetGroup><!-- PadBank -->
+</Template>

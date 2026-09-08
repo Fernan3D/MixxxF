@@ -40,6 +40,11 @@ inline qhash_seed_t qHash(
 constexpr int kNumStandardEffectUnits = 4;
 constexpr int kNumEffectsPerUnit = 4;
 
+/// Numero de pads del modo PAD FX, uno por slot de la PadFxChain del deck.
+/// Coincide con la cuadricula 2x4 de la skin y con los 8 pads fisicos de una
+/// controladora tipo DDJ.
+constexpr int kNumPadFxSlots = 8;
+
 const QString kNoEffectString = QStringLiteral("---");
 
 const QString kMixerProfile = QStringLiteral("[Mixer Profile]");
@@ -115,3 +120,6 @@ typedef QSharedPointer<OutputEffectChain> OutputEffectChainPointer;
 
 class QuickEffectChain;
 typedef QSharedPointer<QuickEffectChain> QuickEffectChainPointer;
+
+class PadFxChain;
+typedef QSharedPointer<PadFxChain> PadFxChainPointer;

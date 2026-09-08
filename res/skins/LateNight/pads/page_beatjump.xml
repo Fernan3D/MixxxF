@@ -1,0 +1,83 @@
+<!--
+Descripcion:
+  Pagina de pads en modo BEAT JUMP con el reparto de Rekordbox:
+  fila superior salta hacia atras (8, 4, 2, 1) y la inferior hacia delante
+  (1, 2, 4, 8).
+
+Variables:
+  Group : grupo del deck, [ChannelN]
+-->
+<Template>
+  <WidgetGroup>
+    <ObjectName>PadPage</ObjectName>
+    <Layout>vertical</Layout>
+    <SizePolicy>min,min</SizePolicy>
+    <Children>
+
+      <WidgetGroup>
+        <ObjectName>PadRow</ObjectName>
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+          <Template src="skins:LateNight/pads/pad_cell_beatjump.xml">
+            <SetVariable name="PadNum">1</SetVariable>
+            <SetVariable name="JumpSize">8</SetVariable>
+            <SetVariable name="Direction">backward</SetVariable>
+            <SetVariable name="JumpLabel">-8</SetVariable>
+          </Template>
+          <Template src="skins:LateNight/pads/pad_cell_beatjump.xml">
+            <SetVariable name="PadNum">2</SetVariable>
+            <SetVariable name="JumpSize">4</SetVariable>
+            <SetVariable name="Direction">backward</SetVariable>
+            <SetVariable name="JumpLabel">-4</SetVariable>
+          </Template>
+          <Template src="skins:LateNight/pads/pad_cell_beatjump.xml">
+            <SetVariable name="PadNum">3</SetVariable>
+            <SetVariable name="JumpSize">2</SetVariable>
+            <SetVariable name="Direction">backward</SetVariable>
+            <SetVariable name="JumpLabel">-2</SetVariable>
+          </Template>
+          <Template src="skins:LateNight/pads/pad_cell_beatjump.xml">
+            <SetVariable name="PadNum">4</SetVariable>
+            <SetVariable name="JumpSize">1</SetVariable>
+            <SetVariable name="Direction">backward</SetVariable>
+            <SetVariable name="JumpLabel">-1</SetVariable>
+          </Template>
+        </Children>
+      </WidgetGroup><!-- PadRow 1-4 -->
+
+      <WidgetGroup>
+        <ObjectName>PadRow</ObjectName>
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+          <Template src="skins:LateNight/pads/pad_cell_beatjump.xml">
+            <SetVariable name="PadNum">5</SetVariable>
+            <SetVariable name="JumpSize">1</SetVariable>
+            <SetVariable name="Direction">forward</SetVariable>
+            <SetVariable name="JumpLabel">+1</SetVariable>
+          </Template>
+          <Template src="skins:LateNight/pads/pad_cell_beatjump.xml">
+            <SetVariable name="PadNum">6</SetVariable>
+            <SetVariable name="JumpSize">2</SetVariable>
+            <SetVariable name="Direction">forward</SetVariable>
+            <SetVariable name="JumpLabel">+2</SetVariable>
+          </Template>
+          <Template src="skins:LateNight/pads/pad_cell_beatjump.xml">
+            <SetVariable name="PadNum">7</SetVariable>
+            <SetVariable name="JumpSize">4</SetVariable>
+            <SetVariable name="Direction">forward</SetVariable>
+            <SetVariable name="JumpLabel">+4</SetVariable>
+          </Template>
+          <Template src="skins:LateNight/pads/pad_cell_beatjump.xml">
+            <SetVariable name="PadNum">8</SetVariable>
+            <SetVariable name="JumpSize">8</SetVariable>
+            <SetVariable name="Direction">forward</SetVariable>
+            <SetVariable name="JumpLabel">+8</SetVariable>
+          </Template>
+        </Children>
+      </WidgetGroup><!-- PadRow 5-8 -->
+
+    </Children>
+  </WidgetGroup><!-- PadPage -->
+</Template>
