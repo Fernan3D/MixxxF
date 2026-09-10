@@ -3,7 +3,7 @@
     <rect x="6" y="7" width="2" height="10" style="paint-order:markers fill stroke"/>
     <path d="m9 17 9-10v10z"/>
   </g>
-  <g transform="translate(-3)" fill="#918273">
+  <g transform="translate(-3)" fill="#aaaaaa">
     <rect x="6" y="7" width="2" height="10" style="paint-order:markers fill stroke"/>
     <path d="m9 17 9-10v10z"/>
   </g>

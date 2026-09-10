@@ -20,7 +20,7 @@ Variables:
 <Template>
   <PushButton>
     <ObjectName>PadModeButton</ObjectName>
-    <Size><Variable name="Width"/>,22f</Size>
+    <Size><Variable name="Width"/>,28f</Size>
     <NumberStates>2</NumberStates>
     <State>
       <Number>0</Number>

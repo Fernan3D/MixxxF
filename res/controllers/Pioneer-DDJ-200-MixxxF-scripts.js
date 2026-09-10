@@ -9,8 +9,6 @@ var DDJ200 = {
     pendingBrowseDeck: 0,
     pendingBrowseAcc: 0,
     pendingBrowseTimer: 0,
-    playBlinkOn: false,
-    playBlinkTimer: 0,
     padModeTimer: 0,
     lastPadMode: [-1, -1, -1],
     // Indices de [PadBankN],mode en LateNight. La DDJ-200 no envia MIDI de modo:
@@ -140,11 +138,19 @@ DDJ200.init = function() {
         // run onTrackLoad after every track load to set LEDs accordingly
         engine.makeConnection(vgroup, "track_loaded", function(ch, vgroup) {
             DDJ200.onTrackLoad(ch, vgroup);
-            DDJ200.updatePlayBlinkTimer();
         });
 
-        engine.makeConnection(vgroup, "play", function(value, group) {
-            DDJ200.updatePlayBlinkTimer();
+        // MixxxF: LEDs PLAY/CUE siguen play_indicator y cue_indicator, el
+        // mismo reloj 500 ms que la skin. Unbuffered para no desfasar el MIDI.
+        DDJ200.connectLed(vgroup, "play_indicator", function(_value, group) {
+            DDJ200.onChannelLed(group, function(physicalDeck) {
+                DDJ200.refreshPlayLed(physicalDeck);
+            });
+        });
+        DDJ200.connectLed(vgroup, "cue_indicator", function(_value, group) {
+            DDJ200.onChannelLed(group, function(physicalDeck) {
+                DDJ200.refreshMainCueLed(physicalDeck);
+            });
         });
 
         engine.makeConnection(vgroup, "pfl", function(value, group) {
@@ -173,23 +179,6 @@ DDJ200.init = function() {
         engine.makeConnection(vgroup, "slip_enabled", function(value, group) {
             DDJ200.onChannelLed(group, function(physicalDeck) {
                 DDJ200.refreshSlipLed(physicalDeck);
-            });
-        });
-
-        engine.makeConnection(vgroup, "cue_point", function(value, group) {
-            DDJ200.onChannelLed(group, function(physicalDeck) {
-                DDJ200.refreshMainCueLed(physicalDeck);
-            });
-        });
-
-        // Por qué solo en pausa: en play el LED CUE va apagado y playposition
-        // dispara cada buffer; no hay que saturar MIDI.
-        engine.makeConnection(vgroup, "playposition", function(value, group) {
-            if (engine.getValue(group, "play")) {
-                return;
-            }
-            DDJ200.onChannelLed(group, function(physicalDeck) {
-                DDJ200.refreshMainCueLed(physicalDeck);
             });
         });
 
@@ -297,7 +286,6 @@ DDJ200.init = function() {
         DDJ200.bindPadBankMode();
         DDJ200.refreshUnshiftedPadLeds(1);
         DDJ200.refreshUnshiftedPadLeds(2);
-        DDJ200.updatePlayBlinkTimer();
         // Despues de los defaults: el dump pisa CFX 50 % con la rueda real.
         DDJ200.requestControllerPositions();
         // Pioneer a veces reescribe pads al arrancar; un segundo pase los deja
@@ -331,7 +319,6 @@ DDJ200.requestControllerPositions = function() {
 
 DDJ200.shutdown = function() {
     DDJ200.stopPadModeWatch();
-    DDJ200.stopPlayBlinkTimer();
     DDJ200.LEDsOff();
 };
 
@@ -955,32 +942,12 @@ DDJ200.refreshSlipLed = function(physicalDeck) {
 };
 
 /**
- * El LED CUE de transporte: fijo en el punto CUE (pausa),
- * parpadeo si hay CUE pero el playhead esta en otro sitio, apagado en play.
+ * LED CUE de transporte: copia cue_indicator (fijo en el punto CUE,
+ * parpadeo 500 ms fuera de el, apagado en play).
  */
-DDJ200.isAtMainCue = function(vgroup) {
-    var cuePoint = engine.getValue(vgroup, "cue_point");
-    var trackSamples = engine.getValue(vgroup, "track_samples");
-    var duration = engine.getValue(vgroup, "duration");
-    if (cuePoint < 0 || !trackSamples || !duration) {
-        return false;
-    }
-    var cuePos = cuePoint / trackSamples;
-    var deltaSec = Math.abs(engine.getValue(vgroup, "playposition") - cuePos) * duration;
-    // Varios buffers de audio: Mixxx no deja el playhead en la muestra exacta.
-    return deltaSec < 0.05;
-};
-
 DDJ200.refreshMainCueLed = function(physicalDeck) {
     var vgroup = "[Channel" + DDJ200.vDeckNo[physicalDeck] + "]";
-    var on = 0x00;
-    if (engine.getValue(vgroup, "track_loaded") &&
-            engine.getValue(vgroup, "cue_point") !== -1 &&
-            !engine.getValue(vgroup, "play")) {
-        if (DDJ200.isAtMainCue(vgroup) || DDJ200.playBlinkOn) {
-            on = 0x7F;
-        }
-    }
+    var on = engine.getValue(vgroup, "cue_indicator") ? 0x7F : 0x00;
     midi.sendShortMsg(0x90 + physicalDeck - 1, 0x0C, on);
 };
 
@@ -989,49 +956,7 @@ DDJ200.refreshMainCueLeds = function() {
     DDJ200.refreshMainCueLed(2);
 };
 
-/**
- * PLAY: apagado sin tema, parpadeo si hay tema en pausa, fijo si suena.
- */
-DDJ200.startPlayBlinkTimer = function() {
-    if (DDJ200.playBlinkTimer) {
-        return;
-    }
-    DDJ200.playBlinkOn = true;
-    DDJ200.playBlinkTimer = engine.beginTimer(490, function() {
-        DDJ200.playBlinkOn = !DDJ200.playBlinkOn;
-        DDJ200.refreshPlayLeds();
-        DDJ200.refreshMainCueLeds();
-    });
-};
-
-DDJ200.stopPlayBlinkTimer = function() {
-    if (DDJ200.playBlinkTimer) {
-        engine.stopTimer(DDJ200.playBlinkTimer);
-        DDJ200.playBlinkTimer = 0;
-    }
-    DDJ200.playBlinkOn = false;
-};
-
-DDJ200.needsPlayBlink = function() {
-    for (var physical = 1; physical <= 2; physical++) {
-        var vgroup = "[Channel" + DDJ200.vDeckNo[physical] + "]";
-        if (engine.getValue(vgroup, "track_loaded") && !engine.getValue(vgroup, "play")) {
-            return true;
-        }
-    }
-    return false;
-};
-
-DDJ200.updatePlayBlinkTimer = function() {
-    if (DDJ200.needsPlayBlink()) {
-        DDJ200.startPlayBlinkTimer();
-    } else {
-        DDJ200.stopPlayBlinkTimer();
-    }
-    DDJ200.refreshPlayLeds();
-    DDJ200.refreshMainCueLeds();
-};
-
+/** PLAY: copia play_indicator (fijo en play, parpadeo 500 ms en pausa). */
 DDJ200.refreshPlayLeds = function() {
     DDJ200.refreshPlayLed(1);
     DDJ200.refreshPlayLed(2);
@@ -1039,12 +964,7 @@ DDJ200.refreshPlayLeds = function() {
 
 DDJ200.refreshPlayLed = function(physicalDeck) {
     var vgroup = "[Channel" + DDJ200.vDeckNo[physicalDeck] + "]";
-    var on = 0x00;
-    if (engine.getValue(vgroup, "play")) {
-        on = 0x7F;
-    } else if (engine.getValue(vgroup, "track_loaded") && DDJ200.playBlinkOn) {
-        on = 0x7F;
-    }
+    var on = engine.getValue(vgroup, "play_indicator") ? 0x7F : 0x00;
     midi.sendShortMsg(0x90 + physicalDeck - 1, 0x0B, on);
 };
 

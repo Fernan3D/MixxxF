@@ -52,7 +52,10 @@ namespace {
 // Overall=1 (y mas con 2) la onda que se desplaza con el play se sale del
 // visor aunque el EQ este al centro. 0.5 es el minimo de Preferencias.
 constexpr double kVisualGainDefault[] = {0.5, 1, 1, 1};
-constexpr bool kOverviewNormalizedDefault = false;
+// MixxxF: el resumen del deck debe llenar la caja como la columna Overview
+// de la biblioteca (peak crop). Sin esto, VisualGain Overall=0.5 deja el
+// resumen casi vacio. El visor que se desplaza sigue usando 0.5.
+constexpr bool kOverviewNormalizedDefault = true;
 
 // Returns true if the given waveform should be rendered.
 bool shouldRenderWaveform(WaveformWidgetAbstract* pWaveformWidget) {
@@ -419,15 +422,31 @@ bool WaveformWidgetFactory::setConfig(UserSettingsPointer config) {
     // Store the widget type on m_configType for later initialization.
     // We will initialize the objects later because of a problem with GL on QT 5.14.2 on Windows
     if (!ok || !setWidgetType(type, &m_configType)) {
-        setWidgetType(WaveformWidgetType::RGB, &m_configType);
+        // MixxxF: Filtered muestra L/M/H por separado; RGB 2.7 llena demasiado el visor.
+        setWidgetType(WaveformWidgetType::Filtered, &m_configType);
+        m_config->setValue(kWaveformTypeKey, static_cast<int>(WaveformWidgetType::Filtered));
     }
 
     for (int i = 0; i < BandCount; i++) {
         m_visualGain[i] = m_config->getValue(visualGainKey(i), kVisualGainDefault[i]);
     }
+    // MixxxF y Mixxx oficial comparten mixxx.cfg. Overall=1 en AllShader 2.7
+    // pega la onda arriba y abajo; Mixxx 2.5 se veia mas baja. 0.5 deja margen.
+    if (m_visualGain[AllBand] >= 1.0) {
+        m_visualGain[AllBand] = kVisualGainDefault[AllBand];
+        m_config->setValue(visualGainKey(AllBand), m_visualGain[AllBand]);
+    }
     m_overviewNormalized = m_config->getValue(
             ConfigKey(kWaveformGroup, QStringLiteral("OverviewNormalized")),
             kOverviewNormalizedDefault);
+    // MixxxF y Mixxx oficial comparten mixxx.cfg. OverviewNormalized=0
+    // escala el resumen del deck con Overall=0.5 y deja la franja vacia.
+    if (!m_overviewNormalized) {
+        m_overviewNormalized = true;
+        m_config->setValue(
+                ConfigKey(kWaveformGroup, QStringLiteral("OverviewNormalized")),
+                m_overviewNormalized);
+    }
 
     emit visualGainChanged(
             m_visualGain[BandIndex::AllBand],

@@ -873,6 +873,10 @@ void Tooltips::addStandardTooltips() {
             << QString("%1: %2").arg(rightClick, tr("Temporarily enable a rolling loop over the set number of beats."))
             << tr("Playback will resume where the track would have been if it had not entered the loop.");
 
+    add("beatlooproll_activate")
+            << tr("Loop roll")
+            << tr("Mantén pulsado para un loop momentáneo. Al soltar, el tema sigue como si no hubiera loop.");
+
     add("loop_anchor")
             << tr("Beatloop Anchor")
             << tr("Define whether the loop is created and adjusted from its "

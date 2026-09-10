@@ -110,10 +110,14 @@
               <Library>
                 <ShowButtonText>false</ShowButtonText>
                 <TrackTableBackgroundColorOpacity>0.175</TrackTableBackgroundColorOpacity>
-                <!-- Colors for the render modes of the Overview column -->
-                <!-- For the overview column we only set the signal color,
-                     other colors are the defaults. -->
+                <!-- L=#FF0000 M=#00FF00 H=#0000FF: la columna Overview usa 3 bandas. -->
                 <SignalColor><Variable name="SignalColor_12"/></SignalColor>
+                <SignalHighColor>#0000FF</SignalHighColor>
+                <SignalMidColor>#00FF00</SignalMidColor>
+                <SignalLowColor>#FF0000</SignalLowColor>
+                <SignalRGBHighColor>#0000FF</SignalRGBHighColor>
+                <SignalRGBMidColor>#00FF00</SignalRGBMidColor>
+                <SignalRGBLowColor>#FF0000</SignalRGBLowColor>
               </Library>
 
             </Children>

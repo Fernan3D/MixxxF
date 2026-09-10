@@ -19,6 +19,7 @@ class SliderEventHandler {
               m_dPos(0.0),
               m_dHandleLength(0),
               m_dSliderLength(0),
+              m_dHandlePadding(0),
               m_bHorizontal(false),
               m_bDrag(false),
               m_bEventWhileDrag(true) { }
@@ -33,6 +34,10 @@ class SliderEventHandler {
 
     void setSliderLength(double len) {
         m_dSliderLength = len;
+    }
+
+    void setHandlePadding(double pad) {
+        m_dHandlePadding = math_max(0.0, pad);
     }
 
     void setEventWhileDrag(bool eventwhile) {
@@ -57,9 +62,9 @@ class SliderEventHandler {
 
             m_dPos = m_dStartHandlePos + (m_dPos - m_dStartMousePos);
 
-            // Clamp to the range [0, sliderLength - m_dHandleLength].
-            if (m_dSliderLength - m_dHandleLength > 0.0) {
-                m_dPos = math_clamp(m_dPos, 0.0, m_dSliderLength - m_dHandleLength);
+            // Clamp al recorrido util (con padding MixxxF a ambos lados).
+            if (travelSpan() > 0.0) {
+                m_dPos = math_clamp(m_dPos, travelMin(), travelMax());
             }
             double newParameter = positionToParameter(m_dPos);
 
@@ -155,9 +160,8 @@ class SliderEventHandler {
 
             double newPos = parameterToPosition(dParameter);
 
-            // Clamp to [0.0, sliderLength - m_dHandleLength].
-            if (m_dSliderLength - m_dHandleLength > 0.0) {
-                newPos = math_clamp(newPos, 0.0, m_dSliderLength - m_dHandleLength);
+            if (travelSpan() > 0.0) {
+                newPos = math_clamp(newPos, travelMin(), travelMax());
             }
 
             // Check a second time for no-ops. It's possible the parameter changed
@@ -180,21 +184,21 @@ class SliderEventHandler {
 
     // Convert CO parameter value to a handle pixel position.
     double parameterToPosition(double parameter) const {
-        if (m_dSliderLength - m_dHandleLength <= 0.0) {
-            return 0.0;
+        if (travelSpan() <= 0.0) {
+            return travelMin();
         }
         if (!m_bHorizontal) {
             parameter = 1.0 - parameter;
         }
-        return parameter * (m_dSliderLength - m_dHandleLength);
+        return travelMin() + parameter * travelSpan();
     }
 
     // Convert handle pixel position to a CO parameter value.
     double positionToParameter(double pos) const {
-        if (m_dSliderLength - m_dHandleLength <= 0.0) {
+        if (travelSpan() <= 0.0) {
             return 0.0;
         }
-        double val = pos / (m_dSliderLength - m_dHandleLength);
+        double val = math_clamp((pos - travelMin()) / travelSpan(), 0.0, 1.0);
         if (!m_bHorizontal) {
             return 1.0 - val;
         }
@@ -202,6 +206,16 @@ class SliderEventHandler {
     }
 
   private:
+    double travelMin() const {
+        return m_dHandlePadding;
+    }
+    double travelMax() const {
+        return math_max(travelMin(), m_dSliderLength - m_dHandleLength - m_dHandlePadding);
+    }
+    double travelSpan() const {
+        return travelMax() - travelMin();
+    }
+
     // This is the position the handle was when a drag started.
     double m_dStartHandlePos;
     // We record where the mouse was when the user started clicking so they
@@ -217,6 +231,8 @@ class SliderEventHandler {
     double m_dHandleLength;
     // Length of the slider in pixels
     double m_dSliderLength;
+    // MixxxF: pixels de margen a cada lado del recorrido del mango
+    double m_dHandlePadding;
     // True if it's a horizontal slider
     bool m_bHorizontal;
     // True if slider is being dragged. Only used when m_bEventWhileDrag is false

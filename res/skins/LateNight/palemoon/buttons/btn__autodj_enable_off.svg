@@ -2,7 +2,7 @@
   <defs>
     <linearGradient id="a" x1="2.8712" x2="2.8712" y1="19.048" y2="1.0256" gradientTransform="matrix(.26458 0 0 .26458 -2.7083e-8 -2e-5)" gradientUnits="userSpaceOnUse">
       <stop stop-color="#80766b" offset="0"/>
-      <stop stop-color="#a89a8c" offset="1"/>
+      <stop stop-color="#aaaaaa" offset="1"/>
     </linearGradient>
   </defs>
   <g fill="url(#a)" stroke-width=".26458">

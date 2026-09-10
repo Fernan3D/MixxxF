@@ -93,6 +93,16 @@ DlgPrefInterface::DlgPrefInterface(
         localeNameFixed.replace('-', '_');
         const auto locale = QLocale(localeNameFixed);
 
+        // MixxxF: el desplegable solo lista ingles y espanol.
+        if (locale.language() != QLocale::English &&
+                locale.language() != QLocale::Spanish) {
+            continue;
+        }
+        // Un espanol generico; las variantes regionales no se instalan.
+        if (locale.language() == QLocale::Spanish && localeNameFixed.contains(QLatin1Char('_'))) {
+            continue;
+        }
+
         const QString languageName = QLocale::languageToString(locale.language());
         // Ugly hack to skip non-resolvable locales
         if (languageName == QStringLiteral("C")) {

@@ -9,8 +9,8 @@
         <SetVariable name="TooltipId">maximize_library</SetVariable>
         <SetVariable name="ObjectName">GuiToggleButton</SetVariable>
         <SetVariable name="Size">80f,20f</SetVariable>
-        <SetVariable name="state_0_text">BIG LIBRARY</SetVariable>
-        <SetVariable name="state_1_text">BIG LIBRARY</SetVariable>
+        <SetVariable name="state_0_text">BIBLIOTECA</SetVariable>
+        <SetVariable name="state_1_text">BIBLIOTECA</SetVariable>
         <SetVariable name="ConfigKey">[Skin],show_maximized_library</SetVariable>
       </Template>
 
@@ -29,18 +29,9 @@
             <SetVariable name="TooltipId">show_waveforms</SetVariable>
             <SetVariable name="ObjectName">GuiToggleButton</SetVariable>
             <SetVariable name="Size">80f,20f</SetVariable>
-            <SetVariable name="state_0_text">WAVEFORMS</SetVariable>
-            <SetVariable name="state_1_text">WAVEFORMS</SetVariable>
+            <SetVariable name="state_0_text">ONDAS</SetVariable>
+            <SetVariable name="state_1_text">ONDAS</SetVariable>
             <SetVariable name="ConfigKey">[Skin],show_waveforms</SetVariable>
-          </Template>
-
-          <Template src="skins:LateNight/controls/button_2state_persist.xml">
-            <SetVariable name="TooltipId">toggle_4decks</SetVariable>
-            <SetVariable name="ObjectName">GuiToggleButton</SetVariable>
-            <SetVariable name="Size">52f,20f</SetVariable>
-            <SetVariable name="state_0_text">4 DECKS</SetVariable>
-            <SetVariable name="state_1_text">4 DECKS</SetVariable>
-            <SetVariable name="ConfigKey">[Skin],show_4decks</SetVariable>
           </Template>
 
           <Template src="skins:LateNight/controls/button_2state_persist.xml">
@@ -56,8 +47,8 @@
             <SetVariable name="TooltipId">show_effects</SetVariable>
             <SetVariable name="ObjectName">GuiToggleButton</SetVariable>
             <SetVariable name="Size">59f,20f</SetVariable>
-            <SetVariable name="state_0_text">EFFECTS</SetVariable>
-            <SetVariable name="state_1_text">EFFECTS</SetVariable>
+            <SetVariable name="state_0_text">EFECTOS</SetVariable>
+            <SetVariable name="state_1_text">EFECTOS</SetVariable>
             <SetVariable name="ConfigKey">[Skin],show_effectrack</SetVariable>
           </Template>
 
@@ -100,15 +91,6 @@
             <SetVariable name="state_0_text">DECKS</SetVariable>
             <SetVariable name="state_1_text">DECKS</SetVariable>
             <SetVariable name="ConfigKey">[LateNight],max_lib_show_decks</SetVariable>
-          </Template>
-
-          <Template src="skins:LateNight/controls/button_2state_persist.xml">
-            <SetVariable name="TooltipId">toggle_4decks</SetVariable>
-            <SetVariable name="ObjectName">GuiToggleButton</SetVariable>
-            <SetVariable name="Size">52f,20f</SetVariable>
-            <SetVariable name="state_0_text">4 DECKS</SetVariable>
-            <SetVariable name="state_1_text">4 DECKS</SetVariable>
-            <SetVariable name="ConfigKey">[Skin],show_4decks</SetVariable>
           </Template>
 
         </Children>
@@ -288,17 +270,37 @@
       </WidgetGroup>
 
       <PushButton>
+        <Size>28f,20f</Size>
+        <Tooltip>Atajos Pioneer DDJ-200 MixxxF</Tooltip>
+        <ObjectName>MixxxFHelpToggle</ObjectName>
+        <NumberStates>2</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text>?</Text>
+        </State>
+        <State>
+          <Number>1</Number>
+          <Text>?</Text>
+        </State>
+        <Connection>
+          <ConfigKey>[Skin],show_mixxxf_help</ConfigKey>
+        </Connection>
+      </PushButton>
+
+      <WidgetGroup><Size>4f,min</Size></WidgetGroup>
+
+      <PushButton>
         <Size>80f,20f</Size>
         <TooltipId>skin_settings</TooltipId>
         <ObjectName>SkinSettingsToggle</ObjectName>
         <NumberStates>2</NumberStates>
         <State>
           <Number>0</Number>
-          <Text>      SETTINGS</Text>
+          <Text>      AJUSTES</Text>
         </State>
         <State>
           <Number>1</Number>
-          <Text>      SETTINGS</Text>
+          <Text>      AJUSTES</Text>
         </State>
         <Connection>
           <ConfigKey>[Skin],show_settings</ConfigKey>

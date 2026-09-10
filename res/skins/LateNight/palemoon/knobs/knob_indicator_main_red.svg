@@ -206,7 +206,7 @@
          id="stop6-2"
          offset="1"
          stop-opacity="0"
-         stop-color="#ff2d2d" />
+         stop-color="#d20000" />
     </radialGradient>
     <linearGradient
        gradientUnits="userSpaceOnUse"
@@ -219,7 +219,7 @@
       <stop
          id="stop2-7"
          offset="0"
-         stop-color="#e90808" />
+         stop-color="#d20000" />
       <stop
          id="stop4-0"
          offset="1"

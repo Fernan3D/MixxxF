@@ -45,12 +45,12 @@ DlgPrefWaveform::DlgPrefWaveform(
     m_pTypeControl->setReadOnly();
     // Update the control with the config value
     OverviewType overviewType =
-            m_pConfig->getValue<OverviewType>(kOverviewTypeCfgKey, OverviewType::RGB);
+            m_pConfig->getValue<OverviewType>(kOverviewTypeCfgKey, OverviewType::Filtered);
     int cfgTypeIndex = waveformOverviewComboBox->findData(QVariant::fromValue(overviewType));
     if (cfgTypeIndex == -1) {
-        // Invalid config value, set default type RGB and write it to config
+        // MixxxF: Filtered pinta L/M/H en la columna de la biblioteca.
         cfgTypeIndex = waveformOverviewComboBox->findData(
-                QVariant::fromValue(OverviewType::RGB));
+                QVariant::fromValue(OverviewType::Filtered));
         waveformOverviewComboBox->setCurrentIndex(cfgTypeIndex);
         m_pConfig->setValue(kOverviewTypeCfgKey, cfgTypeIndex);
     } else {
@@ -365,7 +365,7 @@ void DlgPrefWaveform::slotUpdate() {
     stemDisplayModeComboBox->setCurrentIndex(factory->isStemSplitTracks() ? 1 : 0);
 
     OverviewType cfgOverviewType =
-            m_pConfig->getValue<OverviewType>(kOverviewTypeCfgKey, OverviewType::RGB);
+            m_pConfig->getValue<OverviewType>(kOverviewTypeCfgKey, OverviewType::Filtered);
     // Assumes the combobox index is in sync with the ControlPushButton
     if (cfgOverviewType != waveformOverviewComboBox->currentData().value<OverviewType>()) {
         int cfgOverviewTypeIndex =
@@ -439,9 +439,9 @@ void DlgPrefWaveform::slotResetToDefaults() {
 
     synchronizeZoomCheckBox->setChecked(true);
 
-    // RGB overview.
+    // MixxxF: Filtered (L/M/H) en la columna Overview de la biblioteca.
     waveformOverviewComboBox->setCurrentIndex(
-            waveformOverviewComboBox->findData(QVariant::fromValue(OverviewType::RGB)));
+            waveformOverviewComboBox->findData(QVariant::fromValue(OverviewType::Filtered)));
 
     // Default to overview stereo mode
     overviewStereoCheckBox->setChecked(true);
@@ -449,7 +449,8 @@ void DlgPrefWaveform::slotResetToDefaults() {
     // Show minute markers.
     overviewMinuteMarkersCheckBox->setChecked(true);
 
-    // Use "Global" waveform gain + ReplayGain if enabled
+    // MixxxF: por defecto el resumen del deck recorta al pico (como la biblioteca).
+    overview_scale_normalize->setChecked(WaveformWidgetFactory::isOverviewNormalizedDefault());
     overview_scale_allReplayGain->setChecked(!WaveformWidgetFactory::isOverviewNormalizedDefault());
 
     // 60FPS is the default

@@ -58,6 +58,17 @@ class Translations {
         // the same as the one returned by system().
         QLocale locale;
 
+        // MixxxF solo reparte ingles y espanol. Cualquier otro idioma
+        // del sistema o de un perfil antiguo cae a espanol.
+        if (locale.language() != QLocale::English &&
+                locale.language() != QLocale::Spanish &&
+                locale.language() != QLocale::C) {
+            qWarning() << "MixxxF: idioma no soportado, usando espanol:"
+                       << locale.name();
+            QLocale::setDefault(QLocale(QStringLiteral("es")));
+            locale = QLocale();
+        }
+
         // Do not try to load translations if we're using 'C' locale.
         if (locale.language() == QLocale::C) {
             qDebug() << "Skipping loading of translations because the 'C' locale is used.";

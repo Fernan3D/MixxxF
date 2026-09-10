@@ -1,0 +1,132 @@
+<!--
+Descripcion:
+  Hoja de atajos Pioneer DDJ-200 MixxxF. Se abre con el boton ? de la barra.
+-->
+<Template>
+  <WidgetGroup>
+    <ObjectName>MixxxFHelpPanel</ObjectName>
+    <Layout>vertical</Layout>
+    <Size>280f,1me</Size>
+    <Children>
+
+      <Label>
+        <ObjectName>MixxxFHelpTitle</ObjectName>
+        <Size>0me,28f</Size>
+        <Text>DDJ-200 MixxxF</Text>
+        <Alignment>center</Alignment>
+      </Label>
+
+      <Label>
+        <ObjectName>MixxxFHelpHeading</ObjectName>
+        <Size>0me,22f</Size>
+        <Text>PADS (sin SHIFT = modo de pantalla)</Text>
+        <Alignment>left</Alignment>
+      </Label>
+      <Label>
+        <ObjectName>MixxxFHelpText</ObjectName>
+        <Size>0me,16f</Size>
+        <Text>HOT CUE  saltar / poner cue</Text>
+        <Alignment>left</Alignment>
+      </Label>
+      <Label>
+        <ObjectName>MixxxFHelpText</ObjectName>
+        <Size>0me,16f</Size>
+        <Text>BEAT LOOP  loop fijo 1/8 ... 16</Text>
+        <Alignment>left</Alignment>
+      </Label>
+      <Label>
+        <ObjectName>MixxxFHelpText</ObjectName>
+        <Size>0me,16f</Size>
+        <Text>LOOP ROLL  roll al mantener</Text>
+        <Alignment>left</Alignment>
+      </Label>
+      <Label>
+        <ObjectName>MixxxFHelpText</ObjectName>
+        <Size>0me,16f</Size>
+        <Text>PAD FX  efecto momentaneo</Text>
+        <Alignment>left</Alignment>
+      </Label>
+      <Label>
+        <ObjectName>MixxxFHelpText</ObjectName>
+        <Size>0me,16f</Size>
+        <Text>BEAT JUMP  saltos -8 ... +8</Text>
+        <Alignment>left</Alignment>
+      </Label>
+      <Label>
+        <ObjectName>MixxxFHelpText</ObjectName>
+        <Size>0me,22f</Size>
+        <Text>SAMPLER  deck1: 1-8  deck2: 9-16</Text>
+        <Alignment>left</Alignment>
+      </Label>
+
+      <Label>
+        <ObjectName>MixxxFHelpHeading</ObjectName>
+        <Size>0me,22f</Size>
+        <Text>SHIFT + PADS</Text>
+        <Alignment>left</Alignment>
+      </Label>
+      <Label>
+        <ObjectName>MixxxFHelpText</ObjectName>
+        <Size>0me,16f</Size>
+        <Text>1 loop on/off   2 mas beats</Text>
+        <Alignment>left</Alignment>
+      </Label>
+      <Label>
+        <ObjectName>MixxxFHelpText</ObjectName>
+        <Size>0me,16f</Size>
+        <Text>3 salto atras   4 salto adelante</Text>
+        <Alignment>left</Alignment>
+      </Label>
+      <Label>
+        <ObjectName>MixxxFHelpText</ObjectName>
+        <Size>0me,16f</Size>
+        <Text>5 reloop   6 menos beats</Text>
+        <Alignment>left</Alignment>
+      </Label>
+      <Label>
+        <ObjectName>MixxxFHelpText</ObjectName>
+        <Size>0me,22f</Size>
+        <Text>7 slip   8 reverse</Text>
+        <Alignment>left</Alignment>
+      </Label>
+
+      <Label>
+        <ObjectName>MixxxFHelpHeading</ObjectName>
+        <Size>0me,22f</Size>
+        <Text>TRANSPORTE</Text>
+        <Alignment>left</Alignment>
+      </Label>
+      <Label>
+        <ObjectName>MixxxFHelpText</ObjectName>
+        <Size>0me,16f</Size>
+        <Text>PLAY verde  CUE naranja  SYNC rojo</Text>
+        <Alignment>left</Alignment>
+      </Label>
+      <Label>
+        <ObjectName>MixxxFHelpText</ObjectName>
+        <Size>0me,16f</Size>
+        <Text>CUE cascos naranja = PFL</Text>
+        <Alignment>left</Alignment>
+      </Label>
+      <Label>
+        <ObjectName>MixxxFHelpText</ObjectName>
+        <Size>0me,22f</Size>
+        <Text>SHIFT+aro  biblioteca y cargar</Text>
+        <Alignment>left</Alignment>
+      </Label>
+
+      <Label>
+        <ObjectName>MixxxFHelpText</ObjectName>
+        <Size>0me,16f</Size>
+        <Text>Firmware de pads: deja HOT CUE</Text>
+        <Alignment>left</Alignment>
+      </Label>
+
+      <WidgetGroup><Size>0me,0me</Size></WidgetGroup>
+    </Children>
+    <Connection>
+      <ConfigKey>[Skin],show_mixxxf_help</ConfigKey>
+      <BindProperty>visible</BindProperty>
+    </Connection>
+  </WidgetGroup>
+</Template>

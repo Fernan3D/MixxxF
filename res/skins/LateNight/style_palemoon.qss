@@ -675,7 +675,7 @@ WBeatSpinBox,
 WBpmEditor QDoubleSpinBox,
 #spinBoxTransition,
 #spinBoxRecentDays {
-  selection-color: #a7998b;
+  selection-color: #aaaaaa;
   selection-background-color: #111;
   }
   WBeatSpinBox:focus,
@@ -1337,7 +1337,7 @@ WCueMenuPopup,
 WCueMenuPopup QLabel,
 #CueLabelEdit,
 WCoverArtMenu {
-  color: #c2b3a5;
+  color: #e8e8e8;
 }
 /* Override the 'missing' color in Tracks > Missing,
    it's not useful there */
@@ -1354,7 +1354,7 @@ WCoverArtMenu {
   #SkinSettingsNumToggleHeader[displayValue="1"],
   #SkinSettingsMixerToggle,
   #SkinSettingsText {
-    color: #988f86;
+    color: #aaaaaa;
   }
   #SkinSettingsNumToggleHeader[displayValue="0"] {
     color: #756e6c;
@@ -1365,7 +1365,7 @@ WEffectChainPresetSelector:!editable,
 WEffectChainPresetSelector:!editable:on,
 #fadeModeCombobox:!editable,
 #fadeModeCombobox:!editable:on {
-  color: #918273;
+  color: #aaaaaa;
   }
   WEffectSelector:!editable,
   WEffectSelector:!editable:on,
@@ -1380,11 +1380,14 @@ WEffectChainPresetSelector:!editable:on,
     color: #766b65;
   }
 
-  WBeatSpinBox,
+  /* MixxxF: numeros de loop/beatjump en gris claro. */
+  WBeatSpinBox {
+    color: #aaaaaa;
+  }
   WBpmEditor QDoubleSpinBox,
   #spinBoxTransition,
   #spinBoxRecentDays {
-    color: #a7998b;
+    color: #aaaaaa;
   }
 
 /* pale blue */
@@ -1466,8 +1469,9 @@ WEffectChainPresetSelector QAbstractScrollArea,
 #RecDuration[highlight="0"],
 #BroadcastButton[displayValue="0"],
 #SkinSettingsToggle[displayValue="0"],
+#MixxxFHelpToggle[displayValue="0"],
 #LibraryFeatureControls QLabel {
-  color: #777;
+  color: #e8e8e8;
 }
 
 /* Darker grey for knob labels & inactive decks/units */
@@ -1804,60 +1808,81 @@ WBpmEditor QDoubleSpinBox {
     background-color: #151517;
   }
 
-/* Orange for 'active' status */
+/* MixxxF DDJ-200: PLAY de deck verde, sampler y pads en rojo base. */
 WPushButton#PlayDeck[displayValue="1"],
 WPushButton#PlayDeckMini[displayValue="1"],
-WPushButton#PlaySampler[displayValue="1"],
 WPushButton#PlayPreview[displayValue="1"],
 WPushButton#PlayIndicator[displayValue="1"],
-#LibraryPreviewButton:checked,
-#CueDeck[displayValue="1"],
+#LibraryPreviewButton:checked {
+  background-color: #1db954;
+  }
+WPushButton#PlaySampler[displayValue="1"] {
+  background-color: #d20000;
+  }
+WPushButton#PreviewIndicator[value="1"] {
+  border: 3px solid #1db954;
+  border-radius: 0px;
+}
+#SamplerPlayBox WPushButton#PreviewIndicator[value="1"],
+#PadSamplerPlayBox WPushButton#PreviewIndicator[value="1"] {
+  border: 3px solid #d20000;
+}
+#CueDeck[displayValue="1"] {
+  background-color: #ff7a00;
+  }
+#PflButton[value="1"] {
+  background-color: #ff7a00;
+  }
+#SyncDeck[value="1"],
+#SyncLeader[value="1"],
+#SyncLeader[value="2"],
+#SyncSampler[displayValue="1"] {
+  background-color: #d20000;
+  }
+
 WPushButton#Reverse[pressed="true"],
 #LoopActivate[value="1"],
 #Reloop[value="1"],
-#SyncSampler[displayValue="1"],
-#SyncDeck[value="1"],
-#SyncLeader[value="2"],
+#LoopAnchor[displayValue="1"],
+#SpecialCueButton[value="1"] {
+  background-color: #ff7a00;
+  }
 #MicTalk[value="1"], #AuxPlay[value="1"],
 #MicDucking[value="1"],
 #MicDucking[value="2"],
 WPushButton#StemMuteButton,
 #PassthroughButton[displayValue="1"],
-#BroadcastButton[displayValue="4"], /* warning */
+#BroadcastButton[displayValue="4"],
 QPushButton#pushButtonAutoDJ:checked,
 QPushButton#pushButtonAnalyze:checked {
   background-color: #b24c12;
   }
-  /* Orange border for Play buttons when previewing from
-    Cue or Hotcue */
-  WPushButton#PreviewIndicator[value="1"] {
-    border: 3px solid #b24c12;
-    /* work around round borders being painted outside the actual border area */
-    border-radius: 0px;
-  }
-/* dim orange for momentary controls */
+/* MixxxF: naranja CUE/PFL al pulsar tempo, cuadricula, loop y saltos.
+   Los hotcues numericos siguen en rojo. La corona de SYNC va en rojo. */
 #KeyControls WPushButton[pressed="true"],
-#SyncLeader[value="1"],
 WPushButton#LoopIn[pressed="true"],
 WPushButton#LoopOut[pressed="true"],
 WPushButton#LoopAnchor[pressed="true"],
 #BeatjumpControls WPushButton[value="1"],
 #RateControls WPushButton[value="1"],
-#BeatgridControls WPushButton[pressed="true"]/*,
-#CueStandardButton[pressed="true"],
-#CueStandardButton:checked,
-#CueSavedLoopButton[pressed="true"],
-#CueSavedLoopButton:checked,
-#CueSavedJumpButton[pressed="true"],
-#CueSavedJumpButton:checked*/ {
-  background-color: #7d350d;
+#BeatgridControls WPushButton[pressed="true"],
+#BeatgridControls WPushButton[displayValue="1"],
+#QuantizeButton12[displayValue="1"],
+#QuantizeButton34[displayValue="1"],
+#KeylockButton12[displayValue="1"],
+#KeylockButton34[displayValue="1"],
+#SlipmodeButton12[displayValue="1"],
+#SlipmodeButton34[displayValue="1"],
+WBeatSpinBox::up-button:pressed,
+WBeatSpinBox::down-button:pressed {
+  background-color: #ff7a00;
   }
 
 /* Red */
 #EQKillButtonBox WPushButton[displayValue="1"],
 QPushButton#pushButtonRecording:checked,
 #RecFeedback[displayValue="2"] {
-  background-color: #a80000;
+  background-color: #d20000;
 }
 
 /* Green for Fx toggles, QuickEffect + Fx12 */
@@ -1867,8 +1892,11 @@ WPushButton#VinylStatus[displayValue="1"], /* enabled, OK */
 #BroadcastButton[displayValue="2"] {
   background-color: #438225;
   }
+  /* MixxxF: estrella de efecto rapido en naranja CUE/PFL. */
+  WPushButton#QuickEffectButton[displayValue="1"] {
+    background-color: #ff7a00;
+  }
   /* Dim green for assign buttons Fx12 */
-  WPushButton#QuickEffectButton[displayValue="1"],
   #FxAssignButton1[displayValue="1"],
   #FxAssignButton2[displayValue="1"] {
     background-color: #236b00;
@@ -1878,8 +1906,6 @@ WPushButton#VinylStatus[displayValue="1"], /* enabled, OK */
 #FxUnit4 #FxToggleButton[displayValue="1"],
 WBpmEditor QDoubleSpinBox::up-button:pressed,
 WBpmEditor QDoubleSpinBox::down-button:pressed,
-WBeatSpinBox::up-button:pressed,
-WBeatSpinBox::down-button:pressed,
 #spinBoxTransition::up-button:pressed,
 #spinBoxTransition::down-button:pressed,
 #spinBoxRecentDays::up-button:pressed,
@@ -1897,7 +1923,7 @@ WPushButton#FxSuperLinkInvertButton[displayValue="0"] {
   background-color: #333;
   }
   #FxSuperLinkInvertButton[displayValue="1"] {
-    background-color: #9C0900;
+    background-color: #d20000;
     }
 
 /* Green for Fx1 / Fx2 */
@@ -1974,7 +2000,7 @@ WPushButton#VinylStatus[displayValue="2"] {  /* blinks when the needle reaches t
 }
 
 #SpecialCueButton[value="1"] {
-  background-color: #395579;
+  background-color: #ff7a00;
 }
 
 /* pink for error / failure / warning */
@@ -1986,14 +2012,14 @@ WPushButton#VinylStatus[displayValue="3"] { /* needle skip detected */
 
 /* Grey for GUI toggles */
 #GuiToggleButton[displayValue="1"],
-#SkinSettingsToggle[displayValue="1"] {
-  background-color: #777;
+#SkinSettingsToggle[displayValue="1"],
+#MixxxFHelpToggle[displayValue="1"] {
+  background-color: #d20000;
 }
 
 /* Grey */
 #VinylCueButton[displayValue="1"],
 #VinylCueButton[displayValue="2"],
-#PflButton[value="1"],
 #FxParameterButton[displayValue="1"],
 QPushButton#pushButtonRepeatPlaylist:checked {
   background-color: #666;
@@ -2611,7 +2637,7 @@ WPushButton#PlayDeck[value="0"] {
     image: url(skins:LateNight/palemoon/buttons/btn__eq_kill_dot_active_red.svg) no-repeat center center;
   }
   #QuickEffectDot[displayValue="1"] {
-    image: url(skins:LateNight/palemoon/buttons/btn__eq_kill_dot_active_green.svg) no-repeat center center;
+    image: url(skins:LateNight/palemoon/buttons/btn__eq_kill_dot_active_orange.svg) no-repeat center center;
   }
 
 #RateCenter[highlight="0"] {
@@ -2854,6 +2880,12 @@ WPushButton#PlayDeck[value="0"] {
     image: url(skins:LateNight/palemoon/buttons/btn__settings_on.svg) no-repeat left top;
   }
 
+#MixxxFHelpToggle {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: bold;
+  }
+
 #ToolbarLogo {
   image: url(skins:LateNight/palemoon/style/mixxx_logo_small.svg) no-repeat center center;
 }
@@ -2940,11 +2972,11 @@ WCueMenuPopup #CueSavedJumpButton[direction="backward"] {
 }
 
 #CueDeleteButton:hover {
-  background-color: #6c2e2e;
+  background-color: #d20000;
 }
 
 #CueDeleteButton[pressed="true"], #CueDeleteButton:pressed, #CueDeleteButton:clicked {
-  background-color: #dc4141 !important;
+  background-color: #d20000 !important;
   outline: none;
 }
 

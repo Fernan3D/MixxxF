@@ -2259,10 +2259,10 @@ bool CueControl::updateIndicatorsAndModifyPlay(
                             ControlIndicator::RATIO1TO1_500MS);
                     break;
                 default:
-                    // in Pioneer and CueAndPlay mode Cue Button is flashing fast
-                    // if CUE will move Cue point
+                    // MixxxF: mismo reloj 500 ms que PLAY para que CUE, PLAY
+                    // y los LEDs de la controladora enciendan a la vez.
                     m_pCueIndicator->setBlinkValue(
-                            ControlIndicator::RATIO1TO1_250MS);
+                            ControlIndicator::RATIO1TO1_500MS);
                 }
             } else {
                 m_pCueIndicator->setBlinkValue(ControlIndicator::OFF);
@@ -2327,10 +2327,9 @@ void CueControl::updateIndicators() {
                         m_pCueIndicator->setBlinkValue(ControlIndicator::OFF);
                         break;
                     default:
-                        // in Pioneer and CueAndPlay mode Cue button is flashing fast
-                        // if CUE will move Cue point
+                        // MixxxF: mismo reloj 500 ms que PLAY (Pioneer/CueAndPlay).
                         m_pCueIndicator->setBlinkValue(
-                                ControlIndicator::RATIO1TO1_250MS);
+                                ControlIndicator::RATIO1TO1_500MS);
                     }
                     break;
                 case TrackAt::End:

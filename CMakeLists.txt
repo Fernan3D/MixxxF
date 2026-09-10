@@ -2557,10 +2557,18 @@ if(NOT ANDROID)
     BUNDLE DESTINATION .
   )
 
-  # Skins
+  # Skins MixxxF: solo LateNight (la 64 Samplers reutiliza sus plantillas).
   install(
-    DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/res/skins"
-    DESTINATION "${MIXXX_INSTALL_DATADIR}"
+    DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/res/skins/LateNight"
+              "${CMAKE_CURRENT_SOURCE_DIR}/res/skins/LateNight (64 Samplers)"
+    DESTINATION "${MIXXX_INSTALL_DATADIR}/skins"
+  )
+  install(
+    FILES
+      "${CMAKE_CURRENT_SOURCE_DIR}/res/skins/default-menu-styles-windows.qss"
+      "${CMAKE_CURRENT_SOURCE_DIR}/res/skins/default-menu-styles-linux.qss"
+      "${CMAKE_CURRENT_SOURCE_DIR}/res/skins/default.qss"
+    DESTINATION "${MIXXX_INSTALL_DATADIR}/skins"
   )
 
   # Controller mappings
@@ -2575,12 +2583,12 @@ if(NOT ANDROID)
     DESTINATION "${MIXXX_INSTALL_DATADIR}"
   )
 
-  # Translation files
+  # MixxxF: solo ingles (origen) y espanol.
   install(
     DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/res/translations"
     DESTINATION "${MIXXX_INSTALL_DATADIR}"
     FILES_MATCHING
-    PATTERN "*.qm"
+    PATTERN "mixxx_es.qm"
   )
   # else()
   #   qt_finalize_target(mixxx-lib)
@@ -4685,12 +4693,11 @@ elseif(WIN32)
 endif()
 
 if(APPLE OR WIN32)
-  # qt_de.qm is just one arbitrary file in the directory that needs to be located;
-  # there is no particular reason to look for this file versus any other one in the directory.
+  # MixxxF: localiza el directorio de traducciones de Qt con el .qm de espanol.
   if(QT6)
     find_file(
       QT_TRANSLATION_FILE
-      qt_de.qm
+      qt_es.qm
       PATHS "${Qt6_DIR}/../../translations/Qt6"
       REQUIRED
       NO_DEFAULT_PATH
@@ -4698,7 +4705,7 @@ if(APPLE OR WIN32)
   else()
     find_file(
       QT_TRANSLATION_FILE
-      qt_de.qm
+      qt_es.qm
       PATHS
         "${Qt5_DIR}/../../../translations"
         "${Qt5_DIR}/../../qt5/translations"
@@ -4707,14 +4714,13 @@ if(APPLE OR WIN32)
     )
   endif()
   get_filename_component(QT_TRANSLATIONS ${QT_TRANSLATION_FILE} DIRECTORY)
+  # MixxxF: Qt en ingles y espanol. cmake --install no borra .qm viejos.
   install(
     DIRECTORY "${QT_TRANSLATIONS}/"
     DESTINATION "${MIXXX_INSTALL_DATADIR}/translations"
-    # QT 5 translations have been separated into several files, and most of the qt_xx.qm files
-    # contain just shortcuts to load the qtbase, qtmultimedia etc files.
     FILES_MATCHING
     REGEX
-    "qt_.+\.qm|qtbase_.*\.qm|qtmultimedia_.*\.qm|qtscript_.*\.qm|qtxmlpatterns_.*\.qm"
+    "(qt|qtbase|qtmultimedia|qtscript|qtxmlpatterns|qt_help)_(en|es)\\.qm$"
   )
 endif()
 

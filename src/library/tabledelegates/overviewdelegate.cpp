@@ -42,7 +42,7 @@ OverviewDelegate::OverviewDelegate(QTableView* pTableView)
         : TableItemDelegate(pTableView),
           m_pTrackModel(asTrackModel(pTableView)),
           m_pCache(OverviewCache::instance()),
-          m_type(mixxx::OverviewType::RGB),
+          m_type(mixxx::OverviewType::Filtered),
           m_inhibitLazyLoading(false) {
     WLibrary* pLibrary = findLibraryWidgetParent(pTableView);
     if (pLibrary) {

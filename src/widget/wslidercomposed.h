@@ -50,11 +50,14 @@ class WSliderComposed : public WWidget  {
   private:
     double calculateHandleLength();
     void unsetPixmaps();
+    void applyHandlePadding();
 
     // Length of handle in pixels
     double m_dHandleLength;
     // Length of the slider in pixels.
     double m_dSliderLength;
+    // MixxxF: fraccion del largo reservada a cada extremo del recorrido
+    double m_dHandlePaddingRatio;
     // True if it's a horizontal slider
     bool m_bHorizontal;
     // Properties to draw the level bar

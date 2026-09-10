@@ -35,20 +35,12 @@ Description:
                 <Text>Decks</Text>
                 <Size>56f,23f</Size>
               </Label>
-              <Template src="skins:LateNight/helpers/skin_settings_numToggle_header.xml">
-                <SetVariable name="Text">2</SetVariable>
-                <SetVariable name="Setting">[Skin],show_4decks</SetVariable>
-                <SetVariable name="IsEqual">0</SetVariable>
-                <SetVariable name="TooltipId">toggle_4decks</SetVariable>
-                <SetVariable name="Width">25f</SetVariable>
-              </Template>
-              <Template src="skins:LateNight/helpers/skin_settings_numToggle_header.xml">
-                <SetVariable name="Text">4</SetVariable>
-                <SetVariable name="Setting">[Skin],show_4decks</SetVariable>
-                <SetVariable name="IsEqual">1</SetVariable>
-                <SetVariable name="TooltipId">toggle_4decks</SetVariable>
-                <SetVariable name="Width">25f</SetVariable>
-              </Template>
+              <Label>
+                <ObjectName>SkinSettingsText</ObjectName>
+                <Size>80f,23f</Size>
+                <Text>2 decks</Text>
+                <Alignment>left</Alignment>
+              </Label>
               <WidgetGroup><Size>0me,0f</Size></WidgetGroup>
             </Children>
           </WidgetGroup>

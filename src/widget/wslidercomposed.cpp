@@ -8,6 +8,7 @@
 #include "moc_wslidercomposed.cpp"
 #include "skin/legacy/skincontext.h"
 #include "util/debug.h"
+#include "util/math.h"
 #include "widget/controlwidgetconnection.h"
 #include "widget/wpixmapstore.h"
 #include "widget/wskincolor.h"
@@ -16,6 +17,7 @@ WSliderComposed::WSliderComposed(QWidget* parent)
         : WWidget(parent),
           m_dHandleLength(0.0),
           m_dSliderLength(0.0),
+          m_dHandlePaddingRatio(0.0),
           m_bHorizontal(false),
           m_dBarWidth(0.0),
           m_dBarBgWidth(0.0),
@@ -55,6 +57,9 @@ void WSliderComposed::setup(const QDomNode& node, const SkinContext& context) {
     unsetPixmaps();
 
     m_bHorizontal = context.selectBool(node, "Horizontal", false);
+    // MixxxF: 0.20 deja un 20% del widget libre a cada lado del mango.
+    context.hasNodeSelectDouble(node, "HandlePadding", &m_dHandlePaddingRatio);
+    m_dHandlePaddingRatio = math_clamp(m_dHandlePaddingRatio, 0.0, 0.45);
 
     double scaleFactor = context.getScaleFactor();
     QDomElement slider = context.selectElement(node, "Slider");
@@ -70,6 +75,7 @@ void WSliderComposed::setup(const QDomNode& node, const SkinContext& context) {
 
     m_dSliderLength = m_bHorizontal ? width() : height();
     m_handler.setSliderLength(m_dSliderLength);
+    applyHandlePadding();
 
     QDomElement handle = context.selectElement(node, "Handle");
     PixmapSource sourceHandle = context.getPixmapSource(handle);
@@ -329,6 +335,7 @@ void WSliderComposed::resizeEvent(QResizeEvent* pEvent) {
     m_handler.setHandleLength(m_dHandleLength);
     m_dSliderLength = m_bHorizontal ? width() : height();
     m_handler.setSliderLength(m_dSliderLength);
+    applyHandlePadding();
     m_handler.resizeEvent(this, pEvent);
 
     // Re-calculate state based on our new width/height.
@@ -385,6 +392,10 @@ double WSliderComposed::calculateHandleLength() {
         }
     }
     return 0;
+}
+
+void WSliderComposed::applyHandlePadding() {
+    m_handler.setHandlePadding(m_dHandlePaddingRatio * m_dSliderLength);
 }
 
 void WSliderComposed::inputActivity() {

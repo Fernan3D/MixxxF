@@ -490,6 +490,7 @@ void WOverview::slotMinuteMarkersChanged(bool /*unused*/) {
 }
 
 void WOverview::slotScalingChanged() {
+    m_waveformImageScaled = QImage();
     update();
 }
 
