@@ -9,8 +9,7 @@ No se envian pull requests a Mixxx oficial.
 ![MixxxF LateNight: HOT CUE, BEAT LOOP, PAD FX, BEAT JUMP y SAMPLER](docs/mixxxf/late-night-ddj200.jpg)
 
 - GitHub: https://github.com/Fernan3D/MixxxF
-- Rama de producto: `custom/mixxxf`
-- Rama espejo de Mixxx: `main`
+- Rama de trabajo: `custom/mixxxf`
 
 ## Pioneer DDJ-200
 
@@ -52,34 +51,12 @@ del programa.
 
 ## Como esta organizado
 
-| Rama | Que contiene |
-|---|---|
-| `main` | Mixxx tal cual, sin cambios MixxxF. Se actualiza desde `upstream`. |
-| `custom/mixxxf` | LateNight Performance Pads, Pad FX, mapeo Pioneer DDJ-200 MixxxF. |
+El trabajo personal vive en `custom/mixxxf`. No se copia Mixxx oficial
+encima de `main` ni se mezcla con esta rama.
 
-Remotes:
+Remote:
 
 - `origin` → `https://github.com/Fernan3D/MixxxF.git`
-- `upstream` → `https://github.com/mixxxdj/mixxx.git`
-
-Los archivos MixxxF nuevos (pads, `Pioneer DDJ-200 MixxxF.*`) casi no chocan
-con Mixxx. Los que si pueden chocar al mezclar: `skin.xml`, `style.qss`,
-`loopingcontrol.cpp`, `CMakeLists.txt`.
-
-## Incorporar arreglos de Mixxx
-
-1. Guarda o confirma tus cambios locales (`git status` limpio).
-2. Ejecuta `actualizar-desde-mixxx.bat`.
-3. Si Git para por conflictos, resuelvelos y `git merge --continue`.
-4. Compila con `compilar-MixxxF.bat`.
-5. Prueba en la mesa (pads + DDJ-200).
-6. Cuando quieras publicarlo: `git push origin custom/mixxxf`.
-
-El script **no sube nada a GitHub** y **no abre PR** contra Mixxx.
-
-En GitHub, `main` se puede sincronizar solo (accion MixxxF — sincronizar main).
-Eso no mezcla MixxxF: solo mantiene el espejo. El merge a `custom/mixxxf` lo
-haces tu con el `.bat`.
 
 ## Compilar
 
